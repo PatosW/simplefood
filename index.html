@@ -252,6 +252,12 @@
   details.guide ol b { color: var(--olive); }
   details.guide > p { margin: 0 0 13px; font-size: var(--step--1); color: var(--ink-2); }
 
+  .fromshelf {
+    margin: 9px 0 0; font-size: var(--step--1); color: var(--ink-2);
+    background: var(--surface-2); border-radius: 8px; padding: 8px 12px;
+  }
+  .fromshelf b { color: var(--ink); font-weight: 600; }
+
   .tools { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
   .tools li {
     border: 1px dashed var(--line); border-radius: 8px; padding: 4px 10px;
@@ -443,6 +449,8 @@
   .shop-item input { accent-color: var(--olive); width: 20px; height: 20px; flex: none; }
   .shop-item .q { font-family: "Heebo", sans-serif; font-variant-numeric: tabular-nums; color: var(--ink-2); }
   .shop-item input:checked ~ .q { color: var(--ink-3); text-decoration: line-through; }
+  .aisle-note { margin: -2px 0 6px; font-size: .72rem; color: var(--ink-3); }
+
   .shop-foot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 13px; }
   .shop-foot .count { font-family: "Heebo", sans-serif; font-size: var(--step--1); color: var(--ink-2); font-variant-numeric: tabular-nums; }
   .shop-foot .btn:first-of-type { margin-inline-start: auto; }
@@ -2021,7 +2029,11 @@
             const cls = f.no ? "no" : (f.opt ? "opt" : (isMiss ? "miss" : ""));
             return '<li class="' + cls + '">' + esc(amountLabel(r, f.alts)) + (f.opt ? " (אם יש)" : "") + '</li>';
           }).join("") +
-        '</ul></div>' +
+        '</ul>' +
+        (basicsOf(r).length
+          ? '<p class="fromshelf"><b>ומהארון:</b> ' + esc(basicsOf(r).map(b => b[0]).join(", ")) + '</p>'
+          : "") +
+        '</div>' +
         (r.shake ? SHAKE_GUIDE : "") +
         (r.tools && r.tools.length
           ? '<div class="block"><h3>כלים</h3><ul class="tools">' +
@@ -2060,6 +2072,30 @@
     '<details class="guide"><summary>למה השייק יוצא קפוא מדי — ששת הכללים</summary><ol>' +
     SHAKE_RULES.map(r => "<li><b>" + r[0] + ".</b> " + r[1] + "</li>").join("") +
     '</ol><p>יוגורט חלבון סמיך בהרבה מיוגורט רגיל — איתו תמיד מוסיפים עוד רבע כוס נוזל.</p></details>';
+
+
+  /* ---------------- מהארון ----------------
+     תבלינים ובסיס שהמתכונים משתמשים בהם. מזוהים מתוך טקסט השלבים,
+     כדי שלא נניח שיש אותם בבית — למי שרק מתחיל, בדרך כלל אין.  */
+  const BASICS = [
+    ["שמן זית", "בקבוק שמן זית"],
+    ["מלח", "מלח"],
+    ["פלפל שחור", "פלפל שחור טחון"],
+    ["כמון", "כמון טחון"],
+    ["פפריקה", "פפריקה מתוקה"],
+    ["כורכום", "כורכום"],
+    ["זעתר", "זעתר"],
+    ["אורגנו", "אורגנו יבש"],
+    ["קינמון", "קינמון טחון"],
+    ["סומק", "סומק"],
+    ["שום אבקה", "שום אבקה"],
+    ["חמאה", "חבילת חמאה"]
+  ];
+
+  function basicsOf(r) {
+    const txt = r.steps.map(x => x.t + " " + (x.tip || "")).join(" ");
+    return BASICS.filter(b => txt.indexOf(b[0]) !== -1);
+  }
 
   const mmss = sec => Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0");
 
@@ -2371,8 +2407,16 @@
       if (onlyMissing && ok.some(satisfies)) return;
       out.push(ok[0]);                             // האפשרות הראשונה היא ברירת המחדל לקנייה
     });
+    // במצב "כל המנה" מוסיפים גם את התבלינים והבסיס
+    if (!onlyMissing) basicsOf(r).forEach(b => out.push("basic:" + b[0]));
     return out;
   }
+
+  const isBasic = id => id.indexOf("basic:") === 0;
+  const basicLabel = id => {
+    const key = id.slice(6), hit = BASICS.find(b => b[0] === key);
+    return hit ? hit[1] : key;
+  };
 
   function openShop(id) {
     const same = shop && shop.id === id;
@@ -2398,23 +2442,30 @@
     $("#dlg-sub").textContent = (!have.size && shop.onlyMissing)
       ? "לא סימנת מה יש בבית, אז הרשימה כוללת את כל המנה. סמן כל מה שכבר יש לך."
       : r.min + " דקות · " + r.p + " ג\' חלבון למנה";
-    $("#dlg-scope").textContent = !have.size ? "כל המנה"
-      : (shop.onlyMissing ? "רק מה שחסר" : "כל המרכיבים");
-    $("#dlg-scope").disabled = !have.size;
-    $("#dlg-scope").setAttribute("aria-pressed", String(have.size ? shop.onlyMissing : false));
+    $("#dlg-scope").textContent = shop.onlyMissing
+      ? (have.size ? "רק מה שחסר" : "בלי תבלינים")
+      : "כל המנה, כולל תבלינים";
+    $("#dlg-scope").setAttribute("aria-pressed", String(!shop.onlyMissing));
     document.querySelectorAll("[data-serv]").forEach(b =>
       b.setAttribute("aria-pressed", String(Number(b.dataset.serv) === shop.servings)));
 
     if (!items.length) {
-      $("#dlg-list").innerHTML = '<p class="empty">יש לך כבר הכל בבית. אפשר לעלות ולהתחיל.</p>';
+      $("#dlg-list").innerHTML = '<p class="empty">יש לך כבר הכל בבית. אפשר לעלות ולהתחיל.<br>' +
+        'לא בטוח? לחץ על «כל המנה, כולל תבלינים» למעלה כדי לראות את הרשימה המלאה.</p>';
     } else {
       const byAisle = {};
-      items.forEach(i => { const a = AISLE[i] || "שונות"; (byAisle[a] = byAisle[a] || []).push(i); });
-      $("#dlg-list").innerHTML = GROUPS.map(g => g.title).filter(t => byAisle[t]).map(t =>
+      items.forEach(i => {
+        const a = isBasic(i) ? "תבלינים ובסיס" : (AISLE[i] || "שונות");
+        (byAisle[a] = byAisle[a] || []).push(i);
+      });
+      const order = GROUPS.map(g => g.title).concat(["שונות", "תבלינים ובסיס"]);
+      $("#dlg-list").innerHTML = order.filter(t => byAisle[t]).map(t =>
         '<div class="shop-aisle"><h4>' + esc(t) + '</h4>' +
+        (t === "תבלינים ובסיס" ? '<p class="aisle-note">רק אם אין לך כבר בבית.</p>' : "") +
         byAisle[t].map(i =>
           '<label class="shop-item"><input type="checkbox" data-buy="' + i + '"' +
-          (checked.has(i) ? " checked" : "") + '><span class="q">' + esc(qtyText(i, shop.servings)) + '</span></label>'
+          (checked.has(i) ? " checked" : "") + '><span class="q">' +
+          esc(isBasic(i) ? basicLabel(i) : qtyText(i, shop.servings)) + '</span></label>'
         ).join("") + '</div>'
       ).join("");
     }
@@ -2441,7 +2492,7 @@
   function shopAsText() {
     const r = R.find(x => x.id === shop.id);
     return "קניות ל" + r.name + " (" + shop.servings + " מנות)\n" +
-      shopItems(r, shop.onlyMissing).map(i => "• " + qtyText(i, shop.servings)).join("\n");
+      shopItems(r, shop.onlyMissing).map(i => "• " + (isBasic(i) ? basicLabel(i) : qtyText(i, shop.servings))).join("\n");
   }
 
   /* ---------------- לוח הטעמים ---------------- */
@@ -2792,7 +2843,7 @@
 
   // אחרי הקנייה: מה שסומן בעגלה נכנס ישר למקרר
   $("#dlg-done").addEventListener("click", () => {
-    shop.checked.forEach(i => have.add(i));
+    shop.checked.forEach(i => { if (!isBasic(i)) have.add(i); });   // תבלינים לא נכנסים לרשימת המקרר
     shop = null;
     $("#dlg").close();
     refreshAll();

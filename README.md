@@ -72,8 +72,8 @@ rayon :
 - **avec des quantités** — « 3 גזרים », « קופסת חומוס », « 300 גרם טחון » —
   ajustées selon qu'on cuisine pour 1, 2 ou 4 ;
 - **cochable au fur et à mesure**, en grosses cases lisibles d'une main ;
-- **au choix** : seulement ce qui manque à la maison, ou tous les ingrédients
-  du plat quand on ne se souvient plus de ce qu'on a ;
+- **au choix** : seulement ce qui manque à la maison, ou **tout le plat, épices
+  comprises** — utile quand on démarre et qu'on n'a pas encore de placard ;
 - **« קניתי — סמן במקרר »** : ce qu'on a mis dans le panier entre directement
   dans le garde-manger, donc l'app est à jour en rentrant.
 
@@ -116,8 +116,12 @@ goûter et 35 pour le soir (une recette peut servir à plusieurs moments) ; 33
 tiennent en 10 minutes ou moins, 9 sont pensées pour les enfants, 8 pour vider
 le frigo et 5 sont piquantes.
 
-L'huile d'olive, le sel, le poivre et les épices de base sont toujours
-considérés comme disponibles.
+L'huile d'olive, le sel, le poivre et les épices ne sont pas dans la liste à
+cocher, mais ils ne sont plus passés sous silence : chaque recette affiche
+« ומהארון: … » avec ce qu'elle utilise, et la liste de courses les propose dans
+un rayon « תבלינים ובסיס » dès qu'on demande le plat entier. Le sel intervient
+dans 44 des 69 recettes, l'huile d'olive dans 30 — les supposer présents était
+une hypothèse, pas une évidence.
 
 ## Fichiers
 
