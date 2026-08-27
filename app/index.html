@@ -289,6 +289,8 @@
     padding: 6px 14px; font-size: var(--step--1); font-weight: 400; transition: background .15s, border-color .15s, color .15s;
   }
   .chip:hover { border-color: var(--ink-3); }
+  .chip:disabled { opacity: .55; cursor: default; }
+  .chip:disabled:hover { border-color: var(--line); }
   .chip[aria-pressed="true"] { background: var(--olive); border-color: var(--olive); color: var(--surface); font-weight: 600; }
   :root[data-theme="dark"] .chip[aria-pressed="true"], :root:not([data-theme="light"]) .chip[aria-pressed="true"] { color: #101512; }
 
@@ -1908,7 +1910,8 @@
     store.set(KEY.notes, notes);
     store.set(KEY.people, people);
     store.set(KEY.cooking, Array.from(cooking));
-    store.set("mlo.shop.v1", shop);
+    // רשימה נשמרת רק אחרי שסימנת משהו — עיון בלבד לא יוצר רשימה
+    store.set("mlo.shop.v1", (shop && shop.checked.length) ? shop : null);
   }
 
   /* ---------------- טעמים ---------------- */
@@ -2380,9 +2383,13 @@
     shop.checked = Array.from(checked);
 
     $("#dlg-title").textContent = r.name;
-    $("#dlg-sub").textContent = r.min + " דקות · " + r.p + " ג\' חלבון למנה";
-    $("#dlg-scope").textContent = shop.onlyMissing ? "רק מה שחסר" : "כל המרכיבים";
-    $("#dlg-scope").setAttribute("aria-pressed", String(shop.onlyMissing));
+    $("#dlg-sub").textContent = (!have.size && shop.onlyMissing)
+      ? "לא סימנת מה יש בבית, אז הרשימה כוללת את כל המנה. סמן כל מה שכבר יש לך."
+      : r.min + " דקות · " + r.p + " ג\' חלבון למנה";
+    $("#dlg-scope").textContent = !have.size ? "כל המנה"
+      : (shop.onlyMissing ? "רק מה שחסר" : "כל המרכיבים");
+    $("#dlg-scope").disabled = !have.size;
+    $("#dlg-scope").setAttribute("aria-pressed", String(have.size ? shop.onlyMissing : false));
     document.querySelectorAll("[data-serv]").forEach(b =>
       b.setAttribute("aria-pressed", String(Number(b.dataset.serv) === shop.servings)));
 
@@ -2410,7 +2417,7 @@
 
   function renderListButton() {
     const btn = $("#open-list");
-    if (!shop) { btn.hidden = true; return; }
+    if (!shop || !shop.checked.length) { btn.hidden = true; return; }
     const r = R.find(x => x.id === shop.id);
     if (!r) { btn.hidden = true; return; }
     const total = shopItems(r, shop.onlyMissing).length;
@@ -2750,6 +2757,9 @@
   });
 
   $("#dlg-close").addEventListener("click", () => $("#dlg").close());
+  $("#dlg").addEventListener("close", () => {
+    if (shop && !shop.checked.length) { shop = null; saveAll(); renderListButton(); }
+  });
   $("#open-list").addEventListener("click", () => { if (shop) openShop(shop.id); });
 
   $("#dlg-copy").addEventListener("click", () => {
