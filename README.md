@@ -10,7 +10,7 @@ Interface **en hébreu** (RTL). 69 idées de repas dont 10 smoothies, aucune ne 
 
 | Mode | À quoi ça sert |
 |---|---|
-| **אני רעב עכשיו** | Un bloc d'accueil en haut de page : le moment de la journée, le nombre d'idées disponibles, et un grand bouton dont le libellé s'adapte à l'heure (« תן לי רעיון לארוחת ערב »). La recette s'affiche juste dessous. |
+| **אני רעב עכשיו** | Un bloc d'accueil en haut de page : le moment de la journée, le nombre d'idées disponibles, et un grand bouton dont le libellé s'adapte à l'heure (« תן לי רעיון לארוחת ערב »). En dessous, des raccourcis par catégorie avec leur nombre de recettes — שייקים, במקום נשנוש, עד 10 דקות, מתאים לילדים, לרוקן את המקרר — qui ouvrent la liste filtrée en un geste. |
 | **מה יש לי בבית** | Un champ de recherche pour retrouver un aliment parmi 69, puis on coche ce qu'on a (le choix est mémorisé sur l'appareil). Les recettes sont classées en trois groupes : réalisables tout de suite, il manque un ingrédient, il en manque plusieurs. |
 | **הטעמים שלנו** | Qui mange, et ce que chacun n'aime pas. Plus les ingrédients perso, les recettes écartées et les notes. |
 

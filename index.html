@@ -116,6 +116,22 @@
   .hero-hint { margin: 11px 0 0; text-align: center; color: var(--ink-3); font-size: var(--step--1); }
   .hero-hint b { color: var(--olive); font-weight: 600; }
 
+  .quick { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; padding-top: 13px; border-top: 1px solid var(--line-soft); }
+  .quick > .lab { font-family: "Heebo", sans-serif; font-size: .72rem; letter-spacing: .08em; color: var(--ink-3); align-self: center; }
+  .quick button {
+    border: 1px solid var(--line); background: var(--surface-2); border-radius: 999px;
+    padding: 6px 13px; font-size: var(--step--1); display: inline-flex; align-items: center; gap: 7px;
+    transition: border-color .15s, background .15s;
+  }
+  .quick button:hover { border-color: var(--olive); background: var(--olive-soft); }
+  .quick button b {
+    font-family: "Heebo", sans-serif; font-weight: 700; font-size: .7rem; color: var(--olive);
+    background: var(--olive-soft); border-radius: 999px; padding: 1px 7px; font-variant-numeric: tabular-nums;
+  }
+  .quick button:hover b { background: var(--surface); }
+  .chip .n { font-family: "Heebo", sans-serif; font-size: .7rem; color: var(--ink-3); font-variant-numeric: tabular-nums; margin-inline-start: 5px; }
+  .chip[aria-pressed="true"] .n { color: inherit; opacity: .8; }
+
   /* ---------- חיפוש מרכיבים ---------- */
   .searchbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
   .searchbar input {
@@ -427,6 +443,12 @@
   @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) { .fade { animation: none; } * { transition: none !important; } }
 
+  @media (max-width: 430px) {
+    .modes button { font-size: .82rem; padding: 9px 2px; }
+    .quick { gap: 6px; }
+    .quick button { padding: 5px 11px; }
+  }
+
   @media (max-width: 560px) {
     .nutri { grid-template-columns: 1fr; gap: 7px; }
     .nut { display: flex; align-items: baseline; gap: 8px; }
@@ -466,6 +488,7 @@
       </div>
       <button class="btn primary big" id="roll">תן לי רעיון</button>
       <p class="hero-hint" id="now-hint"></p>
+      <div class="quick" id="quick"></div>
     </div>
     <div id="now-slot"></div>
   </section>
@@ -2035,6 +2058,41 @@
   const SLOT_HE = { boker: "בוקר", tsohorayim: "צהריים", nashnush: "נשנוש אחר הצהריים", erev: "ערב" };
   const SLOT_FOR = { boker: "לארוחת בוקר", tsohorayim: "לצהריים", nashnush: "לנשנוש", erev: "לארוחת ערב" };
 
+  // קיצורי דרך לקטגוריות, כדי שלא צריך לגלול כדי לגלות שהן קיימות
+  const CATS = [
+    ["shake", "שייקים", r => r.shake],
+    ["snack", "במקום נשנוש", r => r.snack],
+    ["fast", "עד 10 דקות", r => r.min <= 10],
+    ["kids", "מתאים לילדים", r => r.kids],
+    ["empty", "לרוקן את המקרר", r => r.empty]
+  ];
+
+  function renderQuick() {
+    const pool = menu();
+    $("#quick").innerHTML = '<span class="lab">או לפי סוג</span>' +
+      CATS.map(c => {
+        const n = pool.filter(c[2]).length;
+        return n ? '<button data-cat="' + c[0] + '">' + esc(c[1]) + ' <b>' + n + '</b></button>' : "";
+      }).join("");
+    // מספרים גם על מסנני הרשימה
+    CATS.forEach(c => {
+      const btn = $("#f-" + c[0]);
+      if (btn) btn.innerHTML = esc(c[1]) + '<span class="n">' + pool.filter(c[2]).length + '</span>';
+    });
+  }
+
+  function showCat(key) {
+    Object.keys(filters).forEach(k => {
+      filters[k] = (k === key);
+      const btn = $("#f-" + k);
+      if (btn) btn.setAttribute("aria-pressed", String(filters[k]));
+    });
+    setTab("pantry");
+    renderResults();
+    const box = $("#results");
+    if (box) box.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   function renderHero() {
     const d = new Date(), slot = slotNow(d);
     const pool = menu().filter(r => r.when.indexOf(slot) !== -1);
@@ -2045,6 +2103,7 @@
     $("#now-hint").innerHTML = have.size
       ? "<b>" + ready + "</b> מתוך " + pool.length + " הרעיונות " + SLOT_FOR[slot] + " אפשר להכין ממה שיש לך עכשיו."
       : "<b>" + pool.length + "</b> רעיונות מתאימים לשעה הזו. סמן מה יש בבית כדי לצמצם למה שאפשר להכין.";
+    renderQuick();
   }
 
   function pickNow() {
@@ -2434,6 +2493,9 @@
 
   document.addEventListener("click", e => {
     const t = e.target;
+
+    const cat = t.closest("[data-cat]");
+    if (cat) { showCat(cat.dataset.cat); return; }
 
     const who = t.closest("[data-who]");
     if (who) {
