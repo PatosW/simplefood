@@ -10,7 +10,7 @@ Interface **en hébreu** (RTL). 69 idées de repas dont 10 smoothies, aucune ne 
 
 | Mode | À quoi ça sert |
 |---|---|
-| **אני רעב עכשיו** | Un bloc d'accueil en haut de page : le moment de la journée, le nombre d'idées disponibles, et un grand bouton dont le libellé s'adapte à l'heure (« תן לי רעיון לארוחת ערב »). En dessous, des raccourcis par catégorie avec leur nombre de recettes — שייקים, במקום נשנוש, עד 10 דקות, מתאים לילדים, לרוקן את המקרר — qui ouvrent la liste filtrée en un geste. |
+| **אני רעב עכשיו** | Un bloc d'accueil en haut de page : quatre boutons pour choisir le moment du repas — celui de l'heure actuelle est marqué « עכשיו », mais on peut préparer le dîner depuis le bureau —, le nombre d'idées disponibles, et un grand bouton dont le libellé s'adapte à l'heure (« תן לי רעיון לארוחת ערב »). En dessous, des raccourcis par catégorie avec leur nombre de recettes — שייקים, במקום נשנוש, עד 10 דקות, מתאים לילדים, לרוקן את המקרר — qui ouvrent la liste filtrée en un geste. |
 | **מה יש לי בבית** | Un champ de recherche pour retrouver un aliment parmi 69, puis on coche ce qu'on a (le choix est mémorisé sur l'appareil). Les recettes sont classées en trois groupes : réalisables tout de suite, il manque un ingrédient, il en manque plusieurs. |
 | **הטעמים שלנו** | Qui mange, et ce que chacun n'aime pas. Plus les ingrédients perso, les recettes écartées et les notes. |
 
@@ -61,8 +61,11 @@ Un filtre « שייקים » les regroupe.
 ## Faire les courses pour un plat
 
 Pensé pour le moment où on décide d'un plat avant de rentrer, avec un
-supermarché sur le chemin. Depuis n'importe quelle recette, le bouton
-« רשימת קניות » ouvre une liste utilisable en rayon :
+supermarché sur le chemin. Le parcours tient en trois gestes : choisir le
+moment du repas dans le bloc d'accueil (**ערב** même s'il est 17 h), tirer une
+idée, puis **« רשימת קניות »** — le bouton est en haut de la recette, à côté de
+celui qui lance la cuisson, pas en bas de page. La liste est utilisable en
+rayon :
 
 - **groupée par rayon** dans l'ordre du magasin (frais, fruits et légumes,
   épicerie, surgelés) ;

@@ -103,6 +103,22 @@
     font-variant-numeric: tabular-nums; letter-spacing: .04em;
   }
   .hero-top::after { content: ""; flex: 1; height: 1px; background: var(--line-soft); }
+  .slots { display: flex; gap: 6px; margin-bottom: 13px; }
+  .slots button {
+    flex: 1; border: 1px solid var(--line); background: transparent; border-radius: 9px;
+    padding: 7px 4px; font-size: var(--step--1); color: var(--ink-2);
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .slots button[aria-pressed="true"] { background: var(--olive); border-color: var(--olive); color: var(--surface); font-weight: 600; }
+  :root[data-theme="dark"] .slots button[aria-pressed="true"],
+  :root:not([data-theme="light"]) .slots button[aria-pressed="true"] { color: #101512; }
+  .slots button .now { display: block; font-size: .6rem; letter-spacing: .06em; opacity: .7; }
+
+  .cardbar {
+    display: flex; gap: 8px; flex-wrap: wrap; padding: 14px 20px 0;
+  }
+  .cardbar .btn { flex: 1; min-width: 140px; text-align: center; }
+
   .hero-hint { margin: 11px 0 0; text-align: center; color: var(--ink-3); font-size: var(--step--1); }
   .hero-hint b { color: var(--olive); font-weight: 600; }
 
@@ -474,6 +490,7 @@
         <span class="moment" id="hero-moment">טוען…</span>
         <span class="hour" id="hero-hour"></span>
       </div>
+      <div class="slots" id="slots"></div>
       <button class="btn primary big" id="roll">תן לי רעיון</button>
       <p class="hero-hint" id="now-hint"></p>
       <div class="quick" id="quick"></div>
@@ -1872,6 +1889,7 @@
   const filters = { fast: false, nocook: false, snack: false, shake: false, kids: false, empty: false, fav: false };
   let lastShown = null;
   let showHidden = false;
+  let slotPick = null;          // מועד שנבחר ידנית, למשל לתכנן ערב כבר מהמשרד
   let query = "";
   let shop = store.get("mlo.shop.v1", null);   // { id, servings, onlyMissing, checked: [] }
 
@@ -1966,6 +1984,13 @@
       '<div class="card-head"><h2>' + esc(r.name) + '</h2>' +
         '<div class="timebox"><b>' + r.min + '</b><span>דקות</span></div></div>' +
       '<div class="tags">' + tags.map(t => '<span class="tag' + (t[1] ? " hot" : "") + '">' + esc(t[0]) + '</span>').join("") + '</div>' +
+      '<div class="cardbar">' +
+        '<button class="btn primary" data-cook="' + r.id + '">בישול שלב־שלב</button>' +
+        '<button class="btn" data-shop="' + r.id + '">' +
+          (have.size && st.missing.length ? "רשימת קניות · חסר " + st.missing.length
+            : (st.missing.length ? "רשימת קניות" : "רשימת קניות · יש לך הכל")) +
+        '</button>' +
+      '</div>' +
       '<div class="nutri">' +
         '<div class="nut p"><div class="lab">חלבון</div><div class="val">' + r.p + ' ג\'</div><div class="bar"><i style="width:' + nutBar(r.p, 40) + '%"></i></div></div>' +
         '<div class="nut f"><div class="lab">סיבים</div><div class="val">' + r.f + ' ג\'</div><div class="bar"><i style="width:' + nutBar(r.f, 16) + '%"></i></div></div>' +
@@ -1994,11 +2019,7 @@
           '<span class="saved" data-saved="' + r.id + '"></span></div>' +
       '</div>' +
       '<div class="card-foot">' +
-        '<button class="btn primary" data-cook="' + r.id + '">בישול שלב אחרי שלב</button>' +
         '<button class="btn fav" data-fav="' + r.id + '" aria-pressed="' + favs.has(r.id) + '">' + (favs.has(r.id) ? "★ שמור" : "☆ שמור") + '</button>' +
-        (st.missing.length
-          ? '<button class="btn" data-shop="' + r.id + '">' + (have.size ? "חסר " + st.missing.length + " — רשימת קניות" : "רשימת קניות") + '</button>'
-          : "") +
         '<button class="btn" data-off="' + r.id + '" style="margin-inline-start:auto">לא בשבילי</button>' +
       '</div></article>';
   }
@@ -2045,6 +2066,7 @@
   }
   const SLOT_HE = { boker: "בוקר", tsohorayim: "צהריים", nashnush: "נשנוש אחר הצהריים", erev: "ערב" };
   const SLOT_FOR = { boker: "לארוחת בוקר", tsohorayim: "לצהריים", nashnush: "לנשנוש", erev: "לארוחת ערב" };
+  const SLOT_SHORT = { boker: "בוקר", tsohorayim: "צהריים", nashnush: "נשנוש", erev: "ערב" };
 
   // קיצורי דרך לקטגוריות, כדי שלא צריך לגלול כדי לגלות שהן קיימות
   const CATS = [
@@ -2081,11 +2103,22 @@
     if (box) box.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  const activeSlot = () => slotPick || slotNow(new Date());
+
+  function renderSlots() {
+    const real = slotNow(new Date()), cur = activeSlot();
+    $("#slots").innerHTML = ["boker", "tsohorayim", "nashnush", "erev"].map(k =>
+      '<button data-slot="' + k + '" aria-pressed="' + (k === cur) + '">' + esc(SLOT_SHORT[k]) +
+      (k === real ? '<span class="now">עכשיו</span>' : '<span class="now">&nbsp;</span>') + '</button>'
+    ).join("");
+  }
+
   function renderHero() {
-    const d = new Date(), slot = slotNow(d);
+    const d = new Date(), slot = activeSlot();
     const pool = menu().filter(r => r.when.indexOf(slot) !== -1);
     const ready = pool.filter(r => stateOf(r).missing.length === 0).length;
     $("#hero-moment").textContent = SLOT_HE[slot];
+    renderSlots();
     $("#hero-hour").textContent = String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
     $("#roll").textContent = "תן לי רעיון " + SLOT_FOR[slot];
     $("#now-hint").innerHTML = have.size
@@ -2095,7 +2128,7 @@
   }
 
   function pickNow() {
-    const slot = slotNow(new Date());
+    const slot = activeSlot();
     const all = menu();
     let pool = all.filter(r => r.when.indexOf(slot) !== -1);
     if (!pool.length) pool = all;
@@ -2477,10 +2510,23 @@
   $("#tab-now").addEventListener("click", () => setTab("now"));
   $("#tab-pantry").addEventListener("click", () => setTab("pantry"));
   $("#tab-taste").addEventListener("click", () => { renderPeople(); renderCustom(); renderOff(); renderNotes(); setTab("taste"); });
-  $("#roll").addEventListener("click", pickNow);
+  function pickAndShow() {
+    pickNow();
+    const card = $("#now-slot");
+    if (card && card.firstChild) card.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  $("#roll").addEventListener("click", pickAndShow);
 
   document.addEventListener("click", e => {
     const t = e.target;
+
+    const sl = t.closest("[data-slot]");
+    if (sl) {
+      slotPick = sl.dataset.slot === slotNow(new Date()) ? null : sl.dataset.slot;
+      setTab("now");
+      pickAndShow();
+      return;
+    }
 
     const cat = t.closest("[data-cat]");
     if (cat) { showCat(cat.dataset.cat); return; }
