@@ -88,12 +88,37 @@
   .top { padding: 26px 0 18px; display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; }
   .brand h1 { font-size: var(--step-2); letter-spacing: -.01em; }
   .brand p { margin: 2px 0 0; color: var(--ink-3); font-size: var(--step--1); font-family: "Heebo", sans-serif; letter-spacing: .04em; }
-  .clock {
-    font-family: "Heebo", sans-serif; font-size: var(--step--1); font-weight: 500;
-    color: var(--olive); background: var(--olive-soft);
-    border-radius: 999px; padding: 5px 12px; white-space: nowrap;
-    font-variant-numeric: tabular-nums;
+
+  /* ---------- בלוק פתיחה ---------- */
+  .hero {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 16px 18px 18px; margin-bottom: 18px;
   }
+  .hero-top { display: flex; align-items: baseline; gap: 10px; margin-bottom: 13px; }
+  .hero-top .moment {
+    font-family: "Frank Ruhl Libre", serif; font-weight: 700; font-size: var(--step-2); color: var(--ink);
+  }
+  .hero-top .hour {
+    font-family: "Heebo", sans-serif; font-size: var(--step--1); color: var(--ink-3);
+    font-variant-numeric: tabular-nums; letter-spacing: .04em;
+  }
+  .hero-top::after { content: ""; flex: 1; height: 1px; background: var(--line-soft); }
+  .hero-hint { margin: 11px 0 0; text-align: center; color: var(--ink-3); font-size: var(--step--1); }
+  .hero-hint b { color: var(--olive); font-weight: 600; }
+
+  /* ---------- חיפוש מרכיבים ---------- */
+  .searchbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .searchbar input {
+    flex: 1; font-size: var(--step-0); padding: 10px 14px; border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--line); color: var(--ink);
+  }
+  .searchbar input:focus { border-color: var(--olive); }
+  .searchbar .found {
+    font-family: "Heebo", sans-serif; font-size: .72rem; color: var(--ink-3);
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+  .chip mark { background: var(--olive-soft); color: inherit; border-radius: 3px; padding: 0 1px; }
+  .chip[aria-pressed="true"] mark { background: rgba(255,255,255,.25); }
 
   /* ---------- mode switch ---------- */
   .modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 4px; margin-bottom: 14px; }
@@ -315,7 +340,6 @@
       <h1>מה לאכול עכשיו</h1>
       <p>אוכל פשוט ומאוזן, ממה שיש בבית</p>
     </div>
-    <div class="clock" id="clock">טוען…</div>
   </header>
 
   <div class="modes" role="tablist" aria-label="מצבי שימוש">
@@ -331,11 +355,15 @@
   </div>
 
   <section class="panel" id="panel-now" role="tabpanel" aria-labelledby="tab-now">
-    <div id="now-slot"></div>
-    <div style="margin-top:14px">
+    <div class="hero">
+      <div class="hero-top">
+        <span class="moment" id="hero-moment">טוען…</span>
+        <span class="hour" id="hero-hour"></span>
+      </div>
       <button class="btn primary big" id="roll">תן לי רעיון</button>
+      <p class="hero-hint" id="now-hint"></p>
     </div>
-    <p class="hint" style="margin-top:10px;text-align:center" id="now-hint"></p>
+    <div id="now-slot"></div>
   </section>
 
   <section class="panel" id="panel-pantry" role="tabpanel" aria-labelledby="tab-pantry" hidden>
@@ -346,10 +374,17 @@
       <button class="chip" id="f-fast" aria-pressed="false">עד 10 דקות</button>
       <button class="chip" id="f-nocook" aria-pressed="false">בלי בישול</button>
       <button class="chip" id="f-snack" aria-pressed="false">במקום נשנוש</button>
+      <button class="chip" id="f-kids" aria-pressed="false">מתאים לילדים</button>
+      <button class="chip" id="f-empty" aria-pressed="false">לרוקן את המקרר</button>
       <button class="chip" id="f-fav" aria-pressed="false">מועדפים</button>
     </div>
 
     <div id="hidden-banner"></div>
+
+    <div class="searchbar">
+      <input class="txt" id="ing-search" type="search" placeholder="חפש מרכיב — «טחינה», «ביצים», «קישוא»…" autocomplete="off">
+      <span class="found" id="ing-found"></span>
+    </div>
 
     <div id="pantry-groups"></div>
 
@@ -401,6 +436,8 @@
   </footer>
 </div>
 
+<datalist id="all-ings"></datalist>
+
 <dialog id="dlg">
   <div style="padding:20px">
     <h2 style="font-size:1.3rem;margin-bottom:10px" id="dlg-title">רשימת קניות</h2>
@@ -421,13 +458,16 @@
     { title: "מקרר", items: [
       ["eggs","ביצים"],["cottage","קוטג'"],["labaneh","לבנה"],["yogurt","יוגורט"],
       ["bulgarit","גבינה בולגרית"],["yellow_cheese","גבינה צהובה"],["milk","חלב"],
-      ["tofu","טופו"],["hummus_ready","חומוס מוכן"],["salmon","פילה סלמון"],["chicken","חזה עוף"]
+      ["tofu","טופו"],["hummus_ready","חומוס מוכן"],["salmon","פילה סלמון"],["chicken","חזה עוף"],
+      ["white_cheese","גבינה לבנה"],["sour_cream","שמנת חמוצה"],["ground_meat","עוף או בשר טחון"]
     ]},
     { title: "ירקות ופירות", items: [
       ["tomato","עגבניות"],["cucumber","מלפפון"],["pepper","פלפל"],["onion","בצל"],
       ["green_onion","בצל ירוק"],["garlic","שום"],["lemon","לימון"],["avocado","אבוקדו"],
       ["lettuce","עלים ירוקים"],["parsley","פטרוזיליה"],["carrot","גזר"],
-      ["sweet_potato","בטטה"],["banana","בננה"],["dates","תמרים"]
+      ["sweet_potato","בטטה"],["banana","בננה"],["dates","תמרים"],["apple","תפוח"],
+      ["potato","תפוח אדמה"],["zucchini","קישוא"],["eggplant","חציל"],
+      ["broccoli","ברוקולי"],["mushrooms","פטריות"]
     ]},
     { title: "ארון", items: [
       ["tuna","טונה"],["sardines","סרדינים"],["chickpeas","חומוס משומר"],["white_beans","שעועית לבנה"],
@@ -437,7 +477,9 @@
       ["cashews","קשיו"],["peanut_butter","חמאת בוטנים"],["honey","דבש או סילאן"],
       ["cocoa","קקאו"],["dark_chocolate","שוקולד מריר"],["chia","צ'יה"],
       ["passata","רסק עגבניות"],["soy_sauce","רוטב סויה"],
-      ["chili","פלפל חריף"],["schug","שוג"],["harissa","הריסה"]
+      ["chili","פלפל חריף"],["schug","שוג"],["harissa","הריסה"],
+      ["granola","גרנולה"],["tortilla","טורטייה"],["corn","תירס"],
+      ["flour","קמח"],["couscous","קוסקוס מלא"]
     ]},
     { title: "מקפיא", items: [
       ["frozen_veg","ירקות קפואים"],["edamame","אדממה"],["spinach_frozen","תרד קפוא"]
@@ -680,7 +722,209 @@
       need:["tuna",["harissa","schug","chili"],"lemon"], nice:["onion","parsley","chickpeas","olives"],
       p:30, f:5, s:2,
       steps:["מסננים טונה לקערה.","כפית הריסה, לימון, שמן זית, בצל קצוץ דק.","מערבבים חזק עד שהכל אחיד."],
-      note:"30 גרם חלבון בשש דקות ובלי להדליק כלום. ההריסה מחליפה גם את המלח וגם את הרוטב." }
+      note:"30 גרם חלבון בשש דקות ובלי להדליק כלום. ההריסה מחליפה גם את המלח וגם את הרוטב." },
+
+    { id:"pancake_banana", name:"פנקייק בננה־ביצה בלי קמח", min:10, when:["boker"],
+      need:["banana","eggs","oats"], nice:["yogurt","peanut_butter","honey","chia"],
+      p:14, f:5, s:13,
+      steps:["מועכים בננה בשלה עם 2 ביצים ו-3 כפות שיבולת שועל עד שאין גושים.",
+             "מחבת עם טיפת שמן, כפית מהתערובת לכל פנקייק. דקה לכל צד.",
+             "מעל: יוגורט או חמאת בוטנים."],
+      note:"הבננה היא הסוכר היחיד כאן. ככל שהיא בשלה יותר, כך הפנקייק מתוק יותר." },
+
+    { id:"ricotta_toast", name:"לחם קלוי, גבינה לבנה ודבש", min:4, when:["boker","nashnush"], snack:true,
+      need:["bread","white_cheese","honey"], nice:["walnuts","banana","chia","apple"],
+      p:16, f:5, s:10,
+      steps:["קולים פרוסת לחם מלא עד שהיא פריכה.","מורחים שכבה נדיבה של גבינה לבנה.",
+             "טפטוף דבש או סילאן, אגוזים קצוצים, קורט מלח."],
+      note:"קורט המלח מעל הדבש הוא מה שמוציא את הטעם. בלעדיו זה סתם מתוק." },
+
+    { id:"pita_toaster", name:"פיתה עם חביתה וגבינה בטוסטר", min:9, when:["boker","tsohorayim"],
+      need:["pita","eggs","white_cheese"], nice:["tomato","parsley","olives"],
+      p:22, f:6, s:3,
+      steps:["מקציפים 2 ביצים עם מלח ומטגנים חביתה דקה, 2 דקות.",
+             "פותחים פיתה, מורחים גבינה, מכניסים את החביתה מקופלת.",
+             "טוסטר או מחבת יבשה, 3 דקות, עד שהפיתה פריכה."],
+      note:"ארוחת בוקר שאפשר לאכול ביד בדרך לרכב, עם 22 גרם חלבון." },
+
+    { id:"hot_oats", name:"דייסת שיבולת שועל עם תפוח וקינמון", min:8, when:["boker"],
+      need:["oats",["milk","yogurt"],"apple"], nice:["walnuts","honey","chia","banana"],
+      p:12, f:7, s:14,
+      steps:["חצי כוס שיבולת שועל וכוס חלב לסיר קטן, 5 דקות על אש נמוכה תוך ערבוב.",
+             "מגרדים תפוח פנימה בשתי הדקות האחרונות.","קינמון, אגוזים, ואם צריך — כפית דבש."],
+      note:"התפוח המגורד ממתיק את הדייסה מבפנים, כך שכמעט לא צריך דבש." },
+
+    { id:"scrambled_soft", name:"ביצים מקושקשות רכות", min:6, when:["boker","erev"],
+      need:["eggs"], nice:["green_onion","white_cheese","bread","parsley","mushrooms"],
+      p:14, f:1, s:2,
+      steps:["טורפים 3 ביצים עם מלח.","מחבת על אש נמוכה עם חמאה או שמן זית, יוצקים ומערבבים בלי הפסקה.",
+             "מורידים מהאש כשהן עדיין רכות ולחות — הן ימשיכו להתבשל בצלחת."],
+      note:"אש נמוכה וערבוב מתמיד: זה כל ההבדל בין מקושקשת קרמית לבין גומי." },
+
+    { id:"fruit_cottage", name:"קערת פירות, קוטג' וגרנולה", min:4, when:["boker","nashnush"], nocook:true, snack:true,
+      need:["cottage",["apple","banana"],"granola"], nice:["honey","chia","almonds","dates"],
+      p:18, f:5, s:16,
+      steps:["קוטג' לקערה.","פרי חתוך מעל וחופן גרנולה.","קינמון או כפית דבש."],
+      note:"סדר הזה חשוב: הגרנולה מעל ולא מעורבבת, כדי שתישאר פריכה." },
+
+    { id:"egg_wrap", name:"טורטייה עם חביתה וגבינה", min:8, when:["boker","tsohorayim"],
+      need:["tortilla","eggs","white_cheese"], nice:["tomato","lettuce","avocado","parsley"],
+      p:20, f:5, s:3,
+      steps:["חביתה דקה מ-2 ביצים במחבת בגודל הטורטייה.",
+             "מניחים את הטורטייה על החביתה בזמן שהיא עוד רכה ולוחצים — הן נדבקות.",
+             "הופכים, מורחים גבינה, ירק חתוך, מגלגלים וחוצים."],
+      note:"הטריק של הטורטייה על החביתה הרכה חוסך גלגול מתפרק." },
+
+    { id:"date_shake", name:"שייק תמרים, שקדים וחלב", min:4, when:["boker","nashnush"], nocook:true, snack:true,
+      need:["dates","almonds",["milk","yogurt"]], nice:["banana","chia","cocoa"],
+      p:14, f:6, s:18,
+      steps:["3 תמרים בלי גלעין, חופן שקדים וכוס חלב לבלנדר.","30 שניות עד שחלק.","קרח אם רוצים קר."],
+      note:"מתוק כמו שייק של בית קפה, בלי סוכר מוסף בכלל — אבל 18 גרם סוכר מהתמרים, אז זו ארוחה ולא משקה." },
+
+    { id:"white_cheese_bowl", name:"גבינה לבנה עם אגוזים וסילאן", min:3, when:["boker","nashnush"], nocook:true, snack:true,
+      need:["white_cheese",["walnuts","almonds","cashews"],"honey"], nice:["chia","apple","banana"],
+      p:18, f:3, s:9,
+      steps:["גבינה לבנה לקערה.","אגוזים קצוצים גס מעל.","קו של סילאן או דבש, קינמון."],
+      note:"שלוש דקות, 18 גרם חלבון: זו הקערה שמחליפה את קופסת השוקולד בערב." },
+
+    { id:"frittata_left", name:"פריטטה מכל ירק שנשאר", min:20, when:["erev","tsohorayim"], empty:true,
+      need:["eggs",["zucchini","pepper","mushrooms","potato","broccoli","carrot"]],
+      nice:["onion","white_cheese","parsley","bulgarit","garlic"],
+      p:18, f:4, s:4,
+      steps:["קוצצים כל ירק שנשאר במקרר ומטגנים במחבת 6 דקות.",
+             "טורפים 4 ביצים עם מלח ופלפל ויוצקים מעל.",
+             "אש נמוכה, מכוסה, 8 דקות — עד שהמרכז מתייצב."],
+      note:"מחבת אחת, כל שאריות הירקות, ומנה שטובה גם קרה למחרת." },
+
+    { id:"fried_rice", name:"אורז מטוגן משאריות", min:12, when:["tsohorayim","erev"], empty:true,
+      need:["rice","eggs"], nice:["frozen_veg","green_onion","soy_sauce","chicken","carrot","garlic"],
+      p:18, f:4, s:3,
+      steps:["מחבת חמה מאוד עם מעט שמן. כל ירק שיש, 3 דקות.",
+             "דוחפים לצד, שוברים 2 ביצים ומערבבים עד שהן נקרשות.",
+             "אורז מאתמול פנימה, כף סויה, מערבבים חזק 3 דקות."],
+      note:"אורז מאתמול מהמקרר עובד הרבה יותר טוב מאורז טרי — הוא יבש ולא נדבק." },
+
+    { id:"clean_soup", name:"מרק «מה שנשאר» עם עדשים", min:25, when:["erev"], empty:true,
+      need:[["carrot","zucchini","potato","broccoli","sweet_potato"],"onion","lentils"],
+      nice:["garlic","lemon","parsley","tomato"],
+      p:16, f:14, s:6,
+      steps:["בצל וכל ירק שנשאר, קצוצים, בסיר עם שמן זית, 5 דקות.",
+             "כוס עדשים, ליטר מים, כמון, כורכום, מלח.",
+             "20 דקות. טועמים, סוחטים לימון."],
+      note:"אין מתכון קבוע פה: כל ירק שנראה עייף במקרר מתאים, וכולם ייעלמו בטעם." },
+
+    { id:"couscous_salad", name:"סלט קוסקוס עם מה שנשאר", min:15, when:["tsohorayim","erev"], empty:true,
+      need:["couscous",["cucumber","tomato","pepper","carrot"]],
+      nice:["lemon","parsley","chickpeas","olives","bulgarit"],
+      p:12, f:8, s:5,
+      steps:["כוס קוסקוס מלא, כוס מים רותחים, מכסים ל-5 דקות ומפרידים במזלג.",
+             "קוצצים דק כל ירק שיש.","לימון, שמן זית, מלח, המון פטרוזיליה."],
+      note:"טוב גם קר למחרת בקופסה, וזה בדיוק העניין." },
+
+    { id:"pasta_veg_yogurt", name:"פסטה עם ירקות שנשארו ורוטב יוגורט", min:15, when:["erev","tsohorayim"], empty:true,
+      need:["pasta",["zucchini","broccoli","mushrooms","pepper"],["yogurt","sour_cream"]],
+      nice:["garlic","parsley","lemon","white_cheese"],
+      p:18, f:8, s:5,
+      steps:["פסטה למים רותחים. בינתיים מטגנים את הירקות עם שום.",
+             "מסננים ושומרים חצי כוס ממי הבישול.",
+             "מכבים את האש, מערבבים יוגורט עם מי הפסטה ויוצקים — מחוץ לאש, אחרת היוגורט ייפרד."],
+      note:"היוגורט נכנס תמיד מחוץ לאש. זה ההבדל בין רוטב קרמי לרוטב שנראה כמו גבינה מפוררת." },
+
+    { id:"oven_veg", name:"ירקות בתנור עם שקדים", min:25, when:["erev"], empty:true,
+      need:[["eggplant","zucchini","sweet_potato","potato","broccoli","carrot"]],
+      nice:["almonds","tahini","garlic","lemon","parsley"],
+      p:8, f:10, s:8,
+      steps:["תנור על 220 מעלות. חותכים כל ירק לקוביות בגודל דומה.",
+             "שמן זית, מלח, כמון. תבנית אחת בשכבה אחת — לא צפוף, אחרת הם מתאדים במקום להשחים.",
+             "20 דקות. שקדים קצוצים וטחינה בסוף."],
+      note:"שכבה אחת ולא צפופה זה כל הסוד של ירקות שמשחימים בתנור." },
+
+    { id:"rosti", name:"רסטי תפוחי אדמה עם ביצה", min:15, when:["erev","boker"], empty:true,
+      need:["potato","eggs","onion"], nice:["parsley","sour_cream","green_onion"],
+      p:14, f:5, s:3,
+      steps:["מגררים 2 תפוחי אדמה ובצל, סוחטים היטב את הנוזלים בידיים.",
+             "מלח ופלפל, שכבה דקה במחבת עם שמן, 5 דקות כל צד עד שזהוב.",
+             "ביצת עין מעל."],
+      note:"הסחיטה של הנוזלים היא מה שהופך את זה לפריך במקום לרך ולח." },
+
+    { id:"fattoush", name:"סלט לחם מפיתה יבשה", min:10, when:["tsohorayim","erev"], empty:true,
+      need:["pita","tomato","cucumber","lemon"], nice:["parsley","onion","olives","bulgarit","lettuce"],
+      p:9, f:7, s:6,
+      steps:["קורעים פיתה יבשה לחתיכות וקולים במחבת יבשה או בטוסטר עד שפריכה.",
+             "קוצצים עגבנייה, מלפפון, בצל ופטרוזיליה גס.",
+             "לימון, שמן זית, סומק אם יש. מוסיפים את הפיתה רק ברגע ההגשה."],
+      note:"המנה הזו נולדה בדיוק בשביל פיתה של אתמול. הפיתה נכנסת אחרונה כדי שתישאר פריכה." },
+
+    { id:"chicken_balls", name:"קציצות עוף ברוטב עגבניות", min:25, when:["erev"], kids:true,
+      need:["ground_meat",["passata","tomato"],"onion"], nice:["garlic","parsley","rice","eggs"],
+      p:30, f:4, s:6,
+      steps:["מערבבים טחון עם בצל מגורר, ביצה, מלח ופלפל. מגלגלים כדורים קטנים.",
+             "מטגנים 3 דקות עד שמשחימים מכל הצדדים.",
+             "רסק עגבניות ומעט מים מעל, מכסים, 15 דקות על אש נמוכה."],
+      note:"בצל מגורר ולא קצוץ: הוא נמס בבשר ומשאיר את הקציצות רכות." },
+
+    { id:"hidden_veg_pasta", name:"פסטה ברוטב עם ירקות סמויים", min:20, when:["tsohorayim","erev"], kids:true,
+      need:["pasta","passata","carrot"], nice:["zucchini","onion","garlic","yellow_cheese"],
+      p:14, f:8, s:8,
+      steps:["מגררים גזר וקישוא דק־דק ומטגנים עם בצל 5 דקות.",
+             "רסק עגבניות, מעט מים, מלח וכפית סוכר או דבש. 10 דקות על אש נמוכה.",
+             "מערבבים עם הפסטה, גבינה מגוררת מעל."],
+      note:"אחרי עשר דקות בישול הירקות המגוררים נעלמים לחלוטין ברוטב. גם בצלחת וגם בטעם." },
+
+    { id:"oven_schnitzel", name:"שניצל תנור בפירורי שיבולת שועל", min:25, when:["erev","tsohorayim"], kids:true,
+      need:["chicken","eggs","oats"], nice:["flour","garlic","lemon"],
+      p:36, f:3, s:1,
+      steps:["טוחנים שיבולת שועל גס במעבד עם פפריקה, מלח ושום אבקה.",
+             "פורסים את החזה דק, טובלים בביצה ואז בפירורים.",
+             "תנור 200 מעלות על נייר אפייה, טפטוף שמן זית, 18 דקות. הופכים באמצע."],
+      note:"פירורי שיבולת שועל נותנים ציפוי פריך עם סיבים, בלי טיגון עמוק." },
+
+    { id:"pita_pizza", name:"פיצה פיתה", min:12, when:["tsohorayim","erev"], kids:true,
+      need:["pita","passata","yellow_cheese"], nice:["olives","corn","pepper","mushrooms"],
+      p:18, f:5, s:5,
+      steps:["מורחים רסק עגבניות על פיתה, אורגנו ומלח.",
+             "גבינה מגוררת וכל תוספת שהילדים אוהבים.",
+             "תנור 220 מעלות, 8 דקות, עד שהגבינה מבעבעת."],
+      note:"פיתה מלאה במקום בצק: פחות עבודה, יותר סיבים, ומוכן לפני שהם מספיקים להתלונן." },
+
+    { id:"sweet_omelette", name:"חביתה מתוקה עם בננה", min:8, when:["boker"], kids:true,
+      need:["eggs","banana"], nice:["oats","honey","white_cheese"],
+      p:14, f:3, s:12,
+      steps:["טורפים 2 ביצים עם קורט מלח.","מטגנים חביתה דקה על אש נמוכה.",
+             "בננה פרוסה על החצי, מקפלים, קינמון מעל."],
+      note:"מתוק בלי סוכר מוסף, ועדיין 14 גרם חלבון. עובד גם כארוחת ערב לילד שלא רעב." },
+
+    { id:"veg_sticks_dip", name:"אצבעות ירקות עם רוטב יוגורט", min:8, when:["nashnush"], kids:true, nocook:true, snack:true,
+      need:[["carrot","cucumber","pepper"],"yogurt"], nice:["lemon","garlic","parsley"],
+      p:10, f:5, s:6,
+      steps:["חותכים ירקות לאצבעות ארוכות.",
+             "יוגורט עם לימון, מלח ומעט שום כתוש.",
+             "מגישים בכוס — ירקות עומדים נאכלים הרבה יותר מירקות בצלחת."],
+      note:"הטריק של הכוס עובד. אותם ירקות בדיוק, פי שלושה נאכלים." },
+
+    { id:"rice_lentils_kids", name:"אורז ועדשים עם גזר מתוק", min:22, when:["erev","tsohorayim"], kids:true,
+      need:["rice","lentils","carrot"], nice:["onion","garlic","parsley"],
+      p:16, f:10, s:5,
+      steps:["מטגנים בצל וגזר מגורר 5 דקות עד שהגזר מתוק.",
+             "חצי כוס עדשים וחצי כוס אורז, שתי כוסות מים, מלח.",
+             "18 דקות מכוסה על אש נמוכה. לא לפתוח באמצע."],
+      note:"אורז ועדשים יחד נותנים חלבון מלא. זו הצלחת הצמחית הכי משביעה לילדים." },
+
+    { id:"corn_pancakes", name:"לביבות תירס", min:15, when:["erev","tsohorayim"], kids:true,
+      need:["corn","eggs","flour"], nice:["green_onion","white_cheese","parsley"],
+      p:14, f:5, s:6,
+      steps:["מערבבים קופסת תירס מסונן עם 2 ביצים, 3 כפות קמח ומלח.",
+             "כפית מהתערובת למחבת עם מעט שמן.",
+             "2 דקות כל צד עד שזהוב."],
+      note:"התירס מספיק מתוק כדי שילדים יאכלו את זה בלי קטשופ." },
+
+    { id:"bento", name:"קופסת נשנוש: גבינה, קרקרים וירקות", min:5, when:["nashnush"], kids:true, nocook:true, snack:true, prep:true,
+      need:[["white_cheese","yellow_cheese","cottage"],"crackers",["cucumber","carrot","tomato"]],
+      nice:["apple","olives","almonds","dates"],
+      p:14, f:4, s:5,
+      steps:["קוביות גבינה, קרקרים מלאים וירקות חתוכים בקופסה עם תאים.",
+             "פרי אחד בצד.","מכינים שתיים בבת אחת — אחת לילדים ואחת לך."],
+      note:"החלופה הישירה לשקית האגוזים: אותן חמש דקות, אבל עם חלבון וירק." }
   ];
   /* ---------------- תחליפים ----------------
      מה להשתמש כשמרכיב חובה הוא משהו שמישהו בבית לא אוהב.  */
@@ -714,7 +958,30 @@
     hummus_hot:         { chickpeas:"שעועית לבנה" },
     tofu_chili:         { tofu:"ביצים מקושקשות", soy_sauce:"מלח ולימון" },
     tuna_harissa:       { tuna:"ביצים קשות מפוררות" },
-    shakshuka_hot:      { eggs:"קוביות טופו" }
+    shakshuka_hot:      { eggs:"קוביות טופו" },
+    pancake_banana:     { banana:"תפוח מגורד עם כפית דבש", oats:"3 כפות קמח" },
+    ricotta_toast:      { white_cheese:"קוטג' או לבנה", honey:"סילאן או תמר מרוסק", bread:"קרקרים מלאים" },
+    pita_toaster:       { white_cheese:"גבינה צהובה", pita:"לחם מלא" },
+    hot_oats:           { apple:"בננה פרוסה", oats:"קוסקוס מלא" },
+    fruit_cottage:      { cottage:"יוגורט או גבינה לבנה", granola:"שיבולת שועל עם אגוזים קצוצים" },
+    egg_wrap:           { tortilla:"פיתה מלאה", white_cheese:"אבוקדו מעוך" },
+    date_shake:         { dates:"בננה בשלה", almonds:"כף חמאת בוטנים" },
+    white_cheese_bowl:  { white_cheese:"יוגורט סמיך או קוטג'", honey:"תמר קצוץ" },
+    fried_rice:         { rice:"קוסקוס מלא מבושל", eggs:"קוביות טופו" },
+    clean_soup:         { lentils:"שעועית לבנה משומרת", onion:"בצל ירוק" },
+    couscous_salad:     { couscous:"קינואה או אורז מלא" },
+    pasta_veg_yogurt:   { yogurt:"גבינה לבנה מדוללת במים", pasta:"אורז מלא" },
+    rosti:              { potato:"בטטה", onion:"בצל ירוק" },
+    fattoush:           { pita:"לחם מלא קלוי", cucumber:"חסה קצוצה" },
+    chicken_balls:      { ground_meat:"עדשים כתומות מבושלות ומעוכות" },
+    hidden_veg_pasta:   { carrot:"קישוא מגורר", passata:"עגבניות קצוצות", pasta:"אורז" },
+    oven_schnitzel:     { chicken:"טופו פרוס עבה או פילה דג", oats:"פירורי לחם מלא" },
+    pita_pizza:         { yellow_cheese:"בולגרית מפוררת", pita:"טורטייה" },
+    sweet_omelette:     { banana:"תפוח מגורד" },
+    veg_sticks_dip:     { yogurt:"חומוס או טחינה מדוללת" },
+    rice_lentils_kids:  { rice:"קוסקוס מלא", lentils:"חומוס משומר" },
+    corn_pancakes:      { corn:"קישוא מגורר וסחוט", flour:"שיבולת שועל טחונה" },
+    bento:              { crackers:"פיתה מלאה חתוכה לרצועות" }
   };
 
 
@@ -739,9 +1006,13 @@
   ]);
   let cooking = new Set(store.get(KEY.cooking, people.map(p => p.id)));
 
-  const filters = { fast: false, nocook: false, snack: false, fav: false };
+  const filters = { fast: false, nocook: false, snack: false, kids: false, empty: false, fav: false };
   let lastShown = null;
   let showHidden = false;
+  let query = "";
+
+  const ID_BY_NAME = {};
+  GROUPS.forEach(g => g.items.forEach(it => { ID_BY_NAME[it[1]] = it[0]; }));
 
   const $ = s => document.querySelector(s);
   const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
@@ -818,6 +1089,8 @@
     if (r.spicy) tags.push(["חריף", true]);
     if (r.nocook) tags.push(["בלי בישול", false]);
     if (r.snack) tags.push(["במקום נשנוש", false]);
+    if (r.kids) tags.push(["מתאים לילדים", false]);
+    if (r.empty) tags.push(["לרוקן את המקרר", false]);
     if (r.prep) tags.push(["הכנה מראש", false]);
     r.when.forEach(w => tags.push([SLOT_HE[w], false]));
 
@@ -868,6 +1141,19 @@
     return "nashnush";
   }
   const SLOT_HE = { boker: "בוקר", tsohorayim: "צהריים", nashnush: "נשנוש אחר הצהריים", erev: "ערב" };
+  const SLOT_FOR = { boker: "לארוחת בוקר", tsohorayim: "לצהריים", nashnush: "לנשנוש", erev: "לארוחת ערב" };
+
+  function renderHero() {
+    const d = new Date(), slot = slotNow(d);
+    const pool = menu().filter(r => r.when.indexOf(slot) !== -1);
+    const ready = pool.filter(r => stateOf(r).missing.length === 0).length;
+    $("#hero-moment").textContent = SLOT_HE[slot];
+    $("#hero-hour").textContent = String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+    $("#roll").textContent = "תן לי רעיון " + SLOT_FOR[slot];
+    $("#now-hint").innerHTML = have.size
+      ? "<b>" + ready + "</b> מתוך " + pool.length + " הרעיונות " + SLOT_FOR[slot] + " אפשר להכין ממה שיש לך עכשיו."
+      : "<b>" + pool.length + "</b> רעיונות מתאימים לשעה הזו. סמן מה יש בבית כדי לצמצם למה שאפשר להכין.";
+  }
 
   function pickNow() {
     const slot = slotNow(new Date());
@@ -876,7 +1162,7 @@
     if (!pool.length) pool = all;
     if (!pool.length) {
       $("#now-slot").innerHTML = '<p class="empty">כל המנות סוננו החוצה. נסה לבחור פחות מגבלות בלשונית «הטעמים שלנו».</p>';
-      $("#now-hint").textContent = "";
+      renderHero();
       return;
     }
     if (have.size) {
@@ -892,27 +1178,55 @@
     lastShown = pick.id;
     $("#now-slot").innerHTML = cardHTML(pick);
 
-    const ready = all.filter(r => r.when.indexOf(slot) !== -1 && stateOf(r).missing.length === 0).length;
-    $("#now-hint").textContent = have.size
-      ? "מתוך מה שסימנת, יש " + ready + " רעיונות ל" + SLOT_HE[slot] + " שאפשר להכין עכשיו."
-      : "סמן מה יש לך בבית כדי שההצעות יתאימו למקרר שלך.";
+    renderHero();
   }
 
   /* ---------------- מצב "מה יש לי" ---------------- */
   function renderPantry() {
     const av = avoidSet();
-    let html = GROUPS.map(g =>
-      '<div class="group"><h3>' + esc(g.title) + '</h3><div class="chips">' +
-      g.items.filter(it => !av.has(it[0])).map(it =>
-        '<button class="chip" data-ing="' + it[0] + '" aria-pressed="' + have.has(it[0]) + '">' + esc(it[1]) + '</button>'
-      ).join("") + '</div></div>'
-    ).join("");
-    if (custom.length) {
-      html += '<div class="group"><h3>שלי</h3><div class="chips">' +
-        custom.map(c => '<button class="chip" data-ing="' + c.id + '" aria-pressed="' + have.has(c.id) + '">' + esc(c.name) + '</button>').join("") +
-        '</div></div>';
+    const q = query.trim();
+
+    // surligne la partie trouvée sans jamais injecter le texte brut
+    function chipLabel(he) {
+      if (!q) return esc(he);
+      const i = he.indexOf(q);
+      if (i === -1) return esc(he);
+      return esc(he.slice(0, i)) + "<mark>" + esc(he.slice(i, i + q.length)) + "</mark>" + esc(he.slice(i + q.length));
     }
+    const chip = (id, he) =>
+      '<button class="chip" data-ing="' + id + '" aria-pressed="' + have.has(id) + '">' + chipLabel(he) + '</button>';
+
+    const visible = (id, he) => !av.has(id) && (!q || he.indexOf(q) !== -1);
+    let shown = 0, html = "";
+
+    if (q) {
+      const hits = [];
+      GROUPS.forEach(g => g.items.forEach(it => { if (visible(it[0], it[1])) hits.push(chip(it[0], it[1])); }));
+      custom.forEach(c => { if (!q || c.name.indexOf(q) !== -1) hits.push(chip(c.id, c.name)); });
+      shown = hits.length;
+      html = hits.length
+        ? '<div class="group"><div class="chips">' + hits.join("") + '</div></div>'
+        : '<p class="empty">לא נמצא מרכיב בשם הזה. אפשר להוסיף אותו בלשונית «הטעמים שלנו».</p>';
+    } else {
+      html = GROUPS.map(g => {
+        const items = g.items.filter(it => visible(it[0], it[1]));
+        shown += items.length;
+        return items.length
+          ? '<div class="group"><h3>' + esc(g.title) + '</h3><div class="chips">' +
+            items.map(it => chip(it[0], it[1])).join("") + '</div></div>'
+          : "";
+      }).join("");
+      if (custom.length) {
+        shown += custom.length;
+        html += '<div class="group"><h3>שלי</h3><div class="chips">' +
+          custom.map(c => chip(c.id, c.name)).join("") + '</div></div>';
+      }
+    }
+
     $("#pantry-groups").innerHTML = html;
+    $("#ing-found").textContent = q ? shown + " נמצאו" : "";
+    $("#all-ings").innerHTML = GROUPS.map(g =>
+      g.items.map(it => '<option value="' + esc(it[1]) + '"></option>').join("")).join("");
   }
 
   function renderBanner() {
@@ -935,6 +1249,8 @@
     if (filters.fast) list = list.filter(r => r.min <= 10);
     if (filters.nocook) list = list.filter(r => r.nocook);
     if (filters.snack) list = list.filter(r => r.snack);
+    if (filters.kids) list = list.filter(r => r.kids);
+    if (filters.empty) list = list.filter(r => r.empty);
     if (filters.fav) list = list.filter(r => favs.has(r.id));
 
     list = list.map(r => ({ r: r, st: stateOf(r) }))
@@ -995,7 +1311,7 @@
         '</div>' +
         '<div class="avoid">' + (p.avoid || []).map(a =>
           '<button class="x" data-unavoid="' + p.id + '|' + a + '">' + esc(nameOf(a)) + '</button>').join("") + '</div>' +
-        '<div class="row"><select data-pick="' + p.id + '"><option value="">בחר מרכיב…</option>' + ingOptions() + '</select>' +
+        '<div class="row"><input class="txt" list="all-ings" data-pick="' + p.id + '" placeholder="חפש מרכיב…" autocomplete="off">' +
           '<button class="btn" data-avoid="' + p.id + '">לא אוהב את זה</button></div>' +
       '</div>'
     ).join("");
@@ -1046,6 +1362,7 @@
     renderCustom();
     renderOff();
     renderNotes();
+    renderHero();
   }
 
   /* ---------------- אירועים ---------------- */
@@ -1088,7 +1405,7 @@
       const r = R.find(x => x.id === open.dataset.open);
       lastShown = r.id;
       $("#now-slot").innerHTML = cardHTML(r);
-      $("#now-hint").textContent = "";
+      renderHero();
       setTab("now");
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
@@ -1128,9 +1445,17 @@
     const avoid = t.closest("[data-avoid]");
     if (avoid) {
       const p = people.find(x => x.id === avoid.dataset.avoid);
-      const val = $('[data-pick="' + p.id + '"]').value;
-      if (val && p.avoid.indexOf(val) === -1) p.avoid.push(val);
+      const box = $('[data-pick="' + p.id + '"]');
+      const val = ID_BY_NAME[box.value.trim()] || "";
+      if (!val) {                       // rien trouvé : on le signale sans rien changer
+        box.style.borderColor = "var(--pomegranate)";
+        setTimeout(() => { box.style.borderColor = ""; }, 1200);
+        box.focus();
+        return;
+      }
+      if (p.avoid.indexOf(val) === -1) p.avoid.push(val);
       have.delete(val);
+      box.value = "";
       refreshAll();
       return;
     }
@@ -1187,6 +1512,9 @@
           esc(q.name) + (q.spicy ? ' <span class="heat">🌶</span>' : "") + '</button>').join("");
       return;
     }
+    const sq = e.target.closest("#ing-search");
+    if (sq) { query = sq.value; renderPantry(); return; }
+
     const nt = e.target.closest("[data-note]");
     if (nt) {
       const id = nt.dataset.note;
@@ -1229,7 +1557,8 @@
     renderResults();
   });
 
-  [["#f-fast","fast"],["#f-nocook","nocook"],["#f-snack","snack"],["#f-fav","fav"]].forEach(pair => {
+  [["#f-fast","fast"],["#f-nocook","nocook"],["#f-snack","snack"],
+   ["#f-kids","kids"],["#f-empty","empty"],["#f-fav","fav"]].forEach(pair => {
     $(pair[0]).addEventListener("click", () => {
       filters[pair[1]] = !filters[pair[1]];
       $(pair[0]).setAttribute("aria-pressed", String(filters[pair[1]]));
@@ -1250,9 +1579,6 @@
   });
 
   /* ---------------- התחלה ---------------- */
-  const now = new Date();
-  $("#clock").textContent = SLOT_HE[slotNow(now)] + " · " +
-    String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0");
   refreshAll();
   pickNow();
 })();

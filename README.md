@@ -4,14 +4,14 @@ Une petite app pour arrêter de grignoter faute d'idée : elle propose des repas
 **simples et à peu près équilibrés**, à partir de ce qu'on a déjà à la maison,
 avec des produits qu'on trouve dans n'importe quel supermarché en Israël.
 
-Interface **en hébreu** (RTL). 33 idées de repas, aucune ne dépasse 25 minutes.
+Interface **en hébreu** (RTL). 59 idées de repas, aucune ne dépasse 25 minutes.
 
 ## Deux façons de s'en servir
 
 | Mode | À quoi ça sert |
 |---|---|
-| **אני רעב עכשיו** | Un bouton, une idée. L'app regarde l'heure (petit-déj / midi / goûter / soir) et propose une recette adaptée. « תן לי רעיון » relance. |
-| **מה יש לי בבית** | On coche ce qu'on a (le choix est mémorisé sur l'appareil). Les recettes sont classées en trois groupes : réalisables tout de suite, il manque un ingrédient, il en manque plusieurs. |
+| **אני רעב עכשיו** | Un bloc d'accueil en haut de page : le moment de la journée, le nombre d'idées disponibles, et un grand bouton dont le libellé s'adapte à l'heure (« תן לי רעיון לארוחת ערב »). La recette s'affiche juste dessous. |
+| **מה יש לי בבית** | Un champ de recherche pour retrouver un aliment parmi 69, puis on coche ce qu'on a (le choix est mémorisé sur l'appareil). Les recettes sont classées en trois groupes : réalisables tout de suite, il manque un ingrédient, il en manque plusieurs. |
 | **הטעמים שלנו** | Qui mange, et ce que chacun n'aime pas. Plus les ingrédients perso, les recettes écartées et les notes. |
 
 ## Les goûts de chacun
@@ -45,7 +45,13 @@ peut les renommer, en ajouter, en supprimer.
 
 Chaque recette affiche le temps, les protéines / fibres / sucres estimés, les
 ingrédients (ceux qui manquent sont en rouge), 2 à 4 étapes, et une astuce.
-Filtres : moins de 10 minutes, sans cuisson, « à la place du grignotage », favoris.
+Filtres : moins de 10 minutes, sans cuisson, « à la place du grignotage »,
+« pour les enfants », « vider le frigo », favoris.
+
+Les 59 recettes se répartissent en 21 pour le matin, 31 pour le midi, 17 pour le
+goûter et 35 pour le soir (une recette peut servir à plusieurs moments) ; 33
+tiennent en 10 minutes ou moins, 9 sont pensées pour les enfants, 8 pour vider
+le frigo et 5 sont piquantes.
 
 L'huile d'olive, le sel, le poivre et les épices de base sont toujours
 considérés comme disponibles.
@@ -85,7 +91,7 @@ Tout est dans le tableau `R` de `app/index.html`. Une entrée ressemble à ça :
 - `need` : ingrédients obligatoires ; un sous-tableau signifie « l'un ou l'autre »
 - `nice` : ingrédients optionnels, affichés en pointillés
 - `p` / `f` / `s` : protéines, fibres, sucres en grammes (estimation pour une portion)
-- `nocook`, `snack`, `prep`, `spicy` : drapeaux facultatifs pour les filtres
+- `nocook`, `snack`, `prep`, `spicy`, `kids`, `empty` : drapeaux facultatifs
 
 Les remplacements vivent dans la table `SWAPS`, juste après `R`, sous la forme
 `idRecette: { ingredient: "texte du remplaçant" }`. Ils ne servent que si
@@ -93,6 +99,15 @@ quelqu'un a déclaré ne pas aimer l'ingrédient.
 
 Les ingrédients disponibles à cocher sont définis dans `GROUPS`, juste au-dessus.
 Après modification : `./build.sh`.
+
+## Ce que l'app ne fait pas
+
+Pas de photo du frigo, pas de recette générée à la volée. Une page HTML
+autonome n'a aucun accès à un modèle d'IA — et les capacités qu'un Artifact
+publié peut recevoir (sauvegarder ses versions, proposer un téléchargement,
+appeler les connecteurs de son propriétaire) n'incluent ni la vision ni la
+génération de texte. Ces deux fonctions demanderaient un service tiers détenant
+une clé d'API, donc un déploiement et un coût par appel.
 
 ## Note
 
