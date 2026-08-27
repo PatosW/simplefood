@@ -33,6 +33,25 @@ Ce choix pilote tout le reste :
 Deux profils existent au départ — אני (piquant) et הילדים (pas piquant) — et on
 peut les renommer, en ajouter, en supprimer.
 
+## Faire les courses pour un plat
+
+Pensé pour le moment où on décide d'un plat avant de rentrer, avec un
+supermarché sur le chemin. Depuis n'importe quelle recette, le bouton
+« רשימת קניות » ouvre une liste utilisable en rayon :
+
+- **groupée par rayon** dans l'ordre du magasin (frais, fruits et légumes,
+  épicerie, surgelés) ;
+- **avec des quantités** — « 3 גזרים », « קופסת חומוס », « 300 גרם טחון » —
+  ajustées selon qu'on cuisine pour 1, 2 ou 4 ;
+- **cochable au fur et à mesure**, en grosses cases lisibles d'une main ;
+- **au choix** : seulement ce qui manque à la maison, ou tous les ingrédients
+  du plat quand on ne se souvient plus de ce qu'on a ;
+- **« קניתי — סמן במקרר »** : ce qu'on a mis dans le panier entre directement
+  dans le garde-manger, donc l'app est à jour en rentrant.
+
+La liste en cours survit à la fermeture : un bouton « הרשימה שלי · 2/5 »
+apparaît en haut de la page tant qu'elle n'est pas finie.
+
 ## Personnalisation
 
 - **Mes ingrédients** : ajouter un produit absent de la liste. On peut déclarer

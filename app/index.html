@@ -313,6 +313,34 @@
   }
   .stickybar .count { font-family: "Heebo", sans-serif; font-size: var(--step--1); color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
+  .listbtn { border-color: var(--olive); color: var(--olive); background: var(--olive-soft); white-space: nowrap; }
+  .listbtn[hidden] { display: none; }
+
+  .shop { padding: 18px 20px 20px; display: grid; gap: 14px; }
+  .shop-head { display: flex; align-items: flex-start; gap: 12px; }
+  .shop-head h2 { font-size: var(--step-2); }
+  .shop-head p { margin: 3px 0 0; color: var(--ink-3); font-size: var(--step--1); }
+  .shop-opts { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .shop-opts .lab { font-family: "Heebo", sans-serif; font-size: .72rem; letter-spacing: .08em; color: var(--ink-3); }
+  .shop-list { display: grid; gap: 14px; max-height: 46vh; overflow-y: auto; padding-inline-end: 4px; }
+  .shop-aisle h4 {
+    font-family: "Heebo", sans-serif; font-size: .7rem; font-weight: 700; letter-spacing: .12em;
+    color: var(--ink-3); margin: 0 0 6px; display: flex; align-items: center; gap: 8px;
+  }
+  .shop-aisle h4::after { content: ""; flex: 1; height: 1px; background: var(--line-soft); }
+  .shop-item {
+    display: flex; align-items: center; gap: 11px; padding: 9px 4px;
+    border-bottom: 1px solid var(--line-soft); cursor: pointer; font-size: var(--step-0);
+  }
+  .shop-item:last-child { border-bottom: 0; }
+  .shop-item input { accent-color: var(--olive); width: 20px; height: 20px; flex: none; }
+  .shop-item .q { font-family: "Heebo", sans-serif; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+  .shop-item input:checked ~ .q { color: var(--ink-3); text-decoration: line-through; }
+  .shop-foot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 13px; }
+  .shop-foot .count { font-family: "Heebo", sans-serif; font-size: var(--step--1); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .shop-foot .btn:first-of-type { margin-inline-start: auto; }
+  .copybox { width: 100%; min-height: 120px; font: inherit; background: var(--surface-2); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 10px; direction: rtl; }
+
   dialog::backdrop { background: rgba(16,21,18,.55); }
   dialog {
     border: 1px solid var(--line); background: var(--surface); color: var(--ink);
@@ -340,6 +368,7 @@
       <h1>מה לאכול עכשיו</h1>
       <p>אוכל פשוט ומאוזן, ממה שיש בבית</p>
     </div>
+    <button class="btn listbtn" id="open-list" hidden></button>
   </header>
 
   <div class="modes" role="tablist" aria-label="מצבי שימוש">
@@ -439,12 +468,31 @@
 <datalist id="all-ings"></datalist>
 
 <dialog id="dlg">
-  <div style="padding:20px">
-    <h2 style="font-size:1.3rem;margin-bottom:10px" id="dlg-title">רשימת קניות</h2>
-    <textarea class="copybox" id="dlg-text" readonly></textarea>
-    <div style="display:flex;gap:8px;margin-top:12px">
-      <button class="btn primary" id="dlg-copy">העתק</button>
-      <button class="btn" id="dlg-close">סגור</button>
+  <div class="shop">
+    <div class="shop-head">
+      <div>
+        <h2 id="dlg-title">רשימת קניות</h2>
+        <p id="dlg-sub"></p>
+      </div>
+      <button class="linkbtn" id="dlg-close" aria-label="סגור">סגור</button>
+    </div>
+
+    <div class="shop-opts">
+      <span class="lab">מנות</span>
+      <div class="row" id="serv-row">
+        <button class="chip" data-serv="1">1</button>
+        <button class="chip" data-serv="2">2</button>
+        <button class="chip" data-serv="4">4</button>
+      </div>
+      <button class="chip" id="dlg-scope" aria-pressed="true" style="margin-inline-start:auto">רק מה שחסר</button>
+    </div>
+
+    <div class="shop-list" id="dlg-list"></div>
+
+    <div class="shop-foot">
+      <span class="count" id="dlg-count"></span>
+      <button class="btn" id="dlg-copy">העתק</button>
+      <button class="btn primary" id="dlg-done">קניתי — סמן במקרר</button>
     </div>
   </div>
 </dialog>
@@ -984,6 +1032,36 @@
     bento:              { crackers:"פיתה מלאה חתוכה לרצועות" }
   };
 
+  /* ---------------- כמויות לקנייה ----------------
+     מספר = פריטים לספירה (מוכפל לפי מספר המנות); מחרוזת = אריזה שקונים כמו שהיא.  */
+  const QTY = {
+    eggs:[4,"ביצים"], cottage:"גביע קוטג'", labaneh:"גביע לבנה", yogurt:[2,"גביעי יוגורט"],
+    bulgarit:"חבילת גבינה בולגרית", yellow_cheese:"חבילת גבינה צהובה", milk:"בקבוק חלב",
+    tofu:"חבילת טופו", hummus_ready:"גביע חומוס", salmon:[2,"פילה סלמון"], chicken:[2,"חזה עוף"],
+    white_cheese:"גביע גבינה לבנה", sour_cream:"גביע שמנת חמוצה", ground_meat:[300,"גרם עוף או בשר טחון"],
+    tomato:[3,"עגבניות"], cucumber:[2,"מלפפונים"], pepper:[1,"פלפל"], onion:[2,"בצלים"],
+    green_onion:"צרור בצל ירוק", garlic:"ראש שום", lemon:[2,"לימונים"], avocado:[1,"אבוקדו"],
+    lettuce:"שקית עלים ירוקים", parsley:"צרור פטרוזיליה", carrot:[3,"גזרים"],
+    sweet_potato:[2,"בטטות"], banana:[3,"בננות"], dates:"חבילת תמרים", apple:[3,"תפוחים"],
+    potato:[3,"תפוחי אדמה"], zucchini:[2,"קישואים"], eggplant:[1,"חציל"],
+    broccoli:[1,"ראש ברוקולי"], mushrooms:"חבילת פטריות",
+    tuna:[2,"קופסאות טונה"], sardines:"קופסת סרדינים", chickpeas:"קופסת חומוס",
+    white_beans:"קופסת שעועית לבנה", lentils:"חבילת עדשים", quinoa:"חבילת קינואה",
+    rice:"חבילת אורז", pasta:"חבילת פסטה מלאה", oats:"חבילת שיבולת שועל",
+    bread:"לחם מלא", pita:"חבילת פיתות", crackers:"חבילת קרקרים מלאים",
+    tahini:"צנצנת טחינה גולמית", olives:"קופסת זיתים", almonds:"שקית שקדים",
+    walnuts:"שקית אגוזי מלך", cashews:"שקית קשיו", peanut_butter:"צנצנת חמאת בוטנים",
+    honey:"דבש או סילאן", cocoa:"קופסת קקאו", dark_chocolate:"טבלת שוקולד מריר",
+    chia:"שקית צ'יה", passata:"רסק עגבניות", soy_sauce:"בקבוק רוטב סויה",
+    chili:[2,"פלפלים חריפים"], schug:"צנצנת שוג", harissa:"צנצנת הריסה",
+    granola:"חבילת גרנולה", tortilla:"חבילת טורטיות", corn:"קופסת תירס",
+    flour:"שקית קמח", couscous:"חבילת קוסקוס מלא",
+    frozen_veg:"שקית ירקות קפואים", edamame:"שקית אדממה", spinach_frozen:"שקית תרד קפוא"
+  };
+
+  const AISLE = {};
+  GROUPS.forEach(g => g.items.forEach(it => { AISLE[it[0]] = g.title; }));
+
 
   /* ---------------- מצב ---------------- */
   const KEY = {
@@ -1010,6 +1088,7 @@
   let lastShown = null;
   let showHidden = false;
   let query = "";
+  let shop = store.get("mlo.shop.v1", null);   // { id, servings, onlyMissing, checked: [] }
 
   const ID_BY_NAME = {};
   GROUPS.forEach(g => g.items.forEach(it => { ID_BY_NAME[it[1]] = it[0]; }));
@@ -1026,6 +1105,7 @@
     store.set(KEY.notes, notes);
     store.set(KEY.people, people);
     store.set(KEY.cooking, Array.from(cooking));
+    store.set("mlo.shop.v1", shop);
   }
 
   /* ---------------- טעמים ---------------- */
@@ -1292,6 +1372,95 @@
     renderBanner();
   }
 
+
+  /* ---------------- רשימת קניות למנה אחת ---------------- */
+  function qtyText(ing, servings) {
+    const q = QTY[ing];
+    if (!q) return nameOf(ing);
+    if (typeof q === "string") return q;
+    const n = Math.max(1, Math.round(q[0] * servings / 2));
+    return n + " " + q[1];
+  }
+
+  // מה לקנות: מרכיבי החובה שאין בבית (או כולם), בלי מה שמישהו לא אוהב
+  function shopItems(r, onlyMissing) {
+    const av = avoidSet(), sw = SWAPS[r.id] || {}, out = [];
+    r.need.forEach(n => {
+      const alts = Array.isArray(n) ? n : [n];
+      const ok = alts.filter(a => !av.has(a));
+      if (ok.length === 0) return;                 // מוחלף בתחליף, אין מה לקנות
+      if (onlyMissing && ok.some(satisfies)) return;
+      out.push(ok[0]);                             // האפשרות הראשונה היא ברירת המחדל לקנייה
+    });
+    return out;
+  }
+
+  function openShop(id) {
+    const same = shop && shop.id === id;
+    shop = {
+      id: id,
+      servings: same ? shop.servings : 2,
+      onlyMissing: same ? shop.onlyMissing : true,
+      checked: same ? shop.checked : []
+    };
+    renderShop();
+    $("#dlg").showModal();
+  }
+
+  function renderShop() {
+    if (!shop) return;
+    const r = R.find(x => x.id === shop.id);
+    if (!r) { shop = null; return; }
+    const items = shopItems(r, shop.onlyMissing);
+    const checked = new Set(shop.checked.filter(c => items.indexOf(c) !== -1));
+    shop.checked = Array.from(checked);
+
+    $("#dlg-title").textContent = r.name;
+    $("#dlg-sub").textContent = r.min + " דקות · " + r.p + " ג\' חלבון למנה";
+    $("#dlg-scope").textContent = shop.onlyMissing ? "רק מה שחסר" : "כל המרכיבים";
+    $("#dlg-scope").setAttribute("aria-pressed", String(shop.onlyMissing));
+    document.querySelectorAll("[data-serv]").forEach(b =>
+      b.setAttribute("aria-pressed", String(Number(b.dataset.serv) === shop.servings)));
+
+    if (!items.length) {
+      $("#dlg-list").innerHTML = '<p class="empty">יש לך כבר הכל בבית. אפשר לעלות ולהתחיל.</p>';
+    } else {
+      const byAisle = {};
+      items.forEach(i => { const a = AISLE[i] || "שונות"; (byAisle[a] = byAisle[a] || []).push(i); });
+      $("#dlg-list").innerHTML = GROUPS.map(g => g.title).filter(t => byAisle[t]).map(t =>
+        '<div class="shop-aisle"><h4>' + esc(t) + '</h4>' +
+        byAisle[t].map(i =>
+          '<label class="shop-item"><input type="checkbox" data-buy="' + i + '"' +
+          (checked.has(i) ? " checked" : "") + '><span class="q">' + esc(qtyText(i, shop.servings)) + '</span></label>'
+        ).join("") + '</div>'
+      ).join("");
+    }
+
+    $("#dlg-count").textContent = items.length
+      ? checked.size + " מתוך " + items.length + " בעגלה"
+      : "";
+    $("#dlg-done").hidden = !checked.size;
+    saveAll();
+    renderListButton();
+  }
+
+  function renderListButton() {
+    const btn = $("#open-list");
+    if (!shop) { btn.hidden = true; return; }
+    const r = R.find(x => x.id === shop.id);
+    if (!r) { btn.hidden = true; return; }
+    const total = shopItems(r, shop.onlyMissing).length;
+    if (!total) { btn.hidden = true; return; }
+    btn.hidden = false;
+    btn.textContent = "הרשימה שלי · " + shop.checked.length + "/" + total;
+  }
+
+  function shopAsText() {
+    const r = R.find(x => x.id === shop.id);
+    return "קניות ל" + r.name + " (" + shop.servings + " מנות)\n" +
+      shopItems(r, shop.onlyMissing).map(i => "• " + qtyText(i, shop.servings)).join("\n");
+  }
+
   /* ---------------- לוח הטעמים ---------------- */
   function ingOptions(selected) {
     return GROUPS.map(g =>
@@ -1363,6 +1532,7 @@
     renderOff();
     renderNotes();
     renderHero();
+    renderListButton();
   }
 
   /* ---------------- אירועים ---------------- */
@@ -1421,15 +1591,14 @@
       return;
     }
 
-    const shop = t.closest("[data-shop]");
-    if (shop) {
-      const r = R.find(x => x.id === shop.dataset.shop);
-      $("#dlg-title").textContent = "רשימת קניות · " + r.name;
-      $("#dlg-text").value = stateOf(r).missing.map(a => "• " + labelOf(a)).join("\n");
-      $("#dlg-copy").textContent = "העתק";
-      $("#dlg").showModal();
-      return;
-    }
+    const shopBtn = t.closest("[data-shop]");
+    if (shopBtn) { openShop(shopBtn.dataset.shop); return; }
+
+    const serv = t.closest("[data-serv]");
+    if (serv) { shop.servings = Number(serv.dataset.serv); renderShop(); return; }
+
+    const scope = t.closest("#dlg-scope");
+    if (scope) { shop.onlyMissing = !shop.onlyMissing; renderShop(); return; }
 
     const outBtn = t.closest("[data-off]");
     if (outBtn) {
@@ -1493,6 +1662,21 @@
   });
 
   document.addEventListener("change", e => {
+    const buy = e.target.closest("[data-buy]");
+    if (buy) {
+      const id = buy.dataset.buy;
+      const i = shop.checked.indexOf(id);
+      if (buy.checked) { if (i === -1) shop.checked.push(id); }
+      else if (i !== -1) shop.checked.splice(i, 1);
+      const r = R.find(x => x.id === shop.id);
+      const total = shopItems(r, shop.onlyMissing).length;
+      $("#dlg-count").textContent = shop.checked.length + " מתוך " + total + " בעגלה";
+      $("#dlg-done").hidden = !shop.checked.length;
+      saveAll();
+      renderListButton();
+      return;
+    }
+
     const sp = e.target.closest("[data-spicy]");
     if (sp) {
       const p = people.find(x => x.id === sp.dataset.spicy);
@@ -1567,15 +1751,31 @@
   });
 
   $("#dlg-close").addEventListener("click", () => $("#dlg").close());
+  $("#open-list").addEventListener("click", () => { if (shop) openShop(shop.id); });
+
   $("#dlg-copy").addEventListener("click", () => {
-    const t = $("#dlg-text");
-    t.select();
+    const txt = shopAsText();
+    const fallback = () => {
+      // אם ההעתקה חסומה: מציגים את הטקסט כדי שאפשר יהיה לסמן ולהעתיק ביד
+      $("#dlg-list").innerHTML = '<textarea class="copybox" readonly>' + esc(txt) + '</textarea>';
+      $("#dlg-list").querySelector("textarea").select();
+      $("#dlg-copy").textContent = "בחר והעתק ידנית";
+    };
     try {
-      navigator.clipboard.writeText(t.value).then(
-        () => { $("#dlg-copy").textContent = "הועתק"; },
-        () => { $("#dlg-copy").textContent = "בחר והעתק ידנית"; }
+      navigator.clipboard.writeText(txt).then(
+        () => { $("#dlg-copy").textContent = "הועתק"; setTimeout(() => { $("#dlg-copy").textContent = "העתק"; }, 1800); },
+        fallback
       );
-    } catch (err) { $("#dlg-copy").textContent = "בחר והעתק ידנית"; }
+    } catch (err) { fallback(); }
+  });
+
+  // אחרי הקנייה: מה שסומן בעגלה נכנס ישר למקרר
+  $("#dlg-done").addEventListener("click", () => {
+    shop.checked.forEach(i => have.add(i));
+    shop = null;
+    $("#dlg").close();
+    refreshAll();
+    if (!$("#panel-now").hidden) pickNow();
   });
 
   /* ---------------- התחלה ---------------- */
