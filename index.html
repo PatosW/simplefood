@@ -106,10 +106,10 @@
   }
 
   /* ---------- mode switch ---------- */
-  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 4px; margin-bottom: 22px; }
+  .modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 4px; margin-bottom: 14px; }
   .modes button {
-    border: 0; background: transparent; border-radius: 999px; padding: 9px 10px;
-    font-weight: 600; color: var(--ink-2); transition: background .18s, color .18s;
+    border: 0; background: transparent; border-radius: 999px; padding: 9px 6px;
+    font-weight: 600; font-size: .94rem; color: var(--ink-2); transition: background .18s, color .18s;
   }
   .modes button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
 
@@ -210,6 +210,85 @@
   h4.bucket span { font-variant-numeric: tabular-nums; background: var(--surface-2); border-radius: 999px; padding: 1px 8px; }
   h4.bucket::after { content: ""; flex: 1; height: 1px; background: var(--line-soft); }
 
+  /* ---------- מבשל עבור ---------- */
+  .who {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 7px;
+    padding: 10px 14px; margin-bottom: 20px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  }
+  .who > .lab { font-family: "Heebo", sans-serif; font-size: .72rem; font-weight: 700; letter-spacing: .08em; color: var(--ink-3); }
+  .who .person {
+    border: 1px solid var(--line); background: transparent; border-radius: 999px;
+    padding: 5px 13px; font-size: var(--step--1); transition: background .15s, border-color .15s, color .15s;
+  }
+  .who .person[aria-pressed="true"] { background: var(--olive); border-color: var(--olive); color: var(--surface); font-weight: 600; }
+  :root[data-theme="dark"] .who .person[aria-pressed="true"],
+  :root:not([data-theme="light"]) .who .person[aria-pressed="true"] { color: #101512; }
+  .who .heat { font-size: .8em; opacity: .85; }
+  .who .state { margin-inline-start: auto; font-family: "Heebo", sans-serif; font-size: .72rem; color: var(--ink-3); }
+
+  /* ---------- שינויים בכרטיס ---------- */
+  .swapline {
+    display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap;
+    background: var(--surface-2); border-inline-start: 3px solid var(--olive);
+    border-radius: 8px; padding: 8px 12px; font-size: var(--step--1);
+  }
+  .swapline b { font-family: "Heebo", sans-serif; font-size: .7rem; letter-spacing: .08em; color: var(--olive); }
+  .swapline s { color: var(--ink-3); text-decoration-thickness: 1px; }
+  .ings li.no { color: var(--ink-3); text-decoration: line-through; text-decoration-thickness: 1px; border-style: dotted; background: transparent; }
+
+  .notebox { display: grid; gap: 6px; }
+  .notebox textarea {
+    font: inherit; font-size: var(--step--1); direction: rtl; resize: vertical; min-height: 44px;
+    background: var(--surface-2); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 8px 11px;
+  }
+  .notebox textarea::placeholder { color: var(--ink-3); }
+  .saved { font-family: "Heebo", sans-serif; font-size: .68rem; letter-spacing: .06em; color: var(--olive); min-height: 1em; }
+
+  .banner {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    background: var(--surface-2); border: 1px dashed var(--line); border-radius: 10px;
+    padding: 9px 13px; margin-bottom: 14px; font-size: var(--step--1); color: var(--ink-2);
+  }
+  .banner button { border: 0; background: none; color: var(--olive); font-weight: 600; text-decoration: underline; padding: 0; }
+
+  /* ---------- לוח הטעמים ---------- */
+  .pcard { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+  .pcard .hd { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .pcard .hd input.nm {
+    font: inherit; font-family: "Frank Ruhl Libre", serif; font-weight: 700; font-size: var(--step-1);
+    background: transparent; border: 0; border-bottom: 1px dashed var(--line); color: var(--ink); padding: 2px 2px; min-width: 6ch; flex: 1;
+  }
+  .pcard .hd input.nm:focus { outline: none; border-bottom-color: var(--olive); }
+  .avoid { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .avoid:empty::after { content: "אוכל הכל"; color: var(--ink-3); font-size: var(--step--1); }
+  .avoid .x {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid var(--pomegranate); color: var(--pomegranate); background: transparent;
+    border-radius: 999px; padding: 4px 11px; font-size: var(--step--1);
+  }
+  .avoid .x::after { content: "×"; font-weight: 700; opacity: .8; }
+  .row { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+  select, input.txt {
+    font: inherit; font-size: var(--step--1); background: var(--surface-2); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 9px; padding: 7px 10px; direction: rtl; max-width: 100%;
+  }
+  .linkbtn { border: 0; background: none; color: var(--ink-3); font-size: var(--step--1); padding: 2px 4px; text-decoration: underline; }
+  .linkbtn:hover { color: var(--pomegranate); }
+  .toggle { display: inline-flex; align-items: center; gap: 7px; font-size: var(--step--1); color: var(--ink-2); cursor: pointer; }
+  .toggle input { accent-color: var(--olive); width: 17px; height: 17px; }
+  .sec { margin: 26px 0 12px; }
+  .sec h3 { font-size: var(--step-1); margin-bottom: 4px; }
+  .sec p { margin: 0; color: var(--ink-3); font-size: var(--step--1); }
+  .minilist { display: grid; gap: 7px; margin-top: 10px; }
+  .minirow {
+    display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 9px 13px; font-size: var(--step--1);
+  }
+  .minirow .grow { flex: 1; min-width: 0; }
+  .minirow .grow em { color: var(--ink-3); font-style: normal; }
+  .minirow button { border: 0; background: none; color: var(--pomegranate); font-weight: 600; padding: 0; }
+
   .empty { text-align: center; color: var(--ink-3); padding: 32px 12px; border: 1px dashed var(--line); border-radius: 12px; }
 
   .stickybar {
@@ -254,6 +333,13 @@
   <div class="modes" role="tablist" aria-label="מצבי שימוש">
     <button role="tab" id="tab-now" aria-selected="true" aria-controls="panel-now">אני רעב עכשיו</button>
     <button role="tab" id="tab-pantry" aria-selected="false" aria-controls="panel-pantry">מה יש לי בבית</button>
+    <button role="tab" id="tab-taste" aria-selected="false" aria-controls="panel-taste">הטעמים שלנו</button>
+  </div>
+
+  <div class="who" id="who">
+    <span class="lab">מבשל עבור</span>
+    <div class="row" id="who-list"></div>
+    <span class="state" id="who-state"></span>
   </div>
 
   <section class="panel" id="panel-now" role="tabpanel" aria-labelledby="tab-now">
@@ -275,6 +361,8 @@
       <button class="chip" id="f-fav" aria-pressed="false">מועדפים</button>
     </div>
 
+    <div id="hidden-banner"></div>
+
     <div id="pantry-groups"></div>
 
     <h3 style="font-family:Heebo,sans-serif;font-size:.74rem;letter-spacing:.12em;color:var(--ink-3);margin:26px 0 10px">מה אפשר להכין</h3>
@@ -283,6 +371,39 @@
     <div class="stickybar">
       <span class="count" id="count"></span>
       <button class="btn" id="clear" style="margin-inline-start:auto">נקה הכל</button>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-taste" role="tabpanel" aria-labelledby="tab-taste" hidden>
+    <p class="hint">מי אוכל, ומה כל אחד לא אוהב. מנה שמכילה מרכיב שמישהו מהנבחרים לא אוהב תוצע רק אם יש לה תחליף.</p>
+
+    <div id="people-list"></div>
+    <div class="row">
+      <input class="txt" id="new-person" placeholder="שם" maxlength="20" style="width:9rem">
+      <button class="btn" id="add-person">הוסף בן משפחה</button>
+    </div>
+
+    <div class="sec">
+      <h3>המרכיבים שלי</h3>
+      <p>מוצרים שקונים בבית ולא ברשימה. אפשר לסמן שהם מחליפים מרכיב קיים — ואז הם ייחשבו בשבילו.</p>
+      <div class="row" style="margin-top:10px">
+        <input class="txt" id="new-ing" placeholder="שם המוצר" maxlength="28" style="width:11rem">
+        <select id="new-ing-alias"><option value="">לא מחליף כלום</option></select>
+        <button class="btn" id="add-ing">הוסף</button>
+      </div>
+      <div class="minilist" id="custom-list"></div>
+    </div>
+
+    <div class="sec">
+      <h3>מנות שהוצאתי</h3>
+      <p>מנות שסימנת «לא בשבילי». הן לא יוצעו שוב עד שתחזיר אותן.</p>
+      <div class="minilist" id="hidden-list"></div>
+    </div>
+
+    <div class="sec">
+      <h3>ההערות שלי</h3>
+      <p>מה שכתבת על מנות — מה עבד, מה לשנות, מה הילדים אהבו.</p>
+      <div class="minilist" id="notes-list"></div>
     </div>
   </section>
 
@@ -327,7 +448,8 @@
       ["tahini","טחינה גולמית"],["olives","זיתים"],["almonds","שקדים"],["walnuts","אגוזי מלך"],
       ["cashews","קשיו"],["peanut_butter","חמאת בוטנים"],["honey","דבש או סילאן"],
       ["cocoa","קקאו"],["dark_chocolate","שוקולד מריר"],["chia","צ'יה"],
-      ["passata","רסק עגבניות"],["soy_sauce","רוטב סויה"]
+      ["passata","רסק עגבניות"],["soy_sauce","רוטב סויה"],
+      ["chili","פלפל חריף"],["schug","שוג"],["harissa","הריסה"]
     ]},
     { title: "מקפיא", items: [
       ["frozen_veg","ירקות קפואים"],["edamame","אדממה"],["spinach_frozen","תרד קפוא"]
@@ -532,58 +654,186 @@
       p:16, f:6, s:3,
       steps:["שתי פרוסות לחם מלא.","גבינה, ואז שכבה נדיבה של ירק חתוך — עגבנייה, מלפפון או אבוקדו.",
              "שמן זית, מלח, פלפל שחור, זעתר."],
-      note:"שכבת הירק היא לא קישוט: היא מה שמוסיפה סיבים ומים ומאריכה את השובע בשעה-שעתיים." }
+      note:"שכבת הירק היא לא קישוט: היא מה שמוסיפה סיבים ומים ומאריכה את השובע בשעה-שעתיים." },
+
+    { id:"shakshuka_hot", name:"שקשוקה חריפה עם שוג", min:15, when:["tsohorayim","erev"], spicy:true,
+      need:["eggs",["passata","tomato"],["schug","chili","harissa"]], nice:["onion","pepper","parsley","pita"],
+      p:16, f:6, s:9,
+      steps:["בצל קצוץ במחבת קטנה עם שמן זית, 4 דקות.",
+             "רסק או עגבניות קצוצות, כמון, פפריקה מתוקה וכפית שוג. 5 דקות.",
+             "שוברים 2 ביצים פנימה, מכסים, 4 דקות. עוד שוג מעל למי שרוצה."],
+      note:"שוג ירוק נותן חריפות שנשארת בגרון רגע ונעלמת. שוג אדום חריף פחות אבל עמוק יותר." },
+
+    { id:"pasta_chili", name:"פסטה שום, צ'ילי ושמן זית", min:15, when:["erev","tsohorayim"], spicy:true,
+      need:["pasta","garlic","chili"], nice:["parsley","tuna","lemon"],
+      p:14, f:8, s:2,
+      steps:["פסטה מלאה למים רותחים ומלוחים.",
+             "4 שיני שום פרוסות דק ופלפל חריף קצוץ בשמן זית על אש נמוכה, 3 דקות — שהשום יזהיב ולא ישרף.",
+             "מסננים, מערבבים עם חצי כוס ממי הבישול והמון פטרוזיליה."],
+      note:"אש נמוכה לשום זה כל הסוד. שום שרוף הופך את כל המנה למרה." },
+
+    { id:"hummus_hot", name:"חומוס חריף עם צ'ילי ולימון", min:6, when:["tsohorayim","nashnush"], spicy:true,
+      need:["chickpeas",["chili","harissa","schug"],"lemon"], nice:["tahini","eggs","pita","parsley"],
+      p:16, f:11, s:2,
+      steps:["מחממים חומוס משומר עם מעט ממי הקופסה ומועכים גס.",
+             "כף הריסה או צ'ילי קצוץ, לימון, שמן זית, מלח.",
+             "פטרוזיליה מעל, ואם יש — ביצה קשה."],
+      note:"החריפות פה עושה עבודה כפולה: היא גם מוסיפה טעם וגם מאטה את קצב האכילה." },
+
+    { id:"tofu_chili", name:"טופו חריף בסויה וצ'ילי", min:12, when:["erev"], spicy:true,
+      need:["tofu",["chili","schug"],"soy_sauce"], nice:["frozen_veg","garlic","rice","green_onion"],
+      p:22, f:5, s:4,
+      steps:["מייבשים טופו בנייר, קוביות, מטגנים על אש גבוהה עד שמזהיב מכל הצדדים.",
+             "שום וצ'ילי קצוצים, חצי דקה.",
+             "כף סויה — היא תתאדה מיד ותצפה את הקוביות. בצל ירוק מעל."],
+      note:"הייבוש בנייר הוא ההבדל בין טופו שמזהיב לטופו שמתאדה במחבת." },
+
+    { id:"tuna_harissa", name:"סלט טונה חריף בהריסה", min:6, when:["tsohorayim"], spicy:true, nocook:true,
+      need:["tuna",["harissa","schug","chili"],"lemon"], nice:["onion","parsley","chickpeas","olives"],
+      p:30, f:5, s:2,
+      steps:["מסננים טונה לקערה.","כפית הריסה, לימון, שמן זית, בצל קצוץ דק.","מערבבים חזק עד שהכל אחיד."],
+      note:"30 גרם חלבון בשש דקות ובלי להדליק כלום. ההריסה מחליפה גם את המלח וגם את הרוטב." }
   ];
+  /* ---------------- תחליפים ----------------
+     מה להשתמש כשמרכיב חובה הוא משהו שמישהו בבית לא אוהב.  */
+  const SWAPS = {
+    avocado_toast:      { avocado:"חומוס מרוח או קוטג' עם פלפל שחור", bread:"פיתה מלאה או קרקרים" },
+    yogurt_bowl:        { yogurt:"קוטג' או לבנה", dates:"תפוח מגורד או צימוקים" },
+    tuna_chickpea:      { tuna:"שתי ביצים קשות מפוררות", chickpeas:"שעועית לבנה משומרת" },
+    pita_tahini_egg:    { tahini:"יוגורט עם לימון ושום כתוש", pita:"לחם מלא" },
+    quinoa_lentils:     { quinoa:"אורז מלא או קוסקוס מלא", lentils:"חומוס משומר" },
+    salmon_oven:        { salmon:"פילה דג לבן או חזה עוף" },
+    cottage_crackers:   { cottage:"לבנה או בולגרית מפוררת", crackers:"לחם מלא קלוי" },
+    edamame:            { edamame:"חומוס קלוי או שקדים" },
+    pasta_tuna:         { tuna:"שעועית לבנה או בולגרית מפוררת" },
+    green_salad_feta:   { avocado:"ביצה קשה", bulgarit:"גבינת עיזים או פטה", lettuce:"מלפפון ועגבנייה קצוצים" },
+    overnight_oats:     { banana:"תפוח מגורד או תמרים קצוצים" },
+    hummus_bowl:        { tahini:"יוגורט עם לימון ושמן זית" },
+    tofu_stirfry:       { tofu:"ביצים מקושקשות או חזה עוף בקוביות" },
+    lentil_soup:        { lentils:"שעועית לבנה משומרת", carrot:"בטטה" },
+    pb_banana:          { peanut_butter:"טחינה עם דבש", banana:"תפוח פרוס דק" },
+    sardines_toast:     { sardines:"טונה", bread:"קרקרים מלאים" },
+    israeli_salad:      { tahini:"יוגורט עם לימון, שום ומלח" },
+    green_shake:        { banana:"תפוח וכף שיבולת שועל" },
+    sweet_potato_tahini:{ tahini:"יוגורט סמיך או חמאת בוטנים דלילה", sweet_potato:"תפוח אדמה או דלעת" },
+    choco_yogurt:       { yogurt:"לבנה" },
+    beans_tomato:       { white_beans:"חומוס משומר" },
+    chicken_pan:        { chicken:"פילה דג לבן או טופו" },
+    labaneh_plate:      { labaneh:"קוטג' או בולגרית" },
+    hummus_plate:       { hummus_ready:"חומוס משומר מעוך עם לימון" },
+    cheese_sandwich:    { bread:"פיתה מלאה" },
+    pasta_chili:        { pasta:"אורז מלא" },
+    hummus_hot:         { chickpeas:"שעועית לבנה" },
+    tofu_chili:         { tofu:"ביצים מקושקשות", soy_sauce:"מלח ולימון" },
+    tuna_harissa:       { tuna:"ביצים קשות מפוררות" },
+    shakshuka_hot:      { eggs:"קוביות טופו" }
+  };
+
 
   /* ---------------- מצב ---------------- */
-  const KEY_PANTRY = "mlo.pantry.v1", KEY_FAV = "mlo.fav.v1";
+  const KEY = {
+    pantry: "mlo.pantry.v1", fav: "mlo.fav.v1", people: "mlo.people.v2",
+    cooking: "mlo.cooking.v1", custom: "mlo.custom.v1", notes: "mlo.notes.v1", off: "mlo.off.v1"
+  };
   const store = {
     get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
   };
-  let have = new Set(store.get(KEY_PANTRY, []));
-  let favs = new Set(store.get(KEY_FAV, []));
+
+  let have    = new Set(store.get(KEY.pantry, []));
+  let favs    = new Set(store.get(KEY.fav, []));
+  let off     = new Set(store.get(KEY.off, []));          // מנות שהוצאו ידנית
+  let custom  = store.get(KEY.custom, []);                // [{id, name, alias}]
+  let notes   = store.get(KEY.notes, {});                 // { recipeId: text }
+  let people  = store.get(KEY.people, [
+    { id: "p1", name: "אני", avoid: [], spicy: true },
+    { id: "p2", name: "הילדים", avoid: [], spicy: false }
+  ]);
+  let cooking = new Set(store.get(KEY.cooking, people.map(p => p.id)));
+
   const filters = { fast: false, nocook: false, snack: false, fav: false };
   let lastShown = null;
+  let showHidden = false;
 
   const $ = s => document.querySelector(s);
   const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+  const nameOf = id => NAME[id] || (custom.find(c => c.id === id) || {}).name || id;
 
-  /* ---------------- לוגיקה ---------------- */
-  function slotNow(d) {
-    const h = d.getHours();
-    if (h >= 5 && h < 11) return "boker";
-    if (h >= 11 && h < 15) return "tsohorayim";
-    if (h >= 15 && h < 18) return "nashnush";
-    if (h >= 18 && h < 23) return "erev";
-    return "nashnush";
+  function saveAll() {
+    store.set(KEY.pantry, Array.from(have));
+    store.set(KEY.fav, Array.from(favs));
+    store.set(KEY.off, Array.from(off));
+    store.set(KEY.custom, custom);
+    store.set(KEY.notes, notes);
+    store.set(KEY.people, people);
+    store.set(KEY.cooking, Array.from(cooking));
   }
-  const SLOT_HE = { boker: "בוקר", tsohorayim: "צהריים", nashnush: "נשנוש אחר הצהריים", erev: "ערב" };
 
-  function missingOf(r) {
-    const out = [];
+  /* ---------------- טעמים ---------------- */
+  const eaters = () => people.filter(p => cooking.has(p.id));
+
+  function avoidSet() {
+    const s = new Set();
+    eaters().forEach(p => (p.avoid || []).forEach(a => s.add(a)));
+    return s;
+  }
+  // חריף מוצע רק אם כל מי שאוכל אוהב חריף
+  const spicyOk = () => { const e = eaters(); return e.length > 0 && e.every(p => p.spicy); };
+
+  // מרכיב מסומן כקיים — ישירות, או דרך מוצר אישי שמחליף אותו
+  const satisfies = ing => have.has(ing) || custom.some(c => c.alias === ing && have.has(c.id));
+
+  /* מצב המרכיבים של מנה, מול מי שאוכל ומול מה שיש בבית */
+  function stateOf(r) {
+    const av = avoidSet(), sw = SWAPS[r.id] || {};
+    const res = { missing: [], swaps: [], dropped: [], blocked: false };
     r.need.forEach(n => {
       const alts = Array.isArray(n) ? n : [n];
-      if (!alts.some(a => have.has(a))) out.push(alts);
+      const ok = alts.filter(a => !av.has(a));
+      if (ok.length === 0) {
+        const key = alts.find(a => sw[a]);
+        if (key) res.swaps.push({ from: key, text: sw[key] });
+        else { res.blocked = true; res.dropped.push(alts); }
+        return;
+      }
+      if (!ok.some(satisfies)) res.missing.push(ok);
     });
-    return out;
+    return res;
   }
-  const labelOf = alts => alts.map(a => NAME[a] || a).join(" או ");
 
+  function whyOut(r) {
+    if (off.has(r.id)) return "off";
+    if (r.spicy && !spicyOk()) return "spicy";
+    if (stateOf(r).blocked) return "taste";
+    return null;
+  }
+  const menu = () => R.filter(r => !whyOut(r));
+
+  const labelOf = alts => alts.map(nameOf).join(" או ");
+
+  /* ---------------- כרטיס מנה ---------------- */
   function nutBar(v, max) { return Math.max(4, Math.min(100, Math.round(v / max * 100))); }
 
   function cardHTML(r) {
-    const miss = missingOf(r);
-    const flat = [];
-    r.need.forEach(n => flat.push({ alts: Array.isArray(n) ? n : [n], opt: false }));
-    (r.nice || []).forEach(n => { if (NAME[n]) flat.push({ alts: [n], opt: true }); });
+    const st = stateOf(r), av = avoidSet();
+    const rows = [];
+    r.need.forEach(n => {
+      const alts = Array.isArray(n) ? n : [n];
+      const ok = alts.filter(a => !av.has(a));
+      if (ok.length === 0) rows.push({ alts: alts, opt: false, no: true });
+      else rows.push({ alts: ok, opt: false, no: false });
+    });
+    (r.nice || []).forEach(n => { if (NAME[n] && !av.has(n)) rows.push({ alts: [n], opt: true, no: false }); });
 
     const tags = [];
-    if (miss.length === 0 && have.size) tags.push(["אפשר להכין עכשיו", true]);
+    if (st.missing.length === 0 && have.size) tags.push(["אפשר להכין עכשיו", true]);
+    if (r.spicy) tags.push(["חריף", true]);
     if (r.nocook) tags.push(["בלי בישול", false]);
     if (r.snack) tags.push(["במקום נשנוש", false]);
     if (r.prep) tags.push(["הכנה מראש", false]);
     r.when.forEach(w => tags.push([SLOT_HE[w], false]));
+
+    const note = notes[r.id] || "";
 
     return '<article class="card fade">' +
       '<div class="card-head"><h2>' + esc(r.name) + '</h2>' +
@@ -595,33 +845,56 @@
         '<div class="nut s"><div class="lab">סוכר</div><div class="val">' + r.s + ' ג\'</div><div class="bar"><i style="width:' + nutBar(r.s, 20) + '%"></i></div></div>' +
       '</div>' +
       '<div class="card-body">' +
+        st.swaps.map(w =>
+          '<p class="swapline"><b>במקום</b> <s>' + esc(nameOf(w.from)) + '</s> <span>' + esc(w.text) + '</span></p>'
+        ).join("") +
         '<div class="block"><h3>מה צריך</h3><ul class="ings">' +
-          flat.map(f => {
-            const isMiss = !f.opt && !f.alts.some(a => have.has(a)) && have.size > 0;
-            const cls = f.opt ? "opt" : (isMiss ? "miss" : "");
+          rows.map(f => {
+            const isMiss = !f.opt && !f.no && !f.alts.some(satisfies) && have.size > 0;
+            const cls = f.no ? "no" : (f.opt ? "opt" : (isMiss ? "miss" : ""));
             return '<li class="' + cls + '">' + esc(labelOf(f.alts)) + (f.opt ? " (אם יש)" : "") + '</li>';
           }).join("") +
         '</ul></div>' +
-        '<div class="block"><h3>איך</h3><ol class="steps">' + r.steps.map(s => "<li>" + esc(s) + "</li>").join("") + '</ol></div>' +
+        '<div class="block"><h3>איך</h3><ol class="steps">' + r.steps.map(x => "<li>" + esc(x) + "</li>").join("") + '</ol></div>' +
         (r.note ? '<p class="note"><b>שווה לדעת:</b> ' + esc(r.note) + '</p>' : "") +
+        '<div class="block notebox"><h3>ההערה שלי</h3>' +
+          '<textarea data-note="' + r.id + '" placeholder="מה עבד, מה לשנות בפעם הבאה, מי אהב">' + esc(note) + '</textarea>' +
+          '<span class="saved" data-saved="' + r.id + '"></span></div>' +
       '</div>' +
       '<div class="card-foot">' +
         '<button class="btn fav" data-fav="' + r.id + '" aria-pressed="' + favs.has(r.id) + '">' + (favs.has(r.id) ? "★ שמור" : "☆ שמור") + '</button>' +
-        (miss.length
-          ? '<button class="btn" data-shop="' + r.id + '">' + (have.size ? "חסר " + miss.length + " — רשימת קניות" : "רשימת קניות") + '</button>'
+        (st.missing.length
+          ? '<button class="btn" data-shop="' + r.id + '">' + (have.size ? "חסר " + st.missing.length + " — רשימת קניות" : "רשימת קניות") + '</button>'
           : "") +
+        '<button class="btn" data-off="' + r.id + '" style="margin-inline-start:auto">לא בשבילי</button>' +
       '</div></article>';
   }
 
   /* ---------------- מצב "עכשיו" ---------------- */
+  function slotNow(d) {
+    const h = d.getHours();
+    if (h >= 5 && h < 11) return "boker";
+    if (h >= 11 && h < 15) return "tsohorayim";
+    if (h >= 15 && h < 18) return "nashnush";
+    if (h >= 18 && h < 23) return "erev";
+    return "nashnush";
+  }
+  const SLOT_HE = { boker: "בוקר", tsohorayim: "צהריים", nashnush: "נשנוש אחר הצהריים", erev: "ערב" };
+
   function pickNow() {
     const slot = slotNow(new Date());
-    let pool = R.filter(r => r.when.indexOf(slot) !== -1);
+    const all = menu();
+    let pool = all.filter(r => r.when.indexOf(slot) !== -1);
+    if (!pool.length) pool = all;
+    if (!pool.length) {
+      $("#now-slot").innerHTML = '<p class="empty">כל המנות סוננו החוצה. נסה לבחור פחות מגבלות בלשונית «הטעמים שלנו».</p>';
+      $("#now-hint").textContent = "";
+      return;
+    }
     if (have.size) {
-      const ready = pool.filter(r => missingOf(r).length === 0);
-      const almost = pool.filter(r => missingOf(r).length === 1);
-      if (ready.length) pool = ready;
-      else if (almost.length) pool = almost;
+      const ready = pool.filter(r => stateOf(r).missing.length === 0);
+      const almost = pool.filter(r => stateOf(r).missing.length === 1);
+      if (ready.length) pool = ready; else if (almost.length) pool = almost;
     }
     if (pool.length > 1 && lastShown) {
       const other = pool.filter(r => r.id !== lastShown);
@@ -631,42 +904,64 @@
     lastShown = pick.id;
     $("#now-slot").innerHTML = cardHTML(pick);
 
-    const readyCount = R.filter(r => r.when.indexOf(slot) !== -1 && missingOf(r).length === 0).length;
+    const ready = all.filter(r => r.when.indexOf(slot) !== -1 && stateOf(r).missing.length === 0).length;
     $("#now-hint").textContent = have.size
-      ? "מתוך מה שסימנת, יש " + readyCount + " רעיונות ל" + SLOT_HE[slot] + " שאפשר להכין עכשיו."
+      ? "מתוך מה שסימנת, יש " + ready + " רעיונות ל" + SLOT_HE[slot] + " שאפשר להכין עכשיו."
       : "סמן מה יש לך בבית כדי שההצעות יתאימו למקרר שלך.";
   }
 
   /* ---------------- מצב "מה יש לי" ---------------- */
   function renderPantry() {
-    $("#pantry-groups").innerHTML = GROUPS.map(g =>
+    const av = avoidSet();
+    let html = GROUPS.map(g =>
       '<div class="group"><h3>' + esc(g.title) + '</h3><div class="chips">' +
-      g.items.map(([id, he]) =>
-        '<button class="chip" data-ing="' + id + '" aria-pressed="' + have.has(id) + '">' + esc(he) + '</button>'
+      g.items.filter(it => !av.has(it[0])).map(it =>
+        '<button class="chip" data-ing="' + it[0] + '" aria-pressed="' + have.has(it[0]) + '">' + esc(it[1]) + '</button>'
       ).join("") + '</div></div>'
     ).join("");
+    if (custom.length) {
+      html += '<div class="group"><h3>שלי</h3><div class="chips">' +
+        custom.map(c => '<button class="chip" data-ing="' + c.id + '" aria-pressed="' + have.has(c.id) + '">' + esc(c.name) + '</button>').join("") +
+        '</div></div>';
+    }
+    $("#pantry-groups").innerHTML = html;
+  }
+
+  function renderBanner() {
+    const outs = R.filter(whyOut);
+    if (!outs.length) { $("#hidden-banner").innerHTML = ""; return; }
+    const by = { taste: 0, spicy: 0, off: 0 };
+    outs.forEach(r => by[whyOut(r)]++);
+    const parts = [];
+    if (by.taste) parts.push(by.taste + " בגלל מה שלא אוהבים");
+    if (by.spicy) parts.push(by.spicy + " חריפות");
+    if (by.off) parts.push(by.off + " שהוצאת");
+    $("#hidden-banner").innerHTML =
+      '<div class="banner"><span>' + outs.length + ' מנות לא מוצגות: ' + esc(parts.join(" · ")) + '</span>' +
+      '<button id="toggle-hidden">' + (showHidden ? "הסתר אותן" : "הצג בכל זאת") + '</button></div>';
   }
 
   function renderResults() {
-    let list = R.slice();
+    let list = menu();
+    if (showHidden) list = list.concat(R.filter(r => whyOut(r) && whyOut(r) !== "off"));
     if (filters.fast) list = list.filter(r => r.min <= 10);
     if (filters.nocook) list = list.filter(r => r.nocook);
     if (filters.snack) list = list.filter(r => r.snack);
     if (filters.fav) list = list.filter(r => favs.has(r.id));
 
-    list = list.map(r => ({ r: r, miss: missingOf(r) }))
-               .sort((a, b) => a.miss.length - b.miss.length || a.r.min - b.r.min);
+    list = list.map(r => ({ r: r, st: stateOf(r) }))
+               .sort((a, b) => a.st.missing.length - b.st.missing.length || a.r.min - b.r.min);
 
     function row(x) {
       const r = x.r;
       const sub = have.size === 0
         ? '<small>' + esc(r.need.map(n => labelOf(Array.isArray(n) ? n : [n])).join(" · ")) + '</small>'
-        : (x.miss.length === 0
+        : (x.st.missing.length === 0
             ? '<small>יש לך הכל</small>'
-            : '<small class="miss">חסר: ' + esc(x.miss.map(labelOf).join(", ")) + '</small>');
+            : '<small class="miss">חסר: ' + esc(x.st.missing.map(labelOf).join(", ")) + '</small>');
       return '<button class="res" data-open="' + r.id + '">' +
         '<span class="t"><b>' + r.min + '</b><span>דק\'</span></span>' +
-        '<span class="m"><strong>' + esc(r.name) + '</strong>' + sub + '</span>' +
+        '<span class="m"><strong>' + esc(r.name) + (r.spicy ? " 🌶" : "") + '</strong>' + sub + '</span>' +
         '<span class="k">' + r.p + ' ג\' חלבון</span></button>';
     }
 
@@ -677,46 +972,130 @@
       box.innerHTML = list.sort((a, b) => a.r.min - b.r.min).map(row).join("");
     } else {
       const buckets = [
-        ["אפשר להכין עכשיו", list.filter(x => x.miss.length === 0)],
-        ["חסר מרכיב אחד", list.filter(x => x.miss.length === 1)],
-        ["חסרים כמה מרכיבים", list.filter(x => x.miss.length > 1)]
+        ["אפשר להכין עכשיו", list.filter(x => x.st.missing.length === 0)],
+        ["חסר מרכיב אחד", list.filter(x => x.st.missing.length === 1)],
+        ["חסרים כמה מרכיבים", list.filter(x => x.st.missing.length > 1)]
       ];
       box.innerHTML = buckets.filter(b => b[1].length).map(b =>
-        '<h4 class="bucket">' + esc(b[0]) + ' <span>' + b[1].length + '</span></h4>' +
-        b[1].map(row).join("")
+        '<h4 class="bucket">' + esc(b[0]) + ' <span>' + b[1].length + '</span></h4>' + b[1].map(row).join("")
       ).join("");
     }
 
-    const ready = R.filter(r => missingOf(r).length === 0).length;
+    const ready = menu().filter(r => stateOf(r).missing.length === 0).length;
     $("#count").textContent = have.size
       ? "סימנת " + have.size + " מרכיבים · " + ready + " מנות מוכנות להכנה"
       : "עדיין לא סימנת כלום";
+    renderBanner();
+  }
+
+  /* ---------------- לוח הטעמים ---------------- */
+  function ingOptions(selected) {
+    return GROUPS.map(g =>
+      '<optgroup label="' + esc(g.title) + '">' +
+      g.items.map(it => '<option value="' + it[0] + '"' + (it[0] === selected ? " selected" : "") + '>' + esc(it[1]) + '</option>').join("") +
+      '</optgroup>'
+    ).join("");
+  }
+
+  function renderPeople() {
+    $("#people-list").innerHTML = people.map(p =>
+      '<div class="pcard" data-p="' + p.id + '">' +
+        '<div class="hd">' +
+          '<input class="nm" data-rename="' + p.id + '" value="' + esc(p.name) + '" aria-label="שם">' +
+          '<label class="toggle"><input type="checkbox" data-spicy="' + p.id + '"' + (p.spicy ? " checked" : "") + '> אוכל חריף</label>' +
+          (people.length > 1 ? '<button class="linkbtn" data-delp="' + p.id + '">הסר</button>' : "") +
+        '</div>' +
+        '<div class="avoid">' + (p.avoid || []).map(a =>
+          '<button class="x" data-unavoid="' + p.id + '|' + a + '">' + esc(nameOf(a)) + '</button>').join("") + '</div>' +
+        '<div class="row"><select data-pick="' + p.id + '"><option value="">בחר מרכיב…</option>' + ingOptions() + '</select>' +
+          '<button class="btn" data-avoid="' + p.id + '">לא אוהב את זה</button></div>' +
+      '</div>'
+    ).join("");
+
+    $("#who-list").innerHTML = people.map(p =>
+      '<button class="person" data-who="' + p.id + '" aria-pressed="' + cooking.has(p.id) + '">' +
+        esc(p.name) + (p.spicy ? ' <span class="heat">🌶</span>' : "") + '</button>'
+    ).join("");
+    $("#who-state").textContent = eaters().length === 0
+      ? "בחר לפחות אדם אחד"
+      : (spicyOk() ? "חריף בפנים" : "בלי חריף");
+  }
+
+  function renderCustom() {
+    $("#new-ing-alias").innerHTML = '<option value="">לא מחליף כלום</option>' + ingOptions();
+    $("#custom-list").innerHTML = custom.length
+      ? custom.map(c =>
+          '<div class="minirow"><span class="grow">' + esc(c.name) +
+          (c.alias ? ' <em>· נחשב כמו ' + esc(nameOf(c.alias)) + '</em>' : "") +
+          '</span><button data-delc="' + c.id + '">הסר</button></div>').join("")
+      : '<p class="hint" style="margin:0">עוד לא הוספת מוצרים משלך.</p>';
+  }
+
+  function renderOff() {
+    const list = R.filter(r => off.has(r.id));
+    $("#hidden-list").innerHTML = list.length
+      ? list.map(r => '<div class="minirow"><span class="grow">' + esc(r.name) +
+          '</span><button data-back="' + r.id + '">החזר</button></div>').join("")
+      : '<p class="hint" style="margin:0">לא הוצאת אף מנה.</p>';
+  }
+
+  function renderNotes() {
+    const ids = Object.keys(notes).filter(id => (notes[id] || "").trim());
+    $("#notes-list").innerHTML = ids.length
+      ? ids.map(id => {
+          const r = R.find(x => x.id === id);
+          return r ? '<div class="minirow"><span class="grow"><strong>' + esc(r.name) + '</strong> · ' +
+            esc(notes[id]) + '</span><button data-delnote="' + id + '">מחק</button></div>' : "";
+        }).join("")
+      : '<p class="hint" style="margin:0">עוד אין הערות. אפשר לכתוב אותן בתוך כל מנה.</p>';
+  }
+
+  function refreshAll() {
+    saveAll();
+    renderPeople();
+    renderPantry();
+    renderResults();
+    renderCustom();
+    renderOff();
+    renderNotes();
   }
 
   /* ---------------- אירועים ---------------- */
   function setTab(which) {
-    const now = which === "now";
-    $("#tab-now").setAttribute("aria-selected", String(now));
-    $("#tab-pantry").setAttribute("aria-selected", String(!now));
-    $("#panel-now").hidden = !now;
-    $("#panel-pantry").hidden = now;
-    if (!now) { renderResults(); }
+    ["now", "pantry", "taste"].forEach(t => {
+      $("#tab-" + t).setAttribute("aria-selected", String(t === which));
+      $("#panel-" + t).hidden = t !== which;
+    });
+    if (which === "pantry") renderResults();
   }
   $("#tab-now").addEventListener("click", () => setTab("now"));
   $("#tab-pantry").addEventListener("click", () => setTab("pantry"));
+  $("#tab-taste").addEventListener("click", () => { renderPeople(); renderCustom(); renderOff(); renderNotes(); setTab("taste"); });
   $("#roll").addEventListener("click", pickNow);
 
   document.addEventListener("click", e => {
-    const ing = e.target.closest("[data-ing]");
+    const t = e.target;
+
+    const who = t.closest("[data-who]");
+    if (who) {
+      const id = who.dataset.who;
+      if (cooking.has(id)) cooking.delete(id); else cooking.add(id);
+      refreshAll();
+      if (!$("#panel-now").hidden) pickNow();
+      return;
+    }
+
+    const ing = t.closest("[data-ing]");
     if (ing) {
       const id = ing.dataset.ing;
       if (have.has(id)) have.delete(id); else have.add(id);
       ing.setAttribute("aria-pressed", String(have.has(id)));
-      store.set(KEY_PANTRY, Array.from(have));
+      store.set(KEY.pantry, Array.from(have));
       renderResults();
       return;
     }
-    const open = e.target.closest("[data-open]");
+
+    const open = t.closest("[data-open]");
     if (open) {
       const r = R.find(x => x.id === open.dataset.open);
       lastShown = r.id;
@@ -726,37 +1105,148 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
-    const fav = e.target.closest("[data-fav]");
+
+    const fav = t.closest("[data-fav]");
     if (fav) {
       const id = fav.dataset.fav;
       if (favs.has(id)) favs.delete(id); else favs.add(id);
-      store.set(KEY_FAV, Array.from(favs));
+      store.set(KEY.fav, Array.from(favs));
       fav.setAttribute("aria-pressed", String(favs.has(id)));
       fav.textContent = favs.has(id) ? "★ שמור" : "☆ שמור";
       return;
     }
-    const shop = e.target.closest("[data-shop]");
+
+    const shop = t.closest("[data-shop]");
     if (shop) {
       const r = R.find(x => x.id === shop.dataset.shop);
       $("#dlg-title").textContent = "רשימת קניות · " + r.name;
-      $("#dlg-text").value = missingOf(r).map(a => "• " + labelOf(a)).join("\n");
+      $("#dlg-text").value = stateOf(r).missing.map(a => "• " + labelOf(a)).join("\n");
+      $("#dlg-copy").textContent = "העתק";
       $("#dlg").showModal();
+      return;
+    }
+
+    const outBtn = t.closest("[data-off]");
+    if (outBtn) {
+      off.add(outBtn.dataset.off);
+      refreshAll();
+      if (!$("#panel-now").hidden) pickNow();
+      return;
+    }
+
+    const back = t.closest("[data-back]");
+    if (back) { off.delete(back.dataset.back); refreshAll(); return; }
+
+    const avoid = t.closest("[data-avoid]");
+    if (avoid) {
+      const p = people.find(x => x.id === avoid.dataset.avoid);
+      const val = $('[data-pick="' + p.id + '"]').value;
+      if (val && p.avoid.indexOf(val) === -1) p.avoid.push(val);
+      have.delete(val);
+      refreshAll();
+      return;
+    }
+
+    const un = t.closest("[data-unavoid]");
+    if (un) {
+      const parts = un.dataset.unavoid.split("|");
+      const p = people.find(x => x.id === parts[0]);
+      p.avoid = p.avoid.filter(a => a !== parts[1]);
+      refreshAll();
+      return;
+    }
+
+    const delp = t.closest("[data-delp]");
+    if (delp) {
+      people = people.filter(p => p.id !== delp.dataset.delp);
+      cooking.delete(delp.dataset.delp);
+      refreshAll();
+      return;
+    }
+
+    const delc = t.closest("[data-delc]");
+    if (delc) {
+      custom = custom.filter(c => c.id !== delc.dataset.delc);
+      have.delete(delc.dataset.delc);
+      refreshAll();
+      return;
+    }
+
+    const dn = t.closest("[data-delnote]");
+    if (dn) { delete notes[dn.dataset.delnote]; refreshAll(); return; }
+
+    const th = t.closest("#toggle-hidden");
+    if (th) { showHidden = !showHidden; renderResults(); return; }
+  });
+
+  document.addEventListener("change", e => {
+    const sp = e.target.closest("[data-spicy]");
+    if (sp) {
+      const p = people.find(x => x.id === sp.dataset.spicy);
+      p.spicy = sp.checked;
+      refreshAll();
     }
   });
 
-  [["#f-fast","fast"],["#f-nocook","nocook"],["#f-snack","snack"],["#f-fav","fav"]].forEach(([sel, key]) => {
-    $(sel).addEventListener("click", () => {
-      filters[key] = !filters[key];
-      $(sel).setAttribute("aria-pressed", String(filters[key]));
-      renderResults();
-    });
+  document.addEventListener("input", e => {
+    const nm = e.target.closest("[data-rename]");
+    if (nm) {
+      const p = people.find(x => x.id === nm.dataset.rename);
+      p.name = nm.value.slice(0, 20);
+      store.set(KEY.people, people);
+      $("#who-list").innerHTML = people.map(q =>
+        '<button class="person" data-who="' + q.id + '" aria-pressed="' + cooking.has(q.id) + '">' +
+          esc(q.name) + (q.spicy ? ' <span class="heat">🌶</span>' : "") + '</button>').join("");
+      return;
+    }
+    const nt = e.target.closest("[data-note]");
+    if (nt) {
+      const id = nt.dataset.note;
+      notes[id] = nt.value;
+      store.set(KEY.notes, notes);
+      const badge = document.querySelector('[data-saved="' + id + '"]');
+      if (badge) {
+        badge.textContent = "נשמר";
+        clearTimeout(badge._t);
+        badge._t = setTimeout(() => { badge.textContent = ""; }, 1600);
+      }
+    }
+  });
+
+  $("#add-person").addEventListener("click", () => {
+    const inp = $("#new-person"), nm = inp.value.trim();
+    if (!nm) { inp.focus(); return; }
+    const id = "p" + Date.now().toString(36);
+    people.push({ id: id, name: nm.slice(0, 20), avoid: [], spicy: false });
+    cooking.add(id);
+    inp.value = "";
+    refreshAll();
+  });
+
+  $("#add-ing").addEventListener("click", () => {
+    const inp = $("#new-ing"), nm = inp.value.trim();
+    if (!nm) { inp.focus(); return; }
+    const id = "c" + Date.now().toString(36);
+    custom.push({ id: id, name: nm.slice(0, 28), alias: $("#new-ing-alias").value || "" });
+    have.add(id);
+    inp.value = "";
+    $("#new-ing-alias").value = "";
+    refreshAll();
   });
 
   $("#clear").addEventListener("click", () => {
     have = new Set();
-    store.set(KEY_PANTRY, []);
+    store.set(KEY.pantry, []);
     renderPantry();
     renderResults();
+  });
+
+  [["#f-fast","fast"],["#f-nocook","nocook"],["#f-snack","snack"],["#f-fav","fav"]].forEach(pair => {
+    $(pair[0]).addEventListener("click", () => {
+      filters[pair[1]] = !filters[pair[1]];
+      $(pair[0]).setAttribute("aria-pressed", String(filters[pair[1]]));
+      renderResults();
+    });
   });
 
   $("#dlg-close").addEventListener("click", () => $("#dlg").close());
@@ -772,11 +1262,10 @@
   });
 
   /* ---------------- התחלה ---------------- */
-  const d = new Date();
-  $("#clock").textContent = SLOT_HE[slotNow(d)] + " · " +
-    String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
-  renderPantry();
-  renderResults();
+  const now = new Date();
+  $("#clock").textContent = SLOT_HE[slotNow(now)] + " · " +
+    String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0");
+  refreshAll();
   pickNow();
 })();
 </script>
