@@ -4,7 +4,7 @@ Une petite app pour arrêter de grignoter faute d'idée : elle propose des repas
 **simples et à peu près équilibrés**, à partir de ce qu'on a déjà à la maison,
 avec des produits qu'on trouve dans n'importe quel supermarché en Israël.
 
-Interface **en hébreu** (RTL). 59 idées de repas, aucune ne dépasse 25 minutes.
+Interface **en hébreu** (RTL). 69 idées de repas dont 10 smoothies, aucune ne dépasse 25 minutes.
 
 ## Deux façons de s'en servir
 
@@ -32,6 +32,31 @@ Ce choix pilote tout le reste :
 
 Deux profils existent au départ — אני (piquant) et הילדים (pas piquant) — et on
 peut les renommer, en ajouter, en supprimer.
+
+## Smoothies
+
+Dix recettes pour blender (Ninja ou autre), couvrant les combinaisons réelles :
+fruits surgelés et fruits frais, avec yaourt protéiné, avec yaourt nature, avec
+lait, à l'eau ou au jus pressé. Les valeurs vont de 3 g de protéines (concombre-
+menthe, un rafraîchissement) à 28 g (le smoothie protéiné) — c'est affiché, pour
+qu'un « smoothie santé » qui ne nourrit pas ne passe pas pour un repas.
+
+Chaque recette de smoothie porte un encadré dépliable, **« למה השייק יוצא קפוא
+מדי »**, qui règle le problème du smoothie trop pris :
+
+1. **Le ratio** — un volume de liquide pour deux volumes de fruits surgelés.
+2. **Un tiers de frais** — au moins un tiers de fruits non congelés, sinon c'est
+   une glace.
+3. **Cinq minutes dehors** — sortir les surgelés cinq minutes avant.
+4. **L'ordre** — dans un gobelet qui se visse et se retourne sur la base, les
+   surgelés vont en premier et le liquide en dernier, pour qu'après
+   retournement le liquide se retrouve contre les lames. Dans un blender à bol
+   fixe, c'est exactement l'inverse.
+5. **Les pulses** — quatre ou cinq impulsions avant le mixage continu.
+6. **Quand ça bloque** — couper, secouer, ajouter deux cuillères de liquide.
+   C'est une poche d'air sous les lames, pas une panne ; forcer n'aide pas.
+
+Un filtre « שייקים » les regroupe.
 
 ## Faire les courses pour un plat
 

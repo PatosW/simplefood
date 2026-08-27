@@ -196,6 +196,20 @@
   .timer[data-on="1"] { border-color: var(--olive); color: var(--olive); background: var(--olive-soft); }
   .timer[data-on="done"] { border-color: var(--pomegranate); color: var(--pomegranate); background: transparent; }
 
+  details.guide {
+    background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 0 13px;
+  }
+  details.guide summary {
+    cursor: pointer; padding: 11px 0; font-weight: 600; font-size: var(--step--1); color: var(--olive);
+    list-style-position: inside;
+  }
+  details.guide summary::marker { color: var(--olive); }
+  details.guide[open] summary { border-bottom: 1px solid var(--line-soft); }
+  details.guide ol { margin: 10px 0; padding-inline-start: 1.2em; display: grid; gap: 8px; font-size: var(--step--1); line-height: 1.55; }
+  details.guide ol li::marker { color: var(--ink-3); font-family: "Heebo", sans-serif; }
+  details.guide ol b { color: var(--olive); }
+  details.guide > p { margin: 0 0 13px; font-size: var(--step--1); color: var(--ink-2); }
+
   .tools { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
   .tools li {
     border: 1px dashed var(--line); border-radius: 8px; padding: 4px 10px;
@@ -452,6 +466,7 @@
       <button class="chip" id="f-fast" aria-pressed="false">עד 10 דקות</button>
       <button class="chip" id="f-nocook" aria-pressed="false">בלי בישול</button>
       <button class="chip" id="f-snack" aria-pressed="false">במקום נשנוש</button>
+      <button class="chip" id="f-shake" aria-pressed="false">שייקים</button>
       <button class="chip" id="f-kids" aria-pressed="false">מתאים לילדים</button>
       <button class="chip" id="f-empty" aria-pressed="false">לרוקן את המקרר</button>
       <button class="chip" id="f-fav" aria-pressed="false">מועדפים</button>
@@ -575,7 +590,8 @@
       ["eggs","ביצים"],["cottage","קוטג'"],["labaneh","לבנה"],["yogurt","יוגורט"],
       ["bulgarit","גבינה בולגרית"],["yellow_cheese","גבינה צהובה"],["milk","חלב"],
       ["tofu","טופו"],["hummus_ready","חומוס מוכן"],["salmon","פילה סלמון"],["chicken","חזה עוף"],
-      ["white_cheese","גבינה לבנה"],["sour_cream","שמנת חמוצה"],["ground_meat","עוף או בשר טחון"]
+      ["white_cheese","גבינה לבנה"],["sour_cream","שמנת חמוצה"],["ground_meat","עוף או בשר טחון"],
+      ["protein_yogurt","יוגורט חלבון"]
     ]},
     { title: "ירקות ופירות", items: [
       ["tomato","עגבניות"],["cucumber","מלפפון"],["pepper","פלפל"],["onion","בצל"],
@@ -583,7 +599,7 @@
       ["lettuce","עלים ירוקים"],["parsley","פטרוזיליה"],["carrot","גזר"],
       ["sweet_potato","בטטה"],["banana","בננה"],["dates","תמרים"],["apple","תפוח"],
       ["potato","תפוח אדמה"],["zucchini","קישוא"],["eggplant","חציל"],
-      ["broccoli","ברוקולי"],["mushrooms","פטריות"]
+      ["broccoli","ברוקולי"],["mushrooms","פטריות"],["orange","תפוז"],["mint","נענע"]
     ]},
     { title: "ארון", items: [
       ["tuna","טונה"],["sardines","סרדינים"],["chickpeas","חומוס משומר"],["white_beans","שעועית לבנה"],
@@ -598,7 +614,8 @@
       ["flour","קמח"],["couscous","קוסקוס מלא"]
     ]},
     { title: "מקפיא", items: [
-      ["frozen_veg","ירקות קפואים"],["edamame","אדממה"],["spinach_frozen","תרד קפוא"]
+      ["frozen_veg","ירקות קפואים"],["edamame","אדממה"],["spinach_frozen","תרד קפוא"],
+      ["frozen_berries","פירות יער קפואים"],["frozen_mango","מנגו קפוא"],["frozen_strawberry","תות קפוא"]
     ]}
   ];
 
@@ -1554,7 +1571,158 @@
           tip:"קרקרים תמיד בתא נפרד ויבש, אחרת הם נרטבים מהירקות." },
         { t:"מכינים שתי קופסאות בבת אחת — אחת לילדים ואחת לך." }
       ],
-      note:"החלופה הישירה לשקית האגוזים: אותן חמש דקות, אבל עם חלבון וירק." }
+      note:"החלופה הישירה לשקית האגוזים: אותן חמש דקות, אבל עם חלבון וירק." },
+
+    { id:"berry_shake", name:"שייק פירות יער — הבסיס", min:4, when:["boker","nashnush"], shake:true, nocook:true, snack:true,
+      need:["frozen_berries","banana",["milk","yogurt"]], nice:["honey","chia","oats"],
+      amounts:{ frozen_berries:"כוס פירות יער קפואים", banana:"בננה טרייה אחת", milk:"חצי כוס חלב", yogurt:"חצי גביע יוגורט", honey:"כפית דבש", chia:"כפית צ'יה", oats:"2 כפות שיבולת שועל" },
+      tools:["נינג'ה או בלנדר","כוס מדידה"],
+      p:12, f:6, s:18,
+      steps:[
+        { t:"מוציאים כוס פירות יער קפואים מהמקפיא ומשאירים אותם על השיש 5 דקות.",
+          tip:"זה הצעד שפותר את השייק הקפוא מדי. הפירות מתרככים בדיוק מספיק כדי להיטחן, אבל נשארים קרים.", sec:300 },
+        { t:"מודדים חצי כוס חלב או יוגורט. היחס הוא כוס נוזל לכל 2 כוסות פירות קפואים.",
+          tip:"פחות נוזל מזה = גוש שהלהבים מסתובבים בתוכו בלי לטחון כלום." },
+        { t:"בכוס נינג'ה שנברגת והופכים על הבסיס: קודם הפירות הקפואים, אחר כך הבננה, והנוזל אחרון.",
+          tip:"אחרי ההיפוך הנוזל נמצא ליד הלהבים — וזה מה שמאפשר להם להתחיל להסתובב. בבלנדר עם קנקן קבוע עושים בדיוק הפוך: נוזל קודם." },
+        { t:"מוסיפים בננה טרייה שלמה, לא קפואה.",
+          tip:"לפחות שליש מהפירות חייבים להיות טריים. שייק שכולו קפוא יוצא גלידה שאי אפשר לשתות." },
+        { t:"נותנים 4-5 פולסים קצרים לשבירת הגושים, ורק אחר כך מפעילים ברצף 30 שניות.", sec:30 },
+        { t:"אם המכשיר נתקע ונשמע כאילו הוא מסתובב בריק: מכבים, מנערים את הכוס בחוזקה, מוסיפים 2 כפות נוזל וממשיכים.",
+          tip:"זה כיס אוויר מתחת ללהבים, לא תקלה. הוספת כוח לא תעזור — רק ניעור או עוד נוזל." }
+      ],
+      note:"זה מתכון הבסיס. אחרי שהיחס הזה עובד אצלך, אפשר להחליף כל פרי בכל פרי אחר." },
+
+    { id:"protein_shake", name:"שייק חלבון אחרי אימון", min:4, when:["boker","nashnush"], shake:true, nocook:true, snack:true,
+      need:["protein_yogurt","frozen_berries","milk"], nice:["peanut_butter","banana","oats","honey"],
+      amounts:{ protein_yogurt:"גביע יוגורט חלבון", frozen_berries:"כוס פירות יער קפואים", milk:"חצי כוס חלב", peanut_butter:"כף חמאת בוטנים", banana:"חצי בננה", oats:"2 כפות שיבולת שועל", honey:"כפית דבש" },
+      tools:["נינג'ה או בלנדר","כוס מדידה"],
+      p:28, f:6, s:14,
+      steps:[
+        { t:"מוציאים את הפירות הקפואים 5 דקות לפני ומשאירים על השיש.", sec:300 },
+        { t:"שמים בכוס: פירות קפואים, גביע יוגורט חלבון, כף חמאת בוטנים, ולבסוף חצי כוס חלב." },
+        { t:"מוסיפים עוד רבע כוס חלב מעבר למה שנראה נכון.",
+          tip:"יוגורט חלבון סמיך הרבה יותר מיוגורט רגיל, והוא מה שגורם לשייק לצאת כמו בטון. תמיד מוסיפים לו נוזל." },
+        { t:"4 פולסים ואז 30 שניות רצוף.", sec:30 },
+        { t:"בודקים במבחן הקש: אם הקש נשאר עומד לבד באמצע — סמיך מדי. עוד 2 כפות חלב ופולס אחד." }
+      ],
+      note:"28 גרם חלבון. אם השייק יוצא סמיך מדי גם אחרי תוספת חלב, זה סימן שהיוגורט שלך מרוכז במיוחד — התחל מרבע גביע פחות." },
+
+    { id:"mango_yogurt_shake", name:"שייק מנגו־יוגורט", min:4, when:["boker","nashnush"], shake:true, nocook:true, snack:true,
+      need:["frozen_mango","yogurt","milk"], nice:["honey","chia","banana","orange"],
+      amounts:{ frozen_mango:"כוס מנגו קפוא", yogurt:"חצי גביע יוגורט", milk:"חצי כוס חלב", honey:"כפית דבש", chia:"כפית צ'יה", banana:"חצי בננה", orange:"תפוז אחד" },
+      tools:["נינג'ה או בלנדר","כוס מדידה"],
+      p:15, f:4, s:22,
+      steps:[
+        { t:"מוציאים את המנגו הקפוא 5 דקות מראש. מנגו קפוא קשה במיוחד — לא לדלג על זה.", sec:300 },
+        { t:"שמים בכוס: מנגו, חצי גביע יוגורט, וחצי כוס חלב אחרון." },
+        { t:"טוחנים 4 פולסים ואז 30 שניות רצוף.", sec:30 },
+        { t:"טועמים לפני שממתיקים. מנגו בשל מספיק מתוק בדרך כלל." }
+      ],
+      note:"מנגו הוא הפרי הקפוא הכי סמיך שיש. אם יוצא סמיך מדי — פחות מנגו, לא יותר יוגורט." },
+
+    { id:"water_shake", name:"שייק על מים, בלי חלב", min:4, when:["nashnush","boker"], shake:true, nocook:true, snack:true,
+      need:["frozen_berries","banana","dates"], nice:["lemon","chia","mint"],
+      amounts:{ frozen_berries:"כוס פירות יער קפואים", banana:"בננה טרייה", dates:"2 תמרים", lemon:"רבע לימון", chia:"כפית צ'יה", mint:"כמה עלי נענע" },
+      tools:["נינג'ה או בלנדר","כוס מדידה"],
+      p:4, f:8, s:24,
+      steps:[
+        { t:"מוציאים גלעינים מ-2 תמרים ומשרים אותם בכף מים חמים 2 דקות.",
+          tip:"תמר יבש לא נטחן טוב ומשאיר חתיכות. שתי דקות במים חמים פותרות את זה.", sec:120 },
+        { t:"מוציאים את הפירות הקפואים 5 דקות מראש.", sec:300 },
+        { t:"שמים בכוס: פירות קפואים, בננה, תמרים, ואז שלושת רבעי כוס מים.",
+          tip:"על מים צריך קצת יותר נוזל מאשר על חלב — למים אין את השומן שמחליק את הטחינה." },
+        { t:"4 פולסים ואז 30 שניות רצוף.", sec:30 },
+        { t:"סוחטים רבע לימון בסוף ומערבבים בכף.",
+          tip:"הלימון מחדד את הטעם. שייק על מים בלי חומצה יוצא שטוח." }
+      ],
+      note:"שים לב: 4 גרם חלבון בלבד. זה קינוח נוזלי מרענן, לא ארוחה — למשהו שמשביע צריך יוגורט או חלב." },
+
+    { id:"strawberry_banana", name:"תות־בננה קלאסי", min:4, when:["boker","nashnush"], shake:true, nocook:true, snack:true,
+      need:["frozen_strawberry","banana","milk"], nice:["honey","oats","yogurt","chia"],
+      amounts:{ frozen_strawberry:"כוס תות קפוא", banana:"בננה טרייה", milk:"חצי כוס חלב", honey:"כפית דבש", oats:"2 כפות שיבולת שועל", yogurt:"2 כפות יוגורט", chia:"כפית צ'יה" },
+      tools:["נינג'ה או בלנדר","כוס מדידה"],
+      p:11, f:5, s:20,
+      steps:[
+        { t:"מוציאים כוס תות קפוא 5 דקות מראש.", sec:300 },
+        { t:"שמים בכוס: תותים, בננה טרייה שלמה, וחצי כוס חלב אחרון." },
+        { t:"4 פולסים ואז 30 שניות.", sec:30 },
+        { t:"אם התותים היו חמוצים — כפית דבש ופולס נוסף." }
+      ],
+      note:"תות קפוא מהסופר לרוב חמצמץ יותר מתות טרי. הבננה היא מה שמאזן אותו." },
+
+    { id:"green_water_shake", name:"שייק ירוק על מים", min:5, when:["boker","nashnush"], shake:true, nocook:true, snack:true,
+      need:["spinach_frozen","apple","banana"], nice:["lemon","mint","chia"],
+      amounts:{ spinach_frozen:"חופן תרד קפוא", apple:"תפוח אחד", banana:"בננה טרייה", lemon:"חצי לימון", mint:"5 עלי נענע", chia:"כפית צ'יה" },
+      tools:["נינג'ה או בלנדר","סכין","כוס מדידה"],
+      p:5, f:7, s:20,
+      steps:[
+        { t:"חותכים תפוח לרבעים ומוציאים את הליבה. לא צריך לקלף." },
+        { t:"שמים בכוס: תרד קפוא, תפוח, בננה, ואז כוס מים." },
+        { t:"טוחנים 45 שניות רצוף — יותר מהרגיל.",
+          tip:"עלים ירוקים צריכים זמן. אם עוצרים מוקדם נשארים סיבים ירוקים בין השיניים.", sec:45 },
+        { t:"סוחטים חצי לימון ומוסיפים עלי נענע, ופולס אחד אחרון.",
+          tip:"הלימון והנענע הם מה שהופך את זה לשתייה ולא לסלט נוזלי." }
+      ],
+      note:"התרד הקפוא נותן גם קור וגם ירוק בלי לשנות את הטעם. 5 גרם חלבון בלבד — טוב לצד ארוחה, לא במקומה." },
+
+    { id:"choco_banana_shake", name:"שוקו־בננה עם חמאת בוטנים", min:4, when:["nashnush","boker"], shake:true, nocook:true, snack:true,
+      need:["banana","milk","cocoa"], nice:["peanut_butter","dates","oats","protein_yogurt"],
+      amounts:{ banana:"2 בננות (אחת קפואה אם יש)", milk:"כוס חלב", cocoa:"כף קקאו לא ממותק", peanut_butter:"כף חמאת בוטנים", dates:"תמר אחד", oats:"2 כפות שיבולת שועל", protein_yogurt:"חצי גביע יוגורט חלבון" },
+      tools:["נינג'ה או בלנדר","כוס מדידה"],
+      p:16, f:5, s:18,
+      steps:[
+        { t:"אם יש בננה קפואה — משתמשים בה. אם לא, מוסיפים 4 קוביות קרח.",
+          tip:"בננה קפואה היא הדרך הכי טובה לקרר שייק בלי לדלל אותו. קרח מקרר אבל גם מימי." },
+        { t:"שמים בכוס: בננות, כף קקאו, כף חמאת בוטנים, ואז כוס חלב." },
+        { t:"טוחנים 30 שניות רצוף.", sec:30 },
+        { t:"טועמים. הקקאו מריר — אם צריך, תמר אחד או כפית דבש ופולס נוסף." }
+      ],
+      note:"טעם של מילקשייק שוקולד עם 16 גרם חלבון. שווה להקפיא בננות בשלות חתוכות בשקית — הן הבסיס לכל שייק." },
+
+    { id:"orange_mango_shake", name:"שייק תפוז־מנגו טרי", min:5, when:["boker","nashnush"], shake:true, nocook:true, snack:true,
+      need:["orange","frozen_mango"], nice:["yogurt","banana","mint","honey"],
+      amounts:{ orange:"2 תפוזים", frozen_mango:"חצי כוס מנגו קפוא", yogurt:"חצי גביע יוגורט", banana:"חצי בננה", mint:"כמה עלי נענע", honey:"כפית דבש" },
+      tools:["נינג'ה או בלנדר","מסחטה או ידיים","סכין"],
+      p:6, f:5, s:24,
+      steps:[
+        { t:"סוחטים 2 תפוזים. אם אין מסחטה — חוצים, ולוחצים על מזלג תוך סיבוב." },
+        { t:"שמים בכוס: חצי כוס מנגו קפוא בלבד, ואז את מיץ התפוזים.",
+          tip:"כאן הנוזל הוא טרי ובטמפרטורת החדר, ולכן צריך פחות פרי קפוא — חצי כוס מספיקה כדי לקרר." },
+        { t:"טוחנים 25 שניות.", sec:25 },
+        { t:"מוסיפים עלי נענע ופולס אחד קצר בלבד.",
+          tip:"נענע שנטחנת יותר מדי הופכת מרירה. פולס אחד ודי." }
+      ],
+      note:"מיץ טרי במקום חלב: קליל ומרענן, אבל 6 גרם חלבון בלבד. עם חצי גביע יוגורט זה כבר מחזיק." },
+
+    { id:"cucumber_mint_shake", name:"שייק מלפפון־נענע קליל", min:5, when:["nashnush","erev"], shake:true, nocook:true, snack:true,
+      need:["cucumber","apple","mint"], nice:["lemon","yogurt","spinach_frozen"],
+      amounts:{ cucumber:"מלפפון אחד", apple:"תפוח ירוק אחד", mint:"10 עלי נענע", lemon:"חצי לימון", yogurt:"2 כפות יוגורט", spinach_frozen:"חופן תרד קפוא" },
+      tools:["נינג'ה או בלנדר","סכין"],
+      p:3, f:4, s:14,
+      steps:[
+        { t:"חותכים מלפפון ותפוח לחתיכות גסות. את המלפפון לא מקלפים." },
+        { t:"שמים בכוס עם 4 קוביות קרח וחצי כוס מים." },
+        { t:"טוחנים 30 שניות.", sec:30 },
+        { t:"מוסיפים נענע ולימון, פולס אחד, ושותים מיד.",
+          tip:"השייק הזה נפרד לשכבות תוך 10 דקות. הוא לא נועד לחכות במקרר." }
+      ],
+      note:"קליל וכמעט בלי קלוריות, אבל 3 גרם חלבון בלבד. זה משקה מרענן לערב חם, לא ארוחה." },
+
+    { id:"oats_shake", name:"שייק שיבולת שועל שמחזיק", min:5, when:["boker"], shake:true, nocook:true,
+      need:["oats","banana",["milk","yogurt"]], nice:["peanut_butter","dates","chia","cocoa"],
+      amounts:{ oats:"רבע כוס שיבולת שועל", banana:"בננה אחת", milk:"כוס חלב", yogurt:"חצי גביע יוגורט", peanut_butter:"כף חמאת בוטנים", dates:"2 תמרים", chia:"כפית צ'יה", cocoa:"כפית קקאו" },
+      tools:["נינג'ה או בלנדר","כוס מדידה"],
+      p:16, f:8, s:18,
+      steps:[
+        { t:"טוחנים רבע כוס שיבולת שועל לבד, יבשה, 15 שניות, עד אבקה גסה.",
+          tip:"אם טוחנים אותה יחד עם השאר היא נשארת פתיתים שנתקעים בקש.", sec:15 },
+        { t:"מוסיפים לכוס בננה, כף חמאת בוטנים וכוס חלב." },
+        { t:"טוחנים 30 שניות רצוף.", sec:30 },
+        { t:"מחכים דקה לפני ששותים.",
+          tip:"השיבולת סופגת נוזל ומסמיכה עוד קצת. אם זה סמיך מדי — עוד רבע כוס חלב.", sec:60 }
+      ],
+      note:"השיבולת היא מה שהופך שייק ממשקה לארוחת בוקר: 8 גרם סיבים והשובע מחזיק שעתיים־שלוש." },
   ];
   /* ---------------- תחליפים ----------------
      מה להשתמש כשמרכיב חובה הוא משהו שמישהו בבית לא אוהב.  */
@@ -1611,7 +1779,17 @@
     veg_sticks_dip:     { yogurt:"חומוס או טחינה מדוללת" },
     rice_lentils_kids:  { rice:"קוסקוס מלא", lentils:"חומוס משומר" },
     corn_pancakes:      { corn:"קישוא מגורר וסחוט", flour:"שיבולת שועל טחונה" },
-    bento:              { crackers:"פיתה מלאה חתוכה לרצועות" }
+    bento:              { crackers:"פיתה מלאה חתוכה לרצועות" },
+    berry_shake:        { frozen_berries:"מנגו או תות קפוא", banana:"חצי אבוקדו — סמיך בלי להמתיק" },
+    protein_shake:      { protein_yogurt:"יוגורט רגיל וכף שיבולת שועל", frozen_berries:"תות או מנגו קפוא" },
+    mango_yogurt_shake: { frozen_mango:"תות או פירות יער קפואים", yogurt:"גבינה לבנה" },
+    water_shake:        { dates:"בננה בשלה נוספת", frozen_berries:"מנגו קפוא" },
+    strawberry_banana:  { frozen_strawberry:"פירות יער קפואים", milk:"מים וכף יוגורט" },
+    green_water_shake:  { spinach_frozen:"חופן עלים טריים ו-4 קוביות קרח", apple:"אגס או בננה" },
+    choco_banana_shake: { cocoa:"כף חמאת בוטנים בלבד", milk:"מים ותמר אחד" },
+    orange_mango_shake: { orange:"חצי כוס מיץ תפוזים", frozen_mango:"תות קפוא" },
+    cucumber_mint_shake:{ mint:"סחיטת לימון בלבד", apple:"אגס" },
+    oats_shake:         { oats:"2 כפות צ'יה", banana:"תפוח מגורד ותמר" }
   };
 
   /* ---------------- כמויות לקנייה ----------------
@@ -1638,7 +1816,9 @@
     chili:[2,"פלפלים חריפים"], schug:"צנצנת שוג", harissa:"צנצנת הריסה",
     granola:"חבילת גרנולה", tortilla:"חבילת טורטיות", corn:"קופסת תירס",
     flour:"שקית קמח", couscous:"חבילת קוסקוס מלא",
-    frozen_veg:"שקית ירקות קפואים", edamame:"שקית אדממה", spinach_frozen:"שקית תרד קפוא"
+    frozen_veg:"שקית ירקות קפואים", edamame:"שקית אדממה", spinach_frozen:"שקית תרד קפוא",
+    frozen_berries:"שקית פירות יער קפואים", frozen_mango:"שקית מנגו קפוא", frozen_strawberry:"שקית תות קפוא",
+    protein_yogurt:[2,"גביעי יוגורט חלבון"], orange:[3,"תפוזים"], mint:"צרור נענע"
   };
 
   const AISLE = {};
@@ -1666,7 +1846,7 @@
   ]);
   let cooking = new Set(store.get(KEY.cooking, people.map(p => p.id)));
 
-  const filters = { fast: false, nocook: false, snack: false, kids: false, empty: false, fav: false };
+  const filters = { fast: false, nocook: false, snack: false, shake: false, kids: false, empty: false, fav: false };
   let lastShown = null;
   let showHidden = false;
   let query = "";
@@ -1753,6 +1933,7 @@
     if (r.snack) tags.push(["במקום נשנוש", false]);
     if (r.kids) tags.push(["מתאים לילדים", false]);
     if (r.empty) tags.push(["לרוקן את המקרר", false]);
+    if (r.shake) tags.push(["שייק", false]);
     if (r.prep) tags.push(["הכנה מראש", false]);
     r.when.forEach(w => tags.push([SLOT_HE[w], false]));
 
@@ -1778,6 +1959,7 @@
             return '<li class="' + cls + '">' + esc(amountLabel(r, f.alts)) + (f.opt ? " (אם יש)" : "") + '</li>';
           }).join("") +
         '</ul></div>' +
+        (r.shake ? SHAKE_GUIDE : "") +
         (r.tools && r.tools.length
           ? '<div class="block"><h3>כלים</h3><ul class="tools">' +
             r.tools.map(t => "<li>" + esc(t) + "</li>").join("") + '</ul></div>'
@@ -1802,6 +1984,23 @@
   function amountLabel(r, alts) {
     return alts.map(a => (r.amounts && r.amounts[a]) ? r.amounts[a] : nameOf(a)).join(" או ");
   }
+
+
+  /* ---------------- למה השייק יוצא קפוא מדי ----------------
+     מוצג בכל מתכון שייק. ששת הכללים שפותרים את זה.  */
+  const SHAKE_RULES = [
+    ["היחס", "כוס נוזל על כל 2 כוסות פירות קפואים. פחות מזה והלהבים מסתובבים בתוך גוש בלי לטחון."],
+    ["שליש טרי", "לפחות שליש מהפירות טריים או בטמפרטורת החדר — בננה, תפוח, תפוז. שייק שכולו קפוא יוצא גלידה."],
+    ["חמש דקות בחוץ", "מוציאים את הפירות הקפואים מהמקפיא 5 דקות לפני. הם מתרככים מספיק כדי להיטחן ונשארים קרים."],
+    ["הסדר", "כוס שנברגת והופכים על הבסיס: קפוא ראשון, נוזל אחרון — אחרי ההיפוך הנוזל ליד הלהבים. בלנדר עם קנקן קבוע: בדיוק הפוך, נוזל ראשון."],
+    ["פולסים", "4-5 פולסים קצרים לשבירת הגושים, ורק אז הפעלה רציפה. ישר על מלא = כיס אוויר מתחת ללהבים."],
+    ["כשזה נתקע", "מכבים, מנערים את הכוס, מוסיפים 2 כפות נוזל וממשיכים. הוספת כוח לא פותרת כיס אוויר."]
+  ];
+
+  const SHAKE_GUIDE =
+    '<details class="guide"><summary>למה השייק יוצא קפוא מדי — ששת הכללים</summary><ol>' +
+    SHAKE_RULES.map(r => "<li><b>" + r[0] + ".</b> " + r[1] + "</li>").join("") +
+    '</ol><p>יוגורט חלבון סמיך בהרבה מיוגורט רגיל — איתו תמיד מוסיפים עוד רבע כוס נוזל.</p></details>';
 
   const mmss = sec => Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0");
 
@@ -1930,6 +2129,7 @@
     if (filters.fast) list = list.filter(r => r.min <= 10);
     if (filters.nocook) list = list.filter(r => r.nocook);
     if (filters.snack) list = list.filter(r => r.snack);
+    if (filters.shake) list = list.filter(r => r.shake);
     if (filters.kids) list = list.filter(r => r.kids);
     if (filters.empty) list = list.filter(r => r.empty);
     if (filters.fav) list = list.filter(r => favs.has(r.id));
@@ -2420,7 +2620,7 @@
   });
 
   [["#f-fast","fast"],["#f-nocook","nocook"],["#f-snack","snack"],
-   ["#f-kids","kids"],["#f-empty","empty"],["#f-fav","fav"]].forEach(pair => {
+   ["#f-shake","shake"],["#f-kids","kids"],["#f-empty","empty"],["#f-fav","fav"]].forEach(pair => {
     $(pair[0]).addEventListener("click", () => {
       filters[pair[1]] = !filters[pair[1]];
       $(pair[0]).setAttribute("aria-pressed", String(filters[pair[1]]));
