@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="רעיונות לארוחות פשוטות ומאוזנות ממה שיש בבית">
+<meta name="theme-color" content="#ECEFEA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101512" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><text y=%22.9em%22 font-size=%2256%22>🥑</text></svg>">
+<title>מה לאכול עכשיו</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Assistant:wght@300;400;600&family=Heebo:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --ground: #ECEFEA;
+    --surface: #FFFFFF;
+    --surface-2: #F4F6F2;
+    --ink: #14201A;
+    --ink-2: #4E5F55;
+    --ink-3: #7C8B82;
+    --line: #D6DCD5;
+    --line-soft: #E4E9E2;
+    --olive: #3F5D2E;
+    --olive-soft: #E1EAD8;
+    --pomegranate: #B32821;
+    --pomegranate-ink: #FFFFFF;
+    --protein: #35637F;
+    --fiber: #44702F;
+    --sugar: #96650F;
+    --shadow: 0 1px 2px rgba(20,32,26,.06), 0 8px 24px -12px rgba(20,32,26,.18);
+    --radius: 14px;
+    --step--1: .78rem;
+    --step-0: 1rem;
+    --step-1: 1.18rem;
+    --step-2: 1.5rem;
+    --step-3: 2rem;
+    --step-4: 2.7rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #101512;
+      --surface: #171E19;
+      --surface-2: #1E2620;
+      --ink: #E8EDE7;
+      --ink-2: #A6B3AA;
+      --ink-3: #7F8D84;
+      --line: #2A342C;
+      --line-soft: #222B24;
+      --olive: #A6C783;
+      --olive-soft: #232E22;
+      --pomegranate: #E4675C;
+      --pomegranate-ink: #17110F;
+      --protein: #86B4D3;
+      --fiber: #9BCC82;
+      --sugar: #E2B75F;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #101512;
+    --surface: #171E19;
+    --surface-2: #1E2620;
+    --ink: #E8EDE7;
+    --ink-2: #A6B3AA;
+    --ink-3: #7F8D84;
+    --line: #2A342C;
+    --line-soft: #222B24;
+    --olive: #A6C783;
+    --olive-soft: #232E22;
+    --pomegranate: #E4675C;
+    --pomegranate-ink: #17110F;
+    --protein: #86B4D3;
+    --fiber: #9BCC82;
+    --sugar: #E2B75F;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 28px -14px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { direction: rtl; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "Assistant", "Segoe UI", system-ui, sans-serif;
+    font-size: var(--step-0);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: "Frank Ruhl Libre", "Times New Roman", serif; font-weight: 700; text-wrap: balance; margin: 0; line-height: 1.2; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :focus-visible { outline: 2.5px solid var(--olive); outline-offset: 2px; border-radius: 6px; }
+
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 18px 96px; }
+
+  /* ---------- header ---------- */
+  .top { padding: 26px 0 18px; display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; }
+  .brand h1 { font-size: var(--step-2); letter-spacing: -.01em; }
+  .brand p { margin: 2px 0 0; color: var(--ink-3); font-size: var(--step--1); font-family: "Heebo", sans-serif; letter-spacing: .04em; }
+  .clock {
+    font-family: "Heebo", sans-serif; font-size: var(--step--1); font-weight: 500;
+    color: var(--olive); background: var(--olive-soft);
+    border-radius: 999px; padding: 5px 12px; white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- mode switch ---------- */
+  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 4px; margin-bottom: 22px; }
+  .modes button {
+    border: 0; background: transparent; border-radius: 999px; padding: 9px 10px;
+    font-weight: 600; color: var(--ink-2); transition: background .18s, color .18s;
+  }
+  .modes button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+
+  .panel[hidden] { display: none; }
+
+  /* ---------- recipe card ---------- */
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); overflow: hidden;
+  }
+  .card-head { display: flex; gap: 18px; align-items: flex-start; padding: 20px 20px 14px; border-bottom: 1px solid var(--line-soft); }
+  .card-head h2 { font-size: var(--step-2); flex: 1; }
+  .timebox { text-align: center; flex: none; line-height: 1; }
+  .timebox b { display: block; font-family: "Heebo", sans-serif; font-size: var(--step-3); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .timebox span { font-family: "Heebo", sans-serif; font-size: .68rem; color: var(--ink-3); letter-spacing: .1em; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 20px 0; }
+  .tag {
+    font-family: "Heebo", sans-serif; font-size: .72rem; font-weight: 500; letter-spacing: .03em;
+    border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; color: var(--ink-2);
+  }
+  .tag.hot { border-color: var(--olive); color: var(--olive); background: var(--olive-soft); }
+
+  .nutri { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 16px 20px; }
+  .nut { background: var(--surface-2); border-radius: 10px; padding: 9px 11px; }
+  .nut .lab { font-family: "Heebo", sans-serif; font-size: .68rem; letter-spacing: .08em; color: var(--ink-3); }
+  .nut .val { font-family: "Heebo", sans-serif; font-weight: 700; font-size: var(--step-1); font-variant-numeric: tabular-nums; line-height: 1.25; }
+  .nut .bar { height: 3px; border-radius: 2px; background: var(--line); overflow: hidden; margin-top: 5px; }
+  .nut .bar i { display: block; height: 100%; border-radius: 2px; }
+  .nut.p .val { color: var(--protein); } .nut.p .bar i { background: var(--protein); }
+  .nut.f .val { color: var(--fiber); }   .nut.f .bar i { background: var(--fiber); }
+  .nut.s .val { color: var(--sugar); }   .nut.s .bar i { background: var(--sugar); }
+
+  .card-body { padding: 4px 20px 20px; display: grid; gap: 18px; }
+  .block h3 { font-family: "Heebo", sans-serif; font-size: .72rem; font-weight: 700; letter-spacing: .12em; color: var(--ink-3); margin-bottom: 8px; }
+  .ings { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+  .ings li { border-radius: 8px; padding: 4px 10px; font-size: var(--step--1); background: var(--surface-2); border: 1px solid var(--line-soft); }
+  .ings li.miss { border-color: var(--pomegranate); color: var(--pomegranate); background: transparent; }
+  .ings li.opt { color: var(--ink-3); border-style: dashed; background: transparent; }
+  ol.steps { margin: 0; padding-inline-start: 1.15em; display: grid; gap: 7px; }
+  ol.steps li { padding-inline-start: 4px; }
+  ol.steps::marker, ol.steps li::marker { color: var(--olive); font-family: "Heebo", sans-serif; font-weight: 700; }
+  .note { background: var(--olive-soft); color: var(--ink); border-radius: 10px; padding: 10px 13px; font-size: var(--step--1); }
+  .note b { color: var(--olive); }
+
+  .card-foot { display: flex; gap: 8px; flex-wrap: wrap; padding: 0 20px 20px; }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    border: 1px solid var(--line); background: var(--surface-2); border-radius: 10px;
+    padding: 9px 16px; font-weight: 600; transition: transform .12s, background .18s, border-color .18s;
+  }
+  .btn:hover { border-color: var(--ink-3); }
+  .btn:active { transform: translateY(1px); }
+  .btn.primary { background: var(--pomegranate); color: var(--pomegranate-ink); border-color: var(--pomegranate); }
+  .btn.primary:hover { filter: brightness(1.06); }
+  .btn.big { font-size: var(--step-1); padding: 15px 22px; width: 100%; border-radius: 12px; }
+  .btn.fav[aria-pressed="true"] { color: var(--pomegranate); border-color: var(--pomegranate); }
+
+  /* ---------- pantry ---------- */
+  .hint { color: var(--ink-2); font-size: var(--step--1); margin: 0 0 16px; }
+  .group { margin-bottom: 18px; }
+  .group > h3 { font-family: "Heebo", sans-serif; font-size: .74rem; font-weight: 700; letter-spacing: .12em; color: var(--ink-3); margin-bottom: 9px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chip {
+    border: 1px solid var(--line); background: var(--surface); border-radius: 999px;
+    padding: 6px 14px; font-size: var(--step--1); font-weight: 400; transition: background .15s, border-color .15s, color .15s;
+  }
+  .chip:hover { border-color: var(--ink-3); }
+  .chip[aria-pressed="true"] { background: var(--olive); border-color: var(--olive); color: var(--surface); font-weight: 600; }
+  :root[data-theme="dark"] .chip[aria-pressed="true"], :root:not([data-theme="light"]) .chip[aria-pressed="true"] { color: #101512; }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; margin: 4px 0 18px; }
+  .filters .lab { font-family: "Heebo", sans-serif; font-size: .72rem; letter-spacing: .08em; color: var(--ink-3); }
+
+  .results { display: grid; gap: 12px; }
+  .res {
+    width: 100%; text-align: start; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; padding: 14px 16px; display: flex; gap: 14px; align-items: center;
+    transition: border-color .15s, transform .12s;
+  }
+  .res:hover { border-color: var(--olive); }
+  .res:active { transform: translateY(1px); }
+  .res .t { flex: none; text-align: center; font-family: "Heebo", sans-serif; font-variant-numeric: tabular-nums; }
+  .res .t b { display: block; font-size: var(--step-1); font-weight: 700; line-height: 1.1; }
+  .res .t span { font-size: .62rem; color: var(--ink-3); letter-spacing: .08em; }
+  .res .m { flex: 1; min-width: 0; }
+  .res .m strong { font-family: "Frank Ruhl Libre", serif; font-size: var(--step-1); font-weight: 700; display: block; }
+  .res .m small { color: var(--ink-3); font-size: var(--step--1); }
+  .res .m small.miss { color: var(--pomegranate); }
+  .res .k { flex: none; font-family: "Heebo", sans-serif; font-size: .72rem; color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: end; }
+
+  h4.bucket {
+    font-family: "Heebo", sans-serif; font-size: .72rem; font-weight: 700; letter-spacing: .1em;
+    color: var(--ink-3); margin: 12px 0 -2px; display: flex; align-items: center; gap: 8px;
+  }
+  h4.bucket:first-child { margin-top: 0; }
+  h4.bucket span { font-variant-numeric: tabular-nums; background: var(--surface-2); border-radius: 999px; padding: 1px 8px; }
+  h4.bucket::after { content: ""; flex: 1; height: 1px; background: var(--line-soft); }
+
+  .empty { text-align: center; color: var(--ink-3); padding: 32px 12px; border: 1px dashed var(--line); border-radius: 12px; }
+
+  .stickybar {
+    position: sticky; bottom: 0; margin-top: 18px; padding: 12px 0 14px;
+    background: linear-gradient(to top, var(--ground) 62%, transparent);
+    display: flex; gap: 10px; align-items: center;
+  }
+  .stickybar .count { font-family: "Heebo", sans-serif; font-size: var(--step--1); color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  dialog::backdrop { background: rgba(16,21,18,.55); }
+  dialog {
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+    border-radius: var(--radius); padding: 0; max-width: 620px; width: calc(100% - 32px); box-shadow: var(--shadow);
+  }
+  .copybox { width: 100%; min-height: 120px; font: inherit; background: var(--surface-2); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 10px; direction: rtl; }
+
+  footer.foot { margin-top: 30px; color: var(--ink-3); font-size: var(--step--1); text-align: center; line-height: 1.7; }
+
+  .fade { animation: fade .28s ease both; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .fade { animation: none; } * { transition: none !important; } }
+
+  @media (max-width: 560px) {
+    .nutri { grid-template-columns: 1fr; gap: 7px; }
+    .nut { display: flex; align-items: baseline; gap: 8px; }
+    .nut .bar { flex: 1; margin-top: 0; }
+    .card-head h2 { font-size: var(--step-1); }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap" lang="he" dir="rtl">
+  <header class="top">
+    <div class="brand">
+      <h1>מה לאכול עכשיו</h1>
+      <p>אוכל פשוט ומאוזן, ממה שיש בבית</p>
+    </div>
+    <div class="clock" id="clock">טוען…</div>
+  </header>
+
+  <div class="modes" role="tablist" aria-label="מצבי שימוש">
+    <button role="tab" id="tab-now" aria-selected="true" aria-controls="panel-now">אני רעב עכשיו</button>
+    <button role="tab" id="tab-pantry" aria-selected="false" aria-controls="panel-pantry">מה יש לי בבית</button>
+  </div>
+
+  <section class="panel" id="panel-now" role="tabpanel" aria-labelledby="tab-now">
+    <div id="now-slot"></div>
+    <div style="margin-top:14px">
+      <button class="btn primary big" id="roll">תן לי רעיון</button>
+    </div>
+    <p class="hint" style="margin-top:10px;text-align:center" id="now-hint"></p>
+  </section>
+
+  <section class="panel" id="panel-pantry" role="tabpanel" aria-labelledby="tab-pantry" hidden>
+    <p class="hint">סמן מה יש לך עכשיו. שמן זית, מלח, פלפל ותבלינים בסיסיים נחשבים כקיימים תמיד. הבחירה נשמרת במכשיר שלך.</p>
+
+    <div class="filters">
+      <span class="lab">סינון</span>
+      <button class="chip" id="f-fast" aria-pressed="false">עד 10 דקות</button>
+      <button class="chip" id="f-nocook" aria-pressed="false">בלי בישול</button>
+      <button class="chip" id="f-snack" aria-pressed="false">במקום נשנוש</button>
+      <button class="chip" id="f-fav" aria-pressed="false">מועדפים</button>
+    </div>
+
+    <div id="pantry-groups"></div>
+
+    <h3 style="font-family:Heebo,sans-serif;font-size:.74rem;letter-spacing:.12em;color:var(--ink-3);margin:26px 0 10px">מה אפשר להכין</h3>
+    <div class="results" id="results"></div>
+
+    <div class="stickybar">
+      <span class="count" id="count"></span>
+      <button class="btn" id="clear" style="margin-inline-start:auto">נקה הכל</button>
+    </div>
+  </section>
+
+  <footer class="foot">
+    הערכים התזונתיים הם הערכה גסה למנה אחת, לא ייעוץ רפואי.<br>
+    כל המנות מבוססות על מוצרים שקל למצוא בסופר בישראל.
+  </footer>
+</div>
+
+<dialog id="dlg">
+  <div style="padding:20px">
+    <h2 style="font-size:1.3rem;margin-bottom:10px" id="dlg-title">רשימת קניות</h2>
+    <textarea class="copybox" id="dlg-text" readonly></textarea>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn primary" id="dlg-copy">העתק</button>
+      <button class="btn" id="dlg-close">סגור</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------- מרכיבים ---------------- */
+  const GROUPS = [
+    { title: "מקרר", items: [
+      ["eggs","ביצים"],["cottage","קוטג'"],["labaneh","לבנה"],["yogurt","יוגורט"],
+      ["bulgarit","גבינה בולגרית"],["yellow_cheese","גבינה צהובה"],["milk","חלב"],
+      ["tofu","טופו"],["hummus_ready","חומוס מוכן"],["salmon","פילה סלמון"],["chicken","חזה עוף"]
+    ]},
+    { title: "ירקות ופירות", items: [
+      ["tomato","עגבניות"],["cucumber","מלפפון"],["pepper","פלפל"],["onion","בצל"],
+      ["green_onion","בצל ירוק"],["garlic","שום"],["lemon","לימון"],["avocado","אבוקדו"],
+      ["lettuce","עלים ירוקים"],["parsley","פטרוזיליה"],["carrot","גזר"],
+      ["sweet_potato","בטטה"],["banana","בננה"],["dates","תמרים"]
+    ]},
+    { title: "ארון", items: [
+      ["tuna","טונה"],["sardines","סרדינים"],["chickpeas","חומוס משומר"],["white_beans","שעועית לבנה"],
+      ["lentils","עדשים"],["quinoa","קינואה"],["rice","אורז"],["pasta","פסטה מלאה"],
+      ["oats","שיבולת שועל"],["bread","לחם מלא"],["pita","פיתה"],["crackers","קרקרים"],
+      ["tahini","טחינה גולמית"],["olives","זיתים"],["almonds","שקדים"],["walnuts","אגוזי מלך"],
+      ["cashews","קשיו"],["peanut_butter","חמאת בוטנים"],["honey","דבש או סילאן"],
+      ["cocoa","קקאו"],["dark_chocolate","שוקולד מריר"],["chia","צ'יה"],
+      ["passata","רסק עגבניות"],["soy_sauce","רוטב סויה"]
+    ]},
+    { title: "מקפיא", items: [
+      ["frozen_veg","ירקות קפואים"],["edamame","אדממה"],["spinach_frozen","תרד קפוא"]
+    ]}
+  ];
+
+  const NAME = {};
+  GROUPS.forEach(g => g.items.forEach(([id, he]) => { NAME[id] = he; }));
+
+  /* ---------------- מנות ----------------
+     need: מרכיב חובה. מערך פנימי = אפשר אחד מהם.
+     p / f / s: חלבון, סיבים, סוכר בגרמים (הערכה למנה)  */
+  const R = [
+    { id:"avocado_toast", name:"טוסט אבוקדו וביצה", min:8, when:["boker","erev"],
+      need:["bread","avocado","eggs"], nice:["lemon","tomato"],
+      p:18, f:8, s:2,
+      steps:["מרתיחים מים וזורקים פנימה ביצה ל-7 דקות. בינתיים קולים את הלחם.",
+             "מועכים את האבוקדו עם מלח וכמה טיפות לימון ומורחים.",
+             "פורסים את הביצה מעל, פלפל שחור, שמן זית."],
+      note:"הביצה היא מה שהופך את זה לארוחה ולא לחטיף. בלעדיה תהיה רעב שוב בעוד שעה." },
+
+    { id:"yogurt_bowl", name:"קערת יוגורט, אגוזים ותמר", min:3, when:["boker","nashnush"], nocook:true, snack:true,
+      need:["yogurt",["walnuts","almonds","cashews"],"dates"], nice:["chia","banana"],
+      p:17, f:4, s:14,
+      steps:["יוגורט לקערה.","קוצצים תמר אחד או שניים ומפזרים חופן אגוזים.","קינמון מעל."],
+      note:"זו בדיוק הקערה שמחליפה את הנשנוש של השעה 16:00: אותה מתיקות, אבל עם חלבון שמשביע." },
+
+    { id:"shakshuka", name:"שקשוקה למנה אחת", min:15, when:["tsohorayim","erev"],
+      need:["eggs",["passata","tomato"],"onion"], nice:["pepper","parsley","bulgarit","pita"],
+      p:16, f:6, s:9,
+      steps:["מטגנים בצל קצוץ במחבת קטנה 4 דקות.","מוסיפים רסק או עגבניות קצוצות, כמון, פפריקה ומלח. 5 דקות על אש בינונית.",
+             "שוברים 2 ביצים פנימה, מכסים, 4 דקות."],
+      note:"מחבת קטנה = פחות כלים ומנה אחת בדיוק. עם פיתה מלאה זו ארוחה שלמה." },
+
+    { id:"tuna_chickpea", name:"סלט טונה־חומוס בקערה אחת", min:7, when:["tsohorayim","erev"], nocook:true,
+      need:["tuna","chickpeas","lemon"], nice:["onion","parsley","olives","tomato"],
+      p:32, f:10, s:3,
+      steps:["מסננים קופסת טונה וקופסת חומוס לקערה.","סוחטים חצי לימון, שמן זית, מלח, פלפל.",
+             "בצל קצוץ דק ופטרוזיליה, מערבבים."],
+      note:"32 גרם חלבון בלי להדליק כלום. שומרת יומיים במקרר, אז שווה להכין כמות כפולה." },
+
+    { id:"veg_omelette", name:"חביתת ירקות", min:10, when:["boker","erev"],
+      need:["eggs"], nice:["tomato","pepper","green_onion","bulgarit","yellow_cheese","parsley"],
+      p:14, f:2, s:3,
+      steps:["קוצצים דק כל ירק שיש: עגבנייה, פלפל, בצל ירוק.","מטגנים 3 דקות בשמן זית.",
+             "טורפים 2-3 ביצים עם מלח ויוצקים מעל. מנמיכים, מכסים, 3 דקות."],
+      note:"אם יש בולגרית, לפורר מעל בסוף. זה הופך חביתה רגילה למשהו שמתחשק לאכול." },
+
+    { id:"pita_tahini_egg", name:"פיתה, טחינה וביצה קשה", min:10, when:["boker","tsohorayim"],
+      need:["pita","tahini","eggs"], nice:["cucumber","tomato","parsley"],
+      p:20, f:7, s:4,
+      steps:["ביצים למים רותחים ל-8 דקות.","מערבבים 2 כפות טחינה גולמית עם מים, לימון, מלח ושום כתוש עד קרם.",
+             "פותחים פיתה, טחינה, ביצה פרוסה, סלט קצוץ."],
+      note:"טחינה גולמית + מים = רוטב ב-30 שניות. הטחינה המוכנה בקופסה כמעט תמיד מדוללת ומומלחת יותר." },
+
+    { id:"quinoa_lentils", name:"קערת קינואה ועדשים", min:20, when:["tsohorayim","erev"],
+      need:["quinoa","lentils"], nice:["lemon","parsley","tomato","tahini","onion"],
+      p:18, f:14, s:4,
+      steps:["קינואה: כוס קינואה על שתי כוסות מים רותחים, 12 דקות מכוסה.",
+             "מחממים עדשים (משומרות או מבושלות מראש) ומערבבים פנימה.",
+             "לימון, שמן זית, מלח, המון פטרוזיליה קצוצה."],
+      note:"14 גרם סיבים במנה — מהמנות הכי משביעות כאן. מבשלים כוס קינואה, יוצאות שלוש מנות." },
+
+    { id:"salmon_oven", name:"סלמון בתנור, 12 דקות", min:18, when:["erev"],
+      need:["salmon","lemon"], nice:["garlic","frozen_veg","sweet_potato"],
+      p:34, f:0, s:1,
+      steps:["תנור על 200 מעלות.","פילה על נייר אפייה, שמן זית, מלח, פרוסות לימון מעל.",
+             "12 דקות. נגמר כשהבשר מתפורר בקלות במזלג."],
+      note:"אפשר לזרוק ירקות קפואים על אותה תבנית ולסיים עם ארוחה שלמה וכלי אחד." },
+
+    { id:"cottage_crackers", name:"קוטג', שרי וזעתר על קרקר", min:3, when:["nashnush","boker"], nocook:true, snack:true,
+      need:["cottage","crackers"], nice:["tomato","olives","cucumber"],
+      p:16, f:3, s:4,
+      steps:["מורחים קוטג' על קרקרים מלאים.","חוצים עגבניות שרי ומניחים מעל.","זעתר, שמן זית, מלח גס."],
+      note:"תחליף ישיר לחופן אגוזים: יותר חלבון, פחות קלוריות, ואותן שלוש דקות." },
+
+    { id:"edamame", name:"אדממה חמה במקום חטיף", min:6, when:["nashnush"], snack:true,
+      need:["edamame"], nice:["soy_sauce","lemon"],
+      p:17, f:8, s:2,
+      steps:["מים רותחים, אדממה קפואה, 5 דקות.","מסננים, מלח גס, ואם בא לך כמה טיפות סויה."],
+      note:"17 גרם חלבון וכמעט בלי סוכר. הקילוף לוקח זמן — וזה בדיוק מה שמונע לאכול את זה בלי לשים לב." },
+
+    { id:"pasta_tuna", name:"פסטה מלאה עם טונה, שום ולימון", min:15, when:["tsohorayim","erev"],
+      need:["pasta","tuna","garlic","lemon"], nice:["parsley","olives","pepper"],
+      p:30, f:9, s:3,
+      steps:["פסטה למים רותחים ומלוחים.","בינתיים: שום פרוס בשמן זית על אש נמוכה 2 דקות, טונה מסוננת פנימה.",
+             "מסננים את הפסטה (שומרים חצי כוס ממי הבישול), מערבבים הכל עם לימון ומי הפסטה."],
+      note:"מי הבישול הם מה שהופך את זה לרוטב במקום לפסטה יבשה. אל תשפוך אותם." },
+
+    { id:"green_salad_feta", name:"סלט עלים, אבוקדו ובולגרית", min:8, when:["tsohorayim","erev"], nocook:true,
+      need:["lettuce","avocado","bulgarit"], nice:["walnuts","lemon","cucumber","tomato"],
+      p:14, f:9, s:3,
+      steps:["עלים לקערה, אבוקדו בקוביות.","מפוררים בולגרית וזורקים חופן אגוזי מלך.",
+             "רוטב: שמן זית, לימון, מלח. מערבבים בידיים."],
+      note:"סלט בלי חלבון הוא תוספת, לא ארוחה. הבולגרית והאגוזים הם מה שהופך אותו לארוחה." },
+
+    { id:"overnight_oats", name:"שיבולת שועל של לילה", min:5, when:["boker"], nocook:true,
+      need:["oats",["yogurt","milk"],"banana"], nice:["chia","peanut_butter","honey","almonds"],
+      p:16, f:8, s:16,
+      steps:["בצנצנת: חצי כוס שיבולת שועל, חצי כוס יוגורט או חלב, כף צ'יה.",
+             "בננה פרוסה וכף חמאת בוטנים.","מערבבים, מכסים, למקרר ללילה."],
+      note:"חמש דקות בערב = בוקר בלי שום החלטה. מכינים שלוש צנצנות בבת אחת ליום ראשון עד שלישי." },
+
+    { id:"hummus_bowl", name:"קערת חומוס ביתית ב-6 דקות", min:6, when:["tsohorayim","nashnush"],
+      need:["chickpeas","tahini","lemon"], nice:["eggs","pita","parsley","olives"],
+      p:18, f:11, s:2,
+      steps:["מחממים חומוס משומר עם מעט ממי הקופסה.","מועכים גס במזלג ומערבבים עם 2 כפות טחינה ולימון.",
+             "שמן זית, פפריקה, פטרוזיליה, ואם יש — ביצה קשה מעל."],
+      note:"מעוך גס במקום מעובד — יותר סיבים, פחות עבודה, טעם של חומוס אמיתי." },
+
+    { id:"tofu_stirfry", name:"טופו וירקות קפואים במחבת", min:12, when:["erev","tsohorayim"],
+      need:["tofu","frozen_veg"], nice:["soy_sauce","garlic","rice"],
+      p:22, f:6, s:5,
+      steps:["מייבשים את הטופו בנייר, חותכים לקוביות ומטגנים על אש גבוהה עד שמזהיב.",
+             "מוסיפים ירקות קפואים ישר מהמקפיא, 5 דקות.","סויה, שום, פלפל שחור."],
+      note:"ירקות קפואים נקטפו ונקפאו באותו יום — תזונתית הם לא נופלים מטריים, וחוסכים את כל הקיצוץ." },
+
+    { id:"lentil_soup", name:"מרק עדשים ב-20 דקות", min:25, when:["erev"],
+      need:["lentils","onion","carrot"], nice:["garlic","lemon","parsley"],
+      p:18, f:16, s:6,
+      steps:["בצל וגזר קצוצים בסיר עם שמן זית, 5 דקות.","כוס עדשים כתומות, ליטר מים, כמון, כורכום, מלח.",
+             "20 דקות על אש נמוכה. סוחטים לימון בסוף."],
+      note:"סיר אחד, 16 גרם סיבים, ומחזיק ארבע ארוחות במקרר. המנה הכי משתלמת ברשימה." },
+
+    { id:"pb_banana", name:"לחם מלא, חמאת בוטנים ובננה", min:3, when:["nashnush","boker"], nocook:true, snack:true,
+      need:["bread","peanut_butter","banana"], nice:["honey","chia"],
+      p:12, f:6, s:14,
+      steps:["מורחים חמאת בוטנים על פרוסה מלאה.","בננה פרוסה מעל, קורט מלח."],
+      note:"כשמתחשק שוקולד בשעה 16:00 — זה מכסה את זה עם חלבון וסיבים במקום סוכר לבד." },
+
+    { id:"sardines_toast", name:"סרדינים על טוסט עם לימון", min:5, when:["tsohorayim","erev"],
+      need:["sardines","bread","lemon"], nice:["onion","parsley","tomato"],
+      p:24, f:4, s:2,
+      steps:["קולים פרוסת לחם מלא.","מועכים סרדינים מעל עם מזלג.","לימון, בצל קצוץ דק, פלפל שחור, שמן זית."],
+      note:"מקור האומגה 3 הכי זול ומהיר בסופר. קופסה אחת = מנה." },
+
+    { id:"batch_eggs", name:"שש ביצים קשות למשמרת", min:15, when:["nashnush"], prep:true, snack:true,
+      need:["eggs"], nice:[],
+      p:12, f:0, s:1,
+      steps:["6 ביצים למים רותחים, 9 דקות.","מעבירים למים קרים 2 דקות — כך הן נקלפות בקלות.",
+             "לקלף הכל מיד ולשמור בקופסה סגורה במקרר."],
+      note:"זה לא רעיון לארוחה, זה ביטוח: כשיש ביצים קשות מוכנות במקרר, הנשנוש הופך לחלבון בשתי שניות." },
+
+    { id:"israeli_salad", name:"סלט ישראלי עם טחינה", min:10, when:["tsohorayim","erev"], nocook:true,
+      need:["tomato","cucumber","tahini"], nice:["bulgarit","lemon","parsley","olives","onion"],
+      p:12, f:6, s:6,
+      steps:["קוצצים עגבנייה ומלפפון דק ככל שיש סבלנות.","מלח, לימון, שמן זית.",
+             "מזלפים מעל טחינה מדוללת ומפוררים בולגרית."],
+      note:"בלי הטחינה זה תוספת. עם הטחינה יש כאן שומן טוב וחלבון וזה מחזיק." },
+
+    { id:"green_shake", name:"שייק ירוק בלי סוכר מוסף", min:4, when:["boker","nashnush"], nocook:true, snack:true,
+      need:["banana",["spinach_frozen","frozen_veg"],["yogurt","milk"]], nice:["peanut_butter","chia","honey"],
+      p:16, f:7, s:15,
+      steps:["בננה (עדיף קפואה), חופן תרד קפוא, כוס יוגורט או חלב לבלנדר.",
+             "כף חמאת בוטנים או צ'יה.","30 שניות."],
+      note:"התרד הקפוא לא מורגש בטעם בכלל. הבננה הקפואה היא מה שנותן מרקם של שייק אמיתי." },
+
+    { id:"sweet_potato_tahini", name:"בטטה מהמיקרו עם טחינה ושקדים", min:12, when:["tsohorayim","nashnush"],
+      need:["sweet_potato","tahini"], nice:["almonds","lemon","parsley"],
+      p:10, f:9, s:11,
+      steps:["מנקבים בטטה במזלג, 8 דקות במיקרוגל על עוצמה גבוהה.","חוצים לאורך ומועכים מעט את הפנים.",
+             "טחינה מדוללת, שקדים קצוצים, מלח."],
+      note:"מיקרוגל במקום תנור: 8 דקות במקום 50, ואותה בטטה בדיוק." },
+
+    { id:"choco_yogurt", name:"יוגורט־קקאו, הפתרון לשוקולד", min:3, when:["nashnush","erev"], nocook:true, snack:true,
+      need:["yogurt","cocoa"], nice:["honey","walnuts","dark_chocolate","banana"],
+      p:18, f:4, s:10,
+      steps:["מערבבים כף קקאו לא ממותק לתוך יוגורט.","כפית דבש או סילאן.","אגוזים קצוצים מעל."],
+      note:"טעם של מוס שוקולד עם 18 גרם חלבון. אם עדיין בא לך שוקולד — ריבוע מריר אחד מעל, ודי." },
+
+    { id:"beans_tomato", name:"שעועית לבנה בעגבניות", min:15, when:["erev","tsohorayim"],
+      need:["white_beans",["passata","tomato"],"garlic"], nice:["onion","parsley","rice","bread"],
+      p:18, f:13, s:7,
+      steps:["שום פרוס בשמן זית, חצי דקה.","רסק עגבניות או עגבניות קצוצות, פפריקה, מלח, 5 דקות.",
+             "שעועית מסוננת פנימה, עוד 5 דקות על אש נמוכה."],
+      note:"קופסת שעועית לבנה היא החלבון הכי זול בסופר. עם לחם מלא זו ארוחת ערב שלמה." },
+
+    { id:"chicken_pan", name:"חזה עוף במחבת, 10 דקות", min:14, when:["erev","tsohorayim"],
+      need:["chicken"], nice:["lemon","garlic","frozen_veg","lettuce"],
+      p:38, f:2, s:1,
+      steps:["פורסים את החזה לאורך לשתי פרוסות דקות — כך הוא מתבשל מהר ולא מתייבש.",
+             "מלח, פפריקה, שום כתוש. מחבת חמה מאוד, 3-4 דקות כל צד.",
+             "מנוחה של 3 דקות לפני החיתוך, לימון מעל."],
+      note:"פריסה לאורך היא כל ההבדל בין חזה עסיסי לחזה יבש. אל תדלג על מנוחת שלוש הדקות." },
+
+    { id:"labaneh_plate", name:"צלחת לבנה, זיתים וירקות", min:4, when:["nashnush","boker","erev"], nocook:true, snack:true,
+      need:["labaneh",["crackers","pita","bread"]], nice:["olives","cucumber","tomato","parsley"],
+      p:12, f:3, s:3,
+      steps:["מרוחים לבנה בצלחת ויוצרים גומה עם הכף.","שמן זית וזעתר בגומה.",
+             "זיתים וירקות חתוכים בצד."],
+      note:"ארוחת ערב קלה כשאין כוח לבשל. לוקח פחות זמן מלפתוח שקית אגוזים." },
+
+    { id:"hummus_plate", name:"חומוס מהסופר, ביצה קשה וסלט", min:10, when:["tsohorayim","erev"],
+      need:["hummus_ready","eggs"], nice:["pita","cucumber","tomato","olives","parsley","tahini"],
+      p:22, f:9, s:3,
+      steps:["ביצה למים רותחים ל-8 דקות.","מורחים חומוס בצלחת, שמן זית ופפריקה מעל.",
+             "ביצה חצויה במרכז, ירקות חתוכים בצד."],
+      note:"חומוס מוכן לבד הוא בעיקר פחמימה ושומן. הביצה מוסיפה את החלבון שהופך אותו לארוחה." },
+
+    { id:"cheese_sandwich", name:"כריך גבינה וירק שמחזיק", min:5, when:["boker","tsohorayim"], nocook:true,
+      need:["bread",["yellow_cheese","bulgarit"],["tomato","cucumber","avocado"]], nice:["lettuce","olives","parsley"],
+      p:16, f:6, s:3,
+      steps:["שתי פרוסות לחם מלא.","גבינה, ואז שכבה נדיבה של ירק חתוך — עגבנייה, מלפפון או אבוקדו.",
+             "שמן זית, מלח, פלפל שחור, זעתר."],
+      note:"שכבת הירק היא לא קישוט: היא מה שמוסיפה סיבים ומים ומאריכה את השובע בשעה-שעתיים." }
+  ];
+
+  /* ---------------- מצב ---------------- */
+  const KEY_PANTRY = "mlo.pantry.v1", KEY_FAV = "mlo.fav.v1";
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  };
+  let have = new Set(store.get(KEY_PANTRY, []));
+  let favs = new Set(store.get(KEY_FAV, []));
+  const filters = { fast: false, nocook: false, snack: false, fav: false };
+  let lastShown = null;
+
+  const $ = s => document.querySelector(s);
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+
+  /* ---------------- לוגיקה ---------------- */
+  function slotNow(d) {
+    const h = d.getHours();
+    if (h >= 5 && h < 11) return "boker";
+    if (h >= 11 && h < 15) return "tsohorayim";
+    if (h >= 15 && h < 18) return "nashnush";
+    if (h >= 18 && h < 23) return "erev";
+    return "nashnush";
+  }
+  const SLOT_HE = { boker: "בוקר", tsohorayim: "צהריים", nashnush: "נשנוש אחר הצהריים", erev: "ערב" };
+
+  function missingOf(r) {
+    const out = [];
+    r.need.forEach(n => {
+      const alts = Array.isArray(n) ? n : [n];
+      if (!alts.some(a => have.has(a))) out.push(alts);
+    });
+    return out;
+  }
+  const labelOf = alts => alts.map(a => NAME[a] || a).join(" או ");
+
+  function nutBar(v, max) { return Math.max(4, Math.min(100, Math.round(v / max * 100))); }
+
+  function cardHTML(r) {
+    const miss = missingOf(r);
+    const flat = [];
+    r.need.forEach(n => flat.push({ alts: Array.isArray(n) ? n : [n], opt: false }));
+    (r.nice || []).forEach(n => { if (NAME[n]) flat.push({ alts: [n], opt: true }); });
+
+    const tags = [];
+    if (miss.length === 0 && have.size) tags.push(["אפשר להכין עכשיו", true]);
+    if (r.nocook) tags.push(["בלי בישול", false]);
+    if (r.snack) tags.push(["במקום נשנוש", false]);
+    if (r.prep) tags.push(["הכנה מראש", false]);
+    r.when.forEach(w => tags.push([SLOT_HE[w], false]));
+
+    return '<article class="card fade">' +
+      '<div class="card-head"><h2>' + esc(r.name) + '</h2>' +
+        '<div class="timebox"><b>' + r.min + '</b><span>דקות</span></div></div>' +
+      '<div class="tags">' + tags.map(t => '<span class="tag' + (t[1] ? " hot" : "") + '">' + esc(t[0]) + '</span>').join("") + '</div>' +
+      '<div class="nutri">' +
+        '<div class="nut p"><div class="lab">חלבון</div><div class="val">' + r.p + ' ג\'</div><div class="bar"><i style="width:' + nutBar(r.p, 40) + '%"></i></div></div>' +
+        '<div class="nut f"><div class="lab">סיבים</div><div class="val">' + r.f + ' ג\'</div><div class="bar"><i style="width:' + nutBar(r.f, 16) + '%"></i></div></div>' +
+        '<div class="nut s"><div class="lab">סוכר</div><div class="val">' + r.s + ' ג\'</div><div class="bar"><i style="width:' + nutBar(r.s, 20) + '%"></i></div></div>' +
+      '</div>' +
+      '<div class="card-body">' +
+        '<div class="block"><h3>מה צריך</h3><ul class="ings">' +
+          flat.map(f => {
+            const isMiss = !f.opt && !f.alts.some(a => have.has(a)) && have.size > 0;
+            const cls = f.opt ? "opt" : (isMiss ? "miss" : "");
+            return '<li class="' + cls + '">' + esc(labelOf(f.alts)) + (f.opt ? " (אם יש)" : "") + '</li>';
+          }).join("") +
+        '</ul></div>' +
+        '<div class="block"><h3>איך</h3><ol class="steps">' + r.steps.map(s => "<li>" + esc(s) + "</li>").join("") + '</ol></div>' +
+        (r.note ? '<p class="note"><b>שווה לדעת:</b> ' + esc(r.note) + '</p>' : "") +
+      '</div>' +
+      '<div class="card-foot">' +
+        '<button class="btn fav" data-fav="' + r.id + '" aria-pressed="' + favs.has(r.id) + '">' + (favs.has(r.id) ? "★ שמור" : "☆ שמור") + '</button>' +
+        (miss.length
+          ? '<button class="btn" data-shop="' + r.id + '">' + (have.size ? "חסר " + miss.length + " — רשימת קניות" : "רשימת קניות") + '</button>'
+          : "") +
+      '</div></article>';
+  }
+
+  /* ---------------- מצב "עכשיו" ---------------- */
+  function pickNow() {
+    const slot = slotNow(new Date());
+    let pool = R.filter(r => r.when.indexOf(slot) !== -1);
+    if (have.size) {
+      const ready = pool.filter(r => missingOf(r).length === 0);
+      const almost = pool.filter(r => missingOf(r).length === 1);
+      if (ready.length) pool = ready;
+      else if (almost.length) pool = almost;
+    }
+    if (pool.length > 1 && lastShown) {
+      const other = pool.filter(r => r.id !== lastShown);
+      if (other.length) pool = other;
+    }
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    lastShown = pick.id;
+    $("#now-slot").innerHTML = cardHTML(pick);
+
+    const readyCount = R.filter(r => r.when.indexOf(slot) !== -1 && missingOf(r).length === 0).length;
+    $("#now-hint").textContent = have.size
+      ? "מתוך מה שסימנת, יש " + readyCount + " רעיונות ל" + SLOT_HE[slot] + " שאפשר להכין עכשיו."
+      : "סמן מה יש לך בבית כדי שההצעות יתאימו למקרר שלך.";
+  }
+
+  /* ---------------- מצב "מה יש לי" ---------------- */
+  function renderPantry() {
+    $("#pantry-groups").innerHTML = GROUPS.map(g =>
+      '<div class="group"><h3>' + esc(g.title) + '</h3><div class="chips">' +
+      g.items.map(([id, he]) =>
+        '<button class="chip" data-ing="' + id + '" aria-pressed="' + have.has(id) + '">' + esc(he) + '</button>'
+      ).join("") + '</div></div>'
+    ).join("");
+  }
+
+  function renderResults() {
+    let list = R.slice();
+    if (filters.fast) list = list.filter(r => r.min <= 10);
+    if (filters.nocook) list = list.filter(r => r.nocook);
+    if (filters.snack) list = list.filter(r => r.snack);
+    if (filters.fav) list = list.filter(r => favs.has(r.id));
+
+    list = list.map(r => ({ r: r, miss: missingOf(r) }))
+               .sort((a, b) => a.miss.length - b.miss.length || a.r.min - b.r.min);
+
+    function row(x) {
+      const r = x.r;
+      const sub = have.size === 0
+        ? '<small>' + esc(r.need.map(n => labelOf(Array.isArray(n) ? n : [n])).join(" · ")) + '</small>'
+        : (x.miss.length === 0
+            ? '<small>יש לך הכל</small>'
+            : '<small class="miss">חסר: ' + esc(x.miss.map(labelOf).join(", ")) + '</small>');
+      return '<button class="res" data-open="' + r.id + '">' +
+        '<span class="t"><b>' + r.min + '</b><span>דק\'</span></span>' +
+        '<span class="m"><strong>' + esc(r.name) + '</strong>' + sub + '</span>' +
+        '<span class="k">' + r.p + ' ג\' חלבון</span></button>';
+    }
+
+    const box = $("#results");
+    if (!list.length) {
+      box.innerHTML = '<p class="empty">אין מנה שעונה על הסינון הזה. נסה להוריד סינון אחד.</p>';
+    } else if (have.size === 0) {
+      box.innerHTML = list.sort((a, b) => a.r.min - b.r.min).map(row).join("");
+    } else {
+      const buckets = [
+        ["אפשר להכין עכשיו", list.filter(x => x.miss.length === 0)],
+        ["חסר מרכיב אחד", list.filter(x => x.miss.length === 1)],
+        ["חסרים כמה מרכיבים", list.filter(x => x.miss.length > 1)]
+      ];
+      box.innerHTML = buckets.filter(b => b[1].length).map(b =>
+        '<h4 class="bucket">' + esc(b[0]) + ' <span>' + b[1].length + '</span></h4>' +
+        b[1].map(row).join("")
+      ).join("");
+    }
+
+    const ready = R.filter(r => missingOf(r).length === 0).length;
+    $("#count").textContent = have.size
+      ? "סימנת " + have.size + " מרכיבים · " + ready + " מנות מוכנות להכנה"
+      : "עדיין לא סימנת כלום";
+  }
+
+  /* ---------------- אירועים ---------------- */
+  function setTab(which) {
+    const now = which === "now";
+    $("#tab-now").setAttribute("aria-selected", String(now));
+    $("#tab-pantry").setAttribute("aria-selected", String(!now));
+    $("#panel-now").hidden = !now;
+    $("#panel-pantry").hidden = now;
+    if (!now) { renderResults(); }
+  }
+  $("#tab-now").addEventListener("click", () => setTab("now"));
+  $("#tab-pantry").addEventListener("click", () => setTab("pantry"));
+  $("#roll").addEventListener("click", pickNow);
+
+  document.addEventListener("click", e => {
+    const ing = e.target.closest("[data-ing]");
+    if (ing) {
+      const id = ing.dataset.ing;
+      if (have.has(id)) have.delete(id); else have.add(id);
+      ing.setAttribute("aria-pressed", String(have.has(id)));
+      store.set(KEY_PANTRY, Array.from(have));
+      renderResults();
+      return;
+    }
+    const open = e.target.closest("[data-open]");
+    if (open) {
+      const r = R.find(x => x.id === open.dataset.open);
+      lastShown = r.id;
+      $("#now-slot").innerHTML = cardHTML(r);
+      $("#now-hint").textContent = "";
+      setTab("now");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    const fav = e.target.closest("[data-fav]");
+    if (fav) {
+      const id = fav.dataset.fav;
+      if (favs.has(id)) favs.delete(id); else favs.add(id);
+      store.set(KEY_FAV, Array.from(favs));
+      fav.setAttribute("aria-pressed", String(favs.has(id)));
+      fav.textContent = favs.has(id) ? "★ שמור" : "☆ שמור";
+      return;
+    }
+    const shop = e.target.closest("[data-shop]");
+    if (shop) {
+      const r = R.find(x => x.id === shop.dataset.shop);
+      $("#dlg-title").textContent = "רשימת קניות · " + r.name;
+      $("#dlg-text").value = missingOf(r).map(a => "• " + labelOf(a)).join("\n");
+      $("#dlg").showModal();
+    }
+  });
+
+  [["#f-fast","fast"],["#f-nocook","nocook"],["#f-snack","snack"],["#f-fav","fav"]].forEach(([sel, key]) => {
+    $(sel).addEventListener("click", () => {
+      filters[key] = !filters[key];
+      $(sel).setAttribute("aria-pressed", String(filters[key]));
+      renderResults();
+    });
+  });
+
+  $("#clear").addEventListener("click", () => {
+    have = new Set();
+    store.set(KEY_PANTRY, []);
+    renderPantry();
+    renderResults();
+  });
+
+  $("#dlg-close").addEventListener("click", () => $("#dlg").close());
+  $("#dlg-copy").addEventListener("click", () => {
+    const t = $("#dlg-text");
+    t.select();
+    try {
+      navigator.clipboard.writeText(t.value).then(
+        () => { $("#dlg-copy").textContent = "הועתק"; },
+        () => { $("#dlg-copy").textContent = "בחר והעתק ידנית"; }
+      );
+    } catch (err) { $("#dlg-copy").textContent = "בחר והעתק ידנית"; }
+  });
+
+  /* ---------------- התחלה ---------------- */
+  const d = new Date();
+  $("#clock").textContent = SLOT_HE[slotNow(d)] + " · " +
+    String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0");
+  renderPantry();
+  renderResults();
+  pickNow();
+})();
+</script>
+</body>
+</html>
