@@ -62,8 +62,24 @@ apparaît en haut de la page tant qu'elle n'est pas finie.
 - **« לא בשבילי »** : écarte une recette pour de bon ; on la restaure d'un clic
   depuis l'onglet des goûts.
 
-Chaque recette affiche le temps, les protéines / fibres / sucres estimés, les
-ingrédients (ceux qui manquent sont en rouge), 2 à 4 étapes, et une astuce.
+## Écrit pour quelqu'un qui n'a jamais cuisiné
+
+Chaque recette donne les **quantités exactes** (« 2 עגבניות », « חצי כפית מלח »),
+la **liste du matériel** à sortir avant de commencer, et des étapes qui ne
+supposent aucun savoir préalable. 314 étapes en tout, dont :
+
+- **95 repères de réussite** — comment savoir que c'est prêt : « l'oignon est
+  fait quand il est translucide, pas brun », « le poulet est cuit quand il est
+  ferme sous le doigt », « les bords ne sont plus liquides et de petites bulles
+  apparaissent ».
+- **80 minuteurs intégrés** — chaque étape chronométrée a un bouton qui
+  décompte, sonne et fait vibrer le téléphone à la fin.
+- **Un mode « בישול שלב אחרי שלב »** : une étape à la fois en gros caractères,
+  avec son repère et son minuteur, une barre de progression, et le temps
+  d'attente restant. Lisible à un mètre, mains sales, sur le plan de travail.
+
+Chaque recette affiche aussi le temps, les protéines / fibres / sucres estimés,
+et les ingrédients qui manquent en rouge.
 Filtres : moins de 10 minutes, sans cuisson, « à la place du grignotage »,
 « pour les enfants », « vider le frigo », favoris.
 
@@ -101,8 +117,14 @@ Tout est dans le tableau `R` de `app/index.html`. Une entrée ressemble à ça :
 ```js
 { id:"lentil_soup", name:"מרק עדשים ב-20 דקות", min:25, when:["erev"],
   need:["lentils","onion","carrot"], nice:["garlic","lemon","parsley"],
+  amounts:{ lentils:"כוס עדשים כתומות", onion:"בצל אחד", carrot:"2 גזרים" },
+  tools:["סיר בינוני","סכין","קרש חיתוך"],
   p:18, f:16, s:6,
-  steps:["…","…","…"],
+  steps:[
+    { t:"מה עושים, בפירוט",
+      tip:"איך יודעים שזה הצליח (אופציונלי)",
+      sec:1200 }                                    // טיימר, בשניות
+  ],
   note:"…" }
 ```
 
@@ -110,6 +132,11 @@ Tout est dans le tableau `R` de `app/index.html`. Une entrée ressemble à ça :
 - `need` : ingrédients obligatoires ; un sous-tableau signifie « l'un ou l'autre »
 - `nice` : ingrédients optionnels, affichés en pointillés
 - `p` / `f` / `s` : protéines, fibres, sucres en grammes (estimation pour une portion)
+- `amounts` : quantité par ingrédient, pour une à deux portions ; chaque
+  ingrédient de `need` et de `nice` doit y figurer
+- `tools` : le matériel à sortir avant de commencer
+- `steps[].t` : l'action, `steps[].tip` : le repère de réussite,
+  `steps[].sec` : la durée en secondes, qui crée le bouton minuteur
 - `nocook`, `snack`, `prep`, `spicy`, `kids`, `empty` : drapeaux facultatifs
 
 Les remplacements vivent dans la table `SWAPS`, juste après `R`, sous la forme
