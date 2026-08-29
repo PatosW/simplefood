@@ -4,7 +4,7 @@ Une petite app pour arrêter de grignoter faute d'idée : elle propose des repas
 **simples et à peu près équilibrés**, à partir de ce qu'on a déjà à la maison,
 avec des produits qu'on trouve dans n'importe quel supermarché en Israël.
 
-Interface **en hébreu** (RTL). 112 idées de repas, dont 35 au Ninja Foodi Grill, 13 smoothies et 5 sauces pour pâtes.
+Interface **en hébreu** (RTL). 122 idées de repas, dont 35 au Ninja Foodi Grill, 15 sauces pour pâtes et 13 smoothies.
 
 ## Deux façons de s'en servir
 
@@ -70,17 +70,28 @@ Un filtre « נינג'ה גריל » les regroupe.
 
 ## Sauces pour pâtes
 
-Cinq sauces qui se préparent **pendant que les pâtes cuisent** : la première
+Quinze sauces qui se préparent **pendant que les pâtes cuisent** : la première
 étape est toujours de lancer les pâtes, et la sauce tient dans le temps indiqué
-sur le paquet. Aucune ne contient de crème.
+sur le paquet. Aucune ne contient de crème ; sept sont prêtes en douze minutes
+ou moins, deux ne demandent aucune cuisson.
 
-| Sauce | Protéines |
-|---|---|
-| Tomate, ail et basilic | 12 g |
-| Tomate, thon et olives | 34 g |
-| Yaourt-citron aux petits pois | 20 g |
-| Courgettes mixées, façon crème | 16 g |
-| Ail, huile d'olive et citron | 10 g |
+| Sauce | Protéines | Temps |
+|---|---|---|
+| Tomate, thon et olives | 34 g | 14 min |
+| Poulet grillé et tomate | 34 g | 15 min |
+| Thon, citron et persil, sans tomate | 32 g | 12 min |
+| Ragù de lentilles | 22 g | 22 min |
+| Yaourt-citron aux petits pois | 20 g | 12 min |
+| Épinards et fromage blanc | 20 g | 12 min |
+| Tahini-citron | 17 g | 10 min |
+| Courgettes mixées, façon crème | 16 g | 15 min |
+| Pesto aux noix et basilic | 16 g | 8 min |
+| Aubergine et feta | 15 g | 20 min |
+| Brocoli et ail | 15 g | 14 min |
+| Tomate, ail et basilic | 12 g | 12 min |
+| Tomates cerises éclatées | 12 g | 14 min |
+| Poivrons rôtis | 12 g | 15 min |
+| Ail, huile d'olive et citron | 10 g | 12 min |
 
 Deux points techniques reviennent partout : garder une demi-tasse d'eau de
 cuisson, qui transforme la sauce en quelque chose qui adhère aux pâtes, et pour
