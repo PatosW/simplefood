@@ -265,6 +265,25 @@
   .surface b { color: var(--olive); font-weight: 700; }
   .surface span { display: block; margin-top: 4px; color: var(--ink-2); }
 
+  .serves {
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px;
+    padding: 9px 12px; margin-bottom: 4px;
+  }
+  .serves .lab { font-family: "Heebo", sans-serif; font-size: .72rem; letter-spacing: .08em; color: var(--ink-3); }
+  .serves button {
+    border: 1px solid var(--line); background: var(--surface); border-radius: 8px;
+    min-width: 34px; padding: 5px 0; font-family: "Heebo", sans-serif; font-weight: 600; font-size: var(--step--1);
+    color: var(--ink-2); transition: background .15s, border-color .15s, color .15s;
+  }
+  .serves button[aria-pressed="true"] { background: var(--olive); border-color: var(--olive); color: var(--surface); }
+  :root[data-theme="dark"] .serves button[aria-pressed="true"],
+  :root:not([data-theme="light"]) .serves button[aria-pressed="true"] { color: #101512; }
+  .serves .state {
+    margin-inline-start: auto; font-family: "Heebo", sans-serif; font-size: var(--step--1);
+    color: var(--olive); font-variant-numeric: tabular-nums; white-space: nowrap;
+  }
+
   .tools { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
   .tools li {
     border: 1px dashed var(--line); border-radius: 8px; padding: 4px 10px;
@@ -710,6 +729,7 @@
         <button class="chip" data-serv="1">1</button>
         <button class="chip" data-serv="2">2</button>
         <button class="chip" data-serv="4">4</button>
+        <button class="chip" data-serv="6">6</button>
       </div>
       <button class="chip" id="dlg-scope" aria-pressed="true" style="margin-inline-start:auto">רק מה שחסר</button>
     </div>
@@ -2922,6 +2942,27 @@
     cauliflower:[1,"כרובית"], basil:"עציץ בזיליקום", peas:"שקית אפונה קפואה"
   };
 
+  /* ---------------- כמויות לפי מספר סועדים ----------------
+     [כמות, יחיד, רבים, סוג]. lin נצמד למשקל הפסטה; soft עולה לאט יותר
+     כי שום, חריף, לימון ושמן לא מוכפלים אחד לאחד.  */
+  const SAUCE_QTY = {
+    sauce_tomato_basil: { pasta:[200,"גרם פסטה","","lin"], passata:[1,"קופסת רסק עגבניות","קופסאות רסק עגבניות","lin"], tomato:[5,"עגבניות","","lin"], garlic:[3,"שיני שום","","soft"], basil:[0,"כמה עלי בזיליקום","","soft"], parsley:[0,"מעט פטרוזיליה","","soft"], bulgarit:[50,"גרם בולגרית","","lin"], olives:[8,"זיתים","","lin"] },
+    sauce_tuna_olives: { pasta:[200,"גרם פסטה","","lin"], passata:[1,"קופסת רסק עגבניות","קופסאות רסק עגבניות","lin"], tomato:[5,"עגבניות","","lin"], tuna:[2,"קופסת טונה","קופסאות טונה","lin"], garlic:[3,"שיני שום","","soft"], olives:[10,"זיתים","","lin"], parsley:[0,"חופן פטרוזיליה","","soft"], chili:[0,"קורט פלפל חריף","","soft"], lemon:[0.25,"לימון","","soft"] },
+    sauce_yogurt_lemon: { pasta:[200,"גרם פסטה","","lin"], yogurt:[1,"גביע יוגורט","גביעי יוגורט","lin"], peas:[1,"כוס אפונה קפואה","כוסות אפונה קפואה","lin"], garlic:[1,"שן שום","שיני שום","soft"], lemon:[0.5,"לימון","","soft"], parsley:[0,"חופן פטרוזיליה","","soft"], walnuts:[1,"חופן אגוזים","חופנים אגוזים","lin"], white_cheese:[3,"כפות גבינה לבנה","","lin"] },
+    sauce_zucchini_cream: { pasta:[200,"גרם פסטה","","lin"], zucchini:[3,"קישואים","","lin"], garlic:[2,"שיני שום","","soft"], white_cheese:[4,"כפות גבינה לבנה","","lin"], bulgarit:[50,"גרם בולגרית","","lin"], lemon:[0.25,"לימון","","soft"], parsley:[0,"מעט פטרוזיליה","","soft"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"] },
+    sauce_garlic_oil: { pasta:[200,"גרם פסטה","","lin"], garlic:[4,"שיני שום","","soft"], lemon:[1,"לימון","לימונים","soft"], parsley:[0,"חופן גדול פטרוזיליה","","soft"], chili:[0,"קורט פלפל חריף","","soft"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"], bulgarit:[50,"גרם בולגרית","","lin"] },
+    sauce_pesto_walnut: { pasta:[200,"גרם פסטה","","lin"], basil:[2,"חופן עלי בזיליקום","חופנים עלי בזיליקום","lin"], walnuts:[30,"גרם אגוזי מלך","","lin"], garlic:[1,"שן שום","שיני שום","soft"], bulgarit:[50,"גרם בולגרית","","lin"], lemon:[0.25,"לימון","","soft"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"] },
+    sauce_burst_cherry: { pasta:[200,"גרם פסטה","","lin"], cherry:[250,"גרם עגבניות שרי","","lin"], garlic:[3,"שיני שום","","soft"], basil:[0,"כמה עלי בזיליקום","","soft"], bulgarit:[50,"גרם בולגרית","","lin"], olives:[8,"זיתים","","lin"], chili:[0,"קורט פלפל חריף","","soft"] },
+    sauce_roasted_pepper: { pasta:[200,"גרם פסטה","","lin"], pepper:[3,"פלפלים אדומים","","lin"], garlic:[2,"שיני שום","","soft"], white_cheese:[3,"כפות גבינה לבנה","","lin"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"], lemon:[0.25,"לימון","","soft"], parsley:[0,"מעט פטרוזיליה","","soft"], chili:[0,"קורט פלפל חריף","","soft"] },
+    sauce_eggplant: { pasta:[200,"גרם פסטה","","lin"], eggplant:[1,"חציל","חצילים","lin"], passata:[0.5,"קופסת רסק עגבניות","","lin"], tomato:[4,"עגבניות","","lin"], garlic:[2,"שיני שום","","soft"], bulgarit:[60,"גרם בולגרית","","lin"], basil:[0,"כמה עלי בזיליקום","","soft"], onion:[0.5,"בצל","בצלים","lin"], chili:[0,"קורט פלפל חריף","","soft"] },
+    sauce_broccoli_garlic: { pasta:[200,"גרם פסטה","","lin"], broccoli:[1,"ראש ברוקולי","ראשי ברוקולי","lin"], garlic:[3,"שיני שום","","soft"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"], lemon:[0.5,"לימון","","soft"], chili:[0,"קורט פלפל חריף","","soft"], bulgarit:[50,"גרם בולגרית","","lin"], white_cheese:[2,"כפות גבינה לבנה","","lin"] },
+    sauce_lentil_ragu: { pasta:[200,"גרם פסטה","","lin"], lentils:[0.5,"כוס עדשים כתומות","כוסות עדשים כתומות","lin"], passata:[1,"קופסת רסק עגבניות","קופסאות רסק עגבניות","lin"], tomato:[5,"עגבניות","","lin"], onion:[1,"בצל","בצלים","lin"], carrot:[1,"גזר","גזרים","lin"], garlic:[2,"שיני שום","","soft"], parsley:[0,"מעט פטרוזיליה","","soft"], bulgarit:[50,"גרם בולגרית","","lin"] },
+    sauce_tuna_white: { pasta:[200,"גרם פסטה","","lin"], tuna:[2,"קופסת טונה","קופסאות טונה","lin"], lemon:[1,"לימון","לימונים","soft"], garlic:[3,"שיני שום","","soft"], parsley:[0,"חופן גדול פטרוזיליה","","soft"], olives:[8,"זיתים","","lin"], chili:[0,"קורט פלפל חריף","","soft"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"] },
+    sauce_spinach_cheese: { pasta:[200,"גרם פסטה","","lin"], spinach_frozen:[2,"חופן תרד קפוא","חופנים תרד קפוא","lin"], white_cheese:[5,"כפות גבינה לבנה","","lin"], garlic:[2,"שיני שום","","soft"], lemon:[0.25,"לימון","","soft"], walnuts:[1,"חופן אגוזים","חופנים אגוזים","lin"], bulgarit:[50,"גרם בולגרית","","lin"] },
+    sauce_grilled_chicken: { pasta:[200,"גרם פסטה","","lin"], chicken:[1,"חזה עוף מבושל","חזות עוף מבושלים","lin"], passata:[1,"קופסת רסק עגבניות","קופסאות רסק עגבניות","lin"], tomato:[5,"עגבניות","","lin"], garlic:[3,"שיני שום","","soft"], onion:[0.5,"בצל","בצלים","lin"], parsley:[0,"מעט פטרוזיליה","","soft"], chili:[0,"קורט פלפל חריף","","soft"], bulgarit:[50,"גרם בולגרית","","lin"] },
+    sauce_tahini_lemon: { pasta:[200,"גרם פסטה","","lin"], tahini:[4,"כפות טחינה גולמית","","lin"], lemon:[1,"לימון","לימונים","soft"], garlic:[1,"שן שום","שיני שום","soft"], parsley:[0,"חופן גדול פטרוזיליה","","soft"], cherry:[1,"חופן עגבניות שרי","חופנים עגבניות שרי","lin"], chili:[0,"קורט פלפל חריף","","soft"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"] },
+  };
+
   const AISLE = {};
   GROUPS.forEach(g => g.items.forEach(it => { AISLE[it[0]] = g.title; }));
 
@@ -3064,6 +3105,7 @@
         st.swaps.map(w =>
           '<p class="swapline"><b>במקום</b> <s>' + esc(nameOf(w.from)) + '</s> <span>' + esc(w.text) + '</span></p>'
         ).join("") +
+        servesBar(r) +
         '<div class="block">' + blockTitle("ings", r.id, "מה צריך") + '<ul class="ings">' +
           rows.map(f => {
             const isMiss = !f.opt && !f.no && !f.alts.some(satisfies) && have.size > 0;
@@ -3085,7 +3127,7 @@
                 '<span>' + esc(r.surface[1]) + '</span></p>'
               : "") + '</div>'
           : "") +
-        '<div class="block">' + blockTitle("steps", r.id, "איך") + '<ol class="steps">' + r.steps.map(stepHTML).join("") + '</ol></div>' +
+        '<div class="block">' + blockTitle("steps", r.id, "איך") + '<ol class="steps">' + r.steps.map(x => stepHTML(x, r)).join("") + '</ol></div>' +
         (r.note ? '<p class="note"><b>שווה לדעת:</b> ' + esc(r.note) + '</p>' : "") +
         '<div class="block notebox"><h3>ההערה שלי</h3>' +
           '<textarea data-note="' + r.id + '" placeholder="מה עבד, מה לשנות בפעם הבאה, מי אהב">' + esc(note) + '</textarea>' +
@@ -3099,7 +3141,7 @@
 
   // כמות אמיתית במקום שם המרכיב, כשהמתכון מגדיר אותה
   function amountLabel(r, alts) {
-    return alts.map(a => (r.amounts && r.amounts[a]) ? r.amounts[a] : nameOf(a)).join(" או ");
+    return alts.map(a => amountOf(r, a)).join(" או ");
   }
 
 
@@ -3179,10 +3221,57 @@
     '</tbody></table></div><p>' + NINJA_BUY + '</p>' +
     '<p>הזמנים כאן נבדקו על פודי גריל רגיל. במכשיר גדול יותר מוסיפים 2-3 דקות.</p></details>';
 
+
+  /* ---------------- לכמה אנשים ---------------- */
+  const SERVE = [1, 2, 4, 6];                 // 100 / 200 / 400 / 600 גרם פסטה
+  let serves = store.get("mlo.serves.v1", 2);
+  if (SERVE.indexOf(serves) === -1) serves = 2;
+
+  function scaleOne(item, people) {
+    const n = item[0], sing = item[1], plur = item[2] || item[1], mode = item[3];
+    if (!n) return sing;                       // טקסט חופשי בלי מספר
+    const f = people / 2;
+    // שום, חריף, לימון ושמן עולים לאט יותר — אחרת רוטב לשישה יוצא חד מדי
+    const k = mode === "soft" ? 1 + (f - 1) * 0.6 : f;
+    let v = n * k;
+    if (v >= 100) v = Math.round(v / 50) * 50;
+    else if (v >= 20) v = Math.round(v / 5) * 5;
+    else if (v >= 3) v = Math.round(v);
+    else v = Math.max(0.5, Math.round(v * 2) / 2);
+    if (v === 0.5) return "חצי " + sing;
+    if (v === 1) return sing;
+    const whole = Math.floor(v), half = v - whole >= 0.5;
+    const num = half ? whole + " וחצי" : String(whole);
+    return num + " " + (v > 1 ? plur : sing);
+  }
+
+  // הכמות של מרכיב במתכון, לפי מספר הסועדים שנבחר
+  function amountOf(r, ing) {
+    const t = SAUCE_QTY[r.id];
+    if (t && t[ing]) return scaleOne(t[ing], serves);
+    return (r.amounts && r.amounts[ing]) ? r.amounts[ing] : nameOf(ing);
+  }
+
+  const pastaGrams = () => serves * 100;
+
+  function servesBar(r) {
+    if (!SAUCE_QTY[r.id]) return "";
+    return '<div class="serves"><span class="lab">לכמה</span>' +
+      SERVE.map(n => '<button data-serves="' + n + '" aria-pressed="' + (n === serves) + '">' + n + '</button>').join("") +
+      '<span class="state">' + (serves * 100) + ' גרם פסטה · ' +
+      (serves === 1 ? "סועד אחד" : serves + " סועדים") + '</span></div>';
+  }
+
   const mmss = sec => Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0");
 
-  function stepHTML(st) {
-    return '<li><div class="st-body"><span class="st-do">' + esc(st.t) + '</span>' +
+  // בשלבים של הרטבים כתוב "200 גרם פסטה" — מעדכנים לפי מספר הסועדים שנבחר
+  function stepText(st, r) {
+    if (r && SAUCE_QTY[r.id]) return st.t.replace(/200 גרם פסטה/g, pastaGrams() + " גרם פסטה");
+    return st.t;
+  }
+
+  function stepHTML(st, r) {
+    return '<li><div class="st-body"><span class="st-do">' + esc(stepText(st, r)) + '</span>' +
       (st.tip ? '<span class="st-tip"><b>איך יודעים:</b> ' + esc(st.tip) + '</span>' : "") +
       (st.sec ? '<button class="timer" data-timer="' + st.sec + '">התחל טיימר ' + mmss(st.sec) + '</button>' : "") +
       '</div></li>';
@@ -3481,7 +3570,9 @@
     $("#big-title").textContent = r.name;
 
     if (big.sec === "ings") {
-      $("#big-sub").textContent = "מה להוציא לשיש לפני שמתחילים";
+      $("#big-sub").textContent = SAUCE_QTY[r.id]
+        ? "מה להוציא לשיש · " + (serves * 100) + " גרם פסטה ל-" + serves
+        : "מה להוציא לשיש לפני שמתחילים";
       const av = avoidSet(), sw = SWAPS[r.id] || {};
       let html = '<div class="big-sec">מרכיבים</div>';
 
@@ -3524,7 +3615,7 @@
     } else {
       $("#big-sub").textContent = r.steps.length + " שלבים · " + r.min + " דקות";
       $("#big-body").innerHTML = r.steps.map((st, i) =>
-        '<div class="bigstep" data-n="' + (i + 1) + '"><div>' + esc(st.t) +
+        '<div class="bigstep" data-n="' + (i + 1) + '"><div>' + esc(stepText(st, r)) +
         (st.tip ? '<span class="tip"><b>איך יודעים:</b> ' + esc(st.tip) + '</span>' : "") +
         (st.sec ? '<button class="timer" data-timer="' + st.sec + '">התחל טיימר ' + mmss(st.sec) + '</button>' : "") +
         '</div></div>'
@@ -3556,9 +3647,10 @@
     if (!r) return;
     const st = r.steps[cook.i], last = cook.i === r.steps.length - 1;
     $("#cook-name").textContent = r.name;
-    $("#cook-num").textContent = "שלב " + (cook.i + 1) + " מתוך " + r.steps.length;
+    $("#cook-num").textContent = "שלב " + (cook.i + 1) + " מתוך " + r.steps.length +
+      (SAUCE_QTY[r.id] ? " · ל-" + serves : "");
     $("#cook-progress").style.width = ((cook.i + 1) / r.steps.length * 100) + "%";
-    $("#cook-do").textContent = st.t;
+    $("#cook-do").textContent = stepText(st, r);
     $("#cook-tip").hidden = !st.tip;
     if (st.tip) $("#cook-tip").innerHTML = "<b>איך יודעים:</b> " + esc(st.tip);
     $("#cook-timer").innerHTML = st.sec
@@ -3570,7 +3662,8 @@
   }
 
   /* ---------------- רשימת קניות למנה אחת ---------------- */
-  function qtyText(ing, servings) {
+  function qtyText(ing, servings, r) {
+    if (r && SAUCE_QTY[r.id] && SAUCE_QTY[r.id][ing]) return scaleOne(SAUCE_QTY[r.id][ing], servings);
     const q = QTY[ing];
     if (!q) return nameOf(ing);
     if (typeof q === "string") return q;
@@ -3603,7 +3696,7 @@
     const same = shop && shop.id === id;
     shop = {
       id: id,
-      servings: same ? shop.servings : 2,
+      servings: same ? shop.servings : (SAUCE_QTY[id] ? serves : 2),
       onlyMissing: same ? shop.onlyMissing : true,
       checked: same ? shop.checked : []
     };
@@ -3646,7 +3739,7 @@
         byAisle[t].map(i =>
           '<label class="shop-item"><input type="checkbox" data-buy="' + i + '"' +
           (checked.has(i) ? " checked" : "") + '><span class="q">' +
-          esc(isBasic(i) ? basicLabel(i) : qtyText(i, shop.servings)) + '</span></label>'
+          esc(isBasic(i) ? basicLabel(i) : qtyText(i, shop.servings, r)) + '</span></label>'
         ).join("") + '</div>'
       ).join("");
     }
@@ -3673,7 +3766,7 @@
   function shopAsText() {
     const r = R.find(x => x.id === shop.id);
     return "קניות ל" + r.name + " (" + shop.servings + " מנות)\n" +
-      shopItems(r, shop.onlyMissing).map(i => "• " + (isBasic(i) ? basicLabel(i) : qtyText(i, shop.servings))).join("\n");
+      shopItems(r, shop.onlyMissing).map(i => "• " + (isBasic(i) ? basicLabel(i) : qtyText(i, shop.servings, r))).join("\n");
   }
 
   /* ---------------- לוח הטעמים ---------------- */
@@ -3770,6 +3863,16 @@
 
   document.addEventListener("click", e => {
     const t = e.target;
+
+    const sv = t.closest("[data-serves]");
+    if (sv) {
+      serves = Number(sv.dataset.serves);
+      store.set("mlo.serves.v1", serves);
+      const card = document.querySelector(".card");
+      const id = card && card.querySelector("[data-cook]") ? card.querySelector("[data-cook]").dataset.cook : null;
+      if (id) $("#now-slot").innerHTML = cardHTML(R.find(x => x.id === id));
+      return;
+    }
 
     const sl = t.closest("[data-slot]");
     if (sl) {

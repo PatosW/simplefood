@@ -84,6 +84,16 @@ Quinze sauces qui se préparent **pendant que les pâtes cuisent** : la premièr
 sur le paquet. Aucune ne contient de crème ; sept sont prêtes en douze minutes
 ou moins, deux ne demandent aucune cuisson.
 
+Chaque sauce porte un sélecteur **1 / 2 / 4 / 6 convives**, affiché en même temps
+en grammes — « 400 גרם פסטה · 4 סועדים ». Les quantités, le texte des étapes et
+la liste de courses suivent ce choix, qui est mémorisé d'une fois sur l'autre.
+
+Les ingrédients ne sont pas tous multipliés par le même facteur : les pâtes, les
+tomates, le thon ou le yaourt suivent le poids, tandis que l'ail, le piment, le
+citron et l'huile montent plus lentement — trois gousses pour deux personnes
+deviennent cinq pour quatre, pas six. Une sauce multipliée à l'identique devient
+immédiatement trop forte.
+
 | Sauce | Protéines | Temps |
 |---|---|---|
 | Tomate, thon et olives | 34 g | 14 min |
