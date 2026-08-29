@@ -468,6 +468,23 @@
     padding: 5px 10px; font-family: "Heebo", sans-serif; font-size: .7rem; font-weight: 700;
   }
   .who .sz:hover { background: var(--surface); }
+  .sizesbtn {
+    border: 1px solid var(--line); background: var(--surface-2); border-radius: 999px;
+    padding: 5px 13px; font-size: var(--step--1); color: var(--ink-2); white-space: nowrap;
+  }
+  .sizesbtn[aria-expanded="true"] { border-color: var(--olive); color: var(--olive); background: var(--olive-soft); }
+  .sizes { width: 100%; margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--line-soft); display: grid; gap: 7px; }
+  .sizes[hidden] { display: none; }
+  .szrow { display: flex; align-items: center; gap: 6px; }
+  .szrow .nm { flex: 1; min-width: 0; font-size: var(--step--1); }
+  .szrow button {
+    border: 1px solid var(--line); background: var(--surface); border-radius: 8px;
+    padding: 5px 11px; font-size: .78rem; color: var(--ink-2);
+  }
+  .szrow button[aria-pressed="true"] { background: var(--olive); border-color: var(--olive); color: var(--surface); font-weight: 600; }
+  :root[data-theme="dark"] .szrow button[aria-pressed="true"],
+  :root:not([data-theme="light"]) .szrow button[aria-pressed="true"] { color: #101512; }
+  .szfoot { margin: 2px 0 0; font-size: var(--step--1); color: var(--ink-3); }
   .who .state { margin-inline-start: auto; font-family: "Heebo", sans-serif; font-size: .72rem; color: var(--ink-3); }
 
   /* ---------- שינויים בכרטיס ---------- */
@@ -619,6 +636,8 @@
     <span class="lab">מבשל עבור</span>
     <div class="row" id="who-list"></div>
     <span class="state" id="who-state"></span>
+    <button class="sizesbtn" id="who-toggle" aria-expanded="false">גודל המנות</button>
+    <div class="sizes" id="who-sizes" hidden></div>
   </div>
 
   <section class="panel" id="panel-now" role="tabpanel" aria-labelledby="tab-now">
@@ -4215,6 +4234,18 @@
           : "") +
       '</span>'
     ).join("");
+    // גודל המנה של כל אחד, לפני שמחפשים מנה
+    $("#who-sizes").innerHTML = eaters().length
+      ? eaters().map(p =>
+          '<div class="szrow"><span class="nm">' + esc(p.name) + '</span>' +
+          EATS.map(e =>
+            '<button data-setEats="' + p.id + '|' + e[0] + '" aria-pressed="' +
+            (Math.abs((p.eats || 1) - e[0]) < .05) + '">' + esc(e[2]) + '</button>').join("") +
+          '</div>').join("") +
+        '<p class="szfoot">סה״כ ' + (Math.round(portions() * 10) / 10) +
+        ' מנות. הכמויות בכל מתכון כבר מחושבות לפי זה.</p>'
+      : '<p class="szfoot">בחר מי אוכל כדי להגדיר גדלים.</p>';
+
     $("#who-state").textContent = eaters().length === 0
       ? "בחר לפחות אדם אחד"
       : (Math.round(portions() * 10) / 10) + " מנות · " + (spicyOk() ? "חריף בפנים" : "בלי חריף");
@@ -4306,6 +4337,26 @@
       slotPick = sl.dataset.slot === slotNow(new Date()) ? null : sl.dataset.slot;
       setTab("now");
       pickAndShow();
+      return;
+    }
+
+    const se = t.closest("[data-seteats]");
+    if (se) {
+      const parts = se.dataset.seteats.split("|");
+      const p = people.find(x => x.id === parts[0]);
+      p.eats = Number(parts[1]);
+      refreshAll();
+      $("#who-sizes").hidden = false;
+      $("#who-toggle").setAttribute("aria-expanded", "true");
+      if (!$("#panel-now").hidden) pickNow();
+      return;
+    }
+
+    const tg = t.closest("#who-toggle");
+    if (tg) {
+      const open = $("#who-sizes").hidden;
+      $("#who-sizes").hidden = !open;
+      tg.setAttribute("aria-expanded", String(open));
       return;
     }
 

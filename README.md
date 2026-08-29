@@ -26,10 +26,12 @@ chaque profil porte un appétit : **מנה קטנה** (× 0,6), **מנה רגי�
 et toutes les quantités suivent : une soupe de lentilles écrite pour deux passe à
 deux tasses et demie de lentilles et cinq carottes.
 
-La taille se change aussi **au moment de cuisiner**, sans passer par les
-réglages : dans la barre du haut, chaque convive porte une pastille קטן / רגיל /
-גדול qu'un clic fait défiler. Quelqu'un rentre affamé, un clic, et les quantités
-montent.
+La taille se règle **avant de chercher un plat**, dans la barre du haut. Le
+bouton **גודל המנות** déplie une ligne par convive, avec ses trois tailles en
+toutes lettres, et le total mis à jour en direct — le tout au-dessus du bouton de
+recherche, avant que la moindre recette soit proposée. Pour un ajustement rapide,
+chaque convive porte aussi une pastille קטן / רגיל / גדול qu'un clic fait
+défiler.
 
 Les 742 quantités des 110 recettes concernées ont été converties en données
 calculables. L'ail, le piment, le citron et les herbes montent plus lentement que
