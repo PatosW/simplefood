@@ -10,7 +10,7 @@ Interface **en hébreu** (RTL). 132 idées de repas, dont 45 au Ninja Foodi Gril
 
 | Mode | À quoi ça sert |
 |---|---|
-| **אני רעב עכשיו** | Un bloc d'accueil en haut de page : quatre boutons pour choisir le moment du repas — celui de l'heure actuelle est marqué « עכשיו », mais on peut préparer le dîner depuis le bureau —, le nombre d'idées disponibles, et un grand bouton dont le libellé s'adapte à l'heure (« תן לי רעיון לארוחת ערב »). En dessous, des raccourcis par catégorie avec leur nombre de recettes — נינג'ה גריל, רטבים לפסטה, שייקים, במקום נשנוש, עד 10 דקות, מתאים לילדים, לרוקן את המקרר — puis une rangée **לפי מרכיב עיקרי** : dix aliments de base (œufs, pâtes, riz, poulet, bœuf haché, steak, thon, yaourt, pain, banane) avec le nombre de recettes de chacun. Un clic ouvre la liste filtrée, triée du plus rapide au plus long. |
+| **אני רעב עכשיו** | Le bouton principal ne propose que des **plats complets** : ni sauce, ni accompagnement, ni dessert, ni préparation d'avance, et pas de smoothie aux heures des repas. Une fois le plat tiré, deux accompagnements rapides sont suggérés en dessous. Quatre boutons pour choisir le moment du repas — celui de l'heure actuelle est marqué « עכשיו », mais on peut préparer le dîner depuis le bureau —, le nombre d'idées disponibles, et un grand bouton dont le libellé s'adapte à l'heure (« תן לי רעיון לארוחת ערב »). En dessous, des raccourcis par catégorie avec leur nombre de recettes — נינג'ה גריל, רטבים לפסטה, שייקים, במקום נשנוש, עד 10 דקות, מתאים לילדים, לרוקן את המקרר — puis une rangée **לפי מרכיב עיקרי** : dix aliments de base (œufs, pâtes, riz, poulet, bœuf haché, steak, thon, yaourt, pain, banane) avec le nombre de recettes de chacun. Un clic ouvre la liste filtrée, triée du plus rapide au plus long. |
 | **מה יש לי בבית** | Un champ de recherche pour retrouver un aliment parmi 69, puis on coche ce qu'on a (le choix est mémorisé sur l'appareil). Les recettes sont classées en trois groupes : réalisables tout de suite, il manque un ingrédient, il en manque plusieurs. |
 | **הטעמים שלנו** | Qui mange, et ce que chacun n'aime pas. Plus les ingrédients perso, les recettes écartées et les notes. |
 
@@ -192,6 +192,17 @@ bâtie pour la consistance plutôt que pour le goût : l'avoine et les amandes s
 broyées à sec avant tout le reste, faute de quoi elles restent en morceaux.
 
 Un filtre « שייקים » les regroupe.
+
+## Plats, accompagnements et desserts
+
+Sur 99 recettes proposables au déjeuner ou au dîner, 27 n'étaient pas des repas :
+15 sauces, 11 accompagnements ou desserts, une préparation d'avance. Le tirage
+aléatoire les écarte désormais et ne retient que les 72 plats complets.
+
+Elles restent accessibles par leurs raccourcis — **רטבים לפסטה**, **תוספות**,
+**קינוחים** — et deux accompagnements assortis sont suggérés sous chaque plat
+tiré à l'heure d'un repas, choisis parmi les plus rapides et les plus proches de
+ce qu'on a déjà.
 
 ## Partir d'un aliment
 

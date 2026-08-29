@@ -143,6 +143,23 @@
   :root[data-theme="dark"] .quick.byfood button[aria-pressed="true"],
   :root:not([data-theme="light"]) .quick.byfood button[aria-pressed="true"] { color: #101512; }
 
+  .sidehint {
+    display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 11px 14px; margin-top: 12px;
+  }
+  .sidehint .lab { font-family: "Heebo", sans-serif; font-size: .72rem; font-weight: 700; letter-spacing: .08em; color: var(--ink-3); }
+  .sidehint button {
+    border: 1px solid var(--line); background: var(--surface-2); border-radius: 999px;
+    padding: 6px 13px; font-size: var(--step--1); display: inline-flex; align-items: center; gap: 7px;
+  }
+  .sidehint button:hover { border-color: var(--olive); background: var(--olive-soft); }
+  .sidehint button b {
+    font-family: "Heebo", sans-serif; font-size: .7rem; color: var(--olive);
+    background: var(--olive-soft); border-radius: 999px; padding: 1px 7px;
+  }
+  .sidehint button:hover b { background: var(--surface); }
+
   .foodbar {
     display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
     background: var(--olive-soft); border-radius: 10px; padding: 9px 13px; margin-bottom: 12px;
@@ -675,6 +692,8 @@
       <button class="chip" id="f-ninja" aria-pressed="false">נינג'ה גריל</button>
       <button class="chip" id="f-sauce" aria-pressed="false">רטבים לפסטה</button>
       <button class="chip" id="f-meat" aria-pressed="false">בשר בקר</button>
+      <button class="chip" id="f-dessert" aria-pressed="false">קינוחים</button>
+      <button class="chip" id="f-side" aria-pressed="false">תוספות</button>
       <button class="chip" id="f-shake" aria-pressed="false">שייקים</button>
       <button class="chip" id="f-kids" aria-pressed="false">מתאים לילדים</button>
       <button class="chip" id="f-empty" aria-pressed="false">לרוקן את המקרר</button>
@@ -1205,7 +1224,7 @@
       ],
       note:"התרד הקפוא לא מורגש בטעם בכלל. הבננה הקפואה היא מה שנותן מרקם של שייק אמיתי." },
 
-    { id:"sweet_potato_tahini", name:"בטטה מהמיקרו עם טחינה ושקדים", min:12, when:["tsohorayim","nashnush"],
+    { id:"sweet_potato_tahini", side:true, name:"בטטה מהמיקרו עם טחינה ושקדים", min:12, when:["tsohorayim","nashnush"],
       need:["sweet_potato","tahini"], nice:["almonds","lemon","parsley"],
       amounts:{ sweet_potato:"בטטה בינונית", tahini:"2 כפות טחינה גולמית", almonds:"חופן שקדים", lemon:"רבע לימון", parsley:"מעט פטרוזיליה" },
       tools:["מיקרוגל","מזלג","סכין"],
@@ -1220,7 +1239,7 @@
       ],
       note:"מיקרוגל במקום תנור: 8 דקות במקום 50, ואותה בטטה בדיוק." },
 
-    { id:"choco_yogurt", name:"יוגורט־קקאו, הפתרון לשוקולד", min:3, when:["nashnush","erev"], nocook:true, snack:true,
+    { id:"choco_yogurt", dessert:true, name:"יוגורט־קקאו, הפתרון לשוקולד", min:3, when:["nashnush","erev"], nocook:true, snack:true,
       need:["yogurt","cocoa"], nice:["honey","walnuts","dark_chocolate","banana"],
       amounts:{ yogurt:"גביע יוגורט", cocoa:"כף קקאו לא ממותק", honey:"כפית דבש או סילאן", walnuts:"חופן אגוזים", dark_chocolate:"ריבוע שוקולד מריר", banana:"חצי בננה" },
       tools:["קערה","כף"],
@@ -1607,7 +1626,7 @@
       ],
       note:"היוגורט נכנס תמיד מחוץ לאש. זה ההבדל בין רוטב קרמי לרוטב שנראה כמו גבינה מפוררת." },
 
-    { id:"oven_veg", name:"ירקות בתנור עם שקדים", min:25, when:["erev"], empty:true,
+    { id:"oven_veg", side:true, name:"ירקות בתנור עם שקדים", min:25, when:["erev"], empty:true,
       need:[["eggplant","zucchini","sweet_potato","potato","broccoli","carrot"]],
       nice:["almonds","tahini","garlic","lemon","parsley"],
       amounts:{ eggplant:"חציל אחד", zucchini:"2 קישואים", sweet_potato:"בטטה אחת", potato:"2 תפוחי אדמה", broccoli:"ראש אחד", carrot:"3 גזרים", almonds:"חופן שקדים", tahini:"2 כפות טחינה", garlic:"3 שיני שום", lemon:"חצי לימון", parsley:"מעט פטרוזיליה" },
@@ -2171,7 +2190,7 @@
       ],
       note:"20 דקות ביום ראשון = חלבון מוכן לארבע ארוחות. פורסים לרצועות ומכניסים לפיתה, לסלט או לקערת אורז." },
 
-    { id:"ninja_frozen_veg", name:"ירקות קפואים באייר קריספ", min:18, when:["erev","tsohorayim"], ninja:true, empty:true,
+    { id:"ninja_frozen_veg", side:true, name:"ירקות קפואים באייר קריספ", min:18, when:["erev","tsohorayim"], ninja:true, empty:true,
       need:["frozen_veg"], nice:["garlic","lemon","almonds","tahini"],
       amounts:{ frozen_veg:"שקית ירקות קפואים (500 גרם)", garlic:"כפית שום אבקה", lemon:"חצי לימון", almonds:"חופן שקדים", tahini:"2 כפות טחינה" },
       surface:["ישר בסל","האוויר חייב לעבור מלמטה — זה כל ההבדל בין ירקות פריכים לירקות רכים."],
@@ -2187,7 +2206,7 @@
       ],
       note:"אפס חיתוך. זה מה שהופך שקית ירקות קפואים לתוספת שבאמת מתחשק לאכול, במקום לגוש רך מהמיקרו." },
 
-    { id:"ninja_sweet_fries", name:"צ'יפס בטטה באייר קריספ", min:25, when:["erev","nashnush"], ninja:true, kids:true,
+    { id:"ninja_sweet_fries", side:true, name:"צ'יפס בטטה באייר קריספ", min:25, when:["erev","nashnush"], ninja:true, kids:true,
       need:["sweet_potato"], nice:["tahini","almonds"],
       amounts:{ sweet_potato:"2 בטטות", tahini:"2 כפות טחינה", almonds:"חופן שקדים" },
       surface:["ישר בסל","צ'יפס על נייר לא מתפצח לעולם. חובה מגע ישיר עם המתכת."],
@@ -2240,7 +2259,7 @@
       ],
       note:"22 גרם חלבון בעשר דקות ובלי טיפת שמן. עם עגבניות שרי ועלים זו ארוחת ערב קלה שלמה." },
 
-    { id:"ninja_baby_potatoes", name:"תפוחי אדמה קטנים שלמים", min:30, when:["erev"], ninja:true,
+    { id:"ninja_baby_potatoes", side:true, name:"תפוחי אדמה קטנים שלמים", min:30, when:["erev"], ninja:true,
       need:["potato"], nice:["garlic","parsley","sour_cream"],
       amounts:{ potato:"600 גרם תפוחי אדמה קטנים", garlic:"כפית שום אבקה", parsley:"מעט פטרוזיליה", sour_cream:"3 כפות שמנת חמוצה" },
       surface:["ישר בסל","הקליפה מקבלת את הקימוט הפריך רק במגע ישיר עם המתכת החמה."],
@@ -2258,7 +2277,7 @@
       ],
       note:"אפס חיתוך אם קונים את הקטנים. הלחיצה הקלה בסוף פותחת אותם ומכפילה את השטח הפריך." },
 
-    { id:"ninja_mushrooms", name:"פטריות ובצל בגריל", min:15, when:["erev","tsohorayim"], ninja:true,
+    { id:"ninja_mushrooms", side:true, name:"פטריות ובצל בגריל", min:15, when:["erev","tsohorayim"], ninja:true,
       need:["mushrooms","onion"], nice:["garlic","parsley","bread","chicken"],
       amounts:{ mushrooms:"חבילת פטריות (250 גרם)", onion:"בצל אחד", garlic:"כפית שום אבקה", parsley:"מעט פטרוזיליה", bread:"2 פרוסות לחם מלא", chicken:"חזה עוף מבושל" },
       surface:["ישר בסל","הן משחררות המון מים. נייר עוצר אותם והפטריות מתבשלות במקום להשחים."],
@@ -2440,7 +2459,7 @@
       ],
       note:"ציפוי פריך עם סיבים ובלי טיגון עמוק. הילדים אוכלים את זה כמו שניצל עוף." },
 
-    { id:"ninja_cauliflower", name:"כרובית שלמה בסל", min:35, when:["erev"], ninja:true,
+    { id:"ninja_cauliflower", side:true, name:"כרובית שלמה בסל", min:35, when:["erev"], ninja:true,
       need:["cauliflower"], nice:["tahini","almonds","lemon","garlic","parsley"],
       amounts:{ cauliflower:"כרובית שלמה בינונית", tahini:"3 כפות טחינה", almonds:"חופן שקדים", lemon:"חצי לימון", garlic:"כפית שום אבקה", parsley:"מעט פטרוזיליה" },
       surface:["ישר בסל","היא כבדה וצריכה אוויר מכל הכיוונים כדי להתבשל אחיד עד המרכז."],
@@ -2579,7 +2598,7 @@
       ],
       note:"בלי שמרים, בלי המתנה של שעה. ארבע לאפות טריות בזמן שהתבשיל מתחמם." },
 
-    { id:"ninja_baked_apples", name:"תפוחים אפויים בקינמון", min:22, when:["nashnush","erev"], ninja:true, snack:true, kids:true,
+    { id:"ninja_baked_apples", dessert:true, name:"תפוחים אפויים בקינמון", min:22, when:["nashnush","erev"], ninja:true, snack:true, kids:true,
       need:["apple"], nice:["walnuts","honey","yogurt","oats"],
       amounts:{ apple:"2 תפוחים", walnuts:"חופן אגוזי מלך", honey:"כפית דבש", yogurt:"חצי גביע יוגורט", oats:"2 כפות שיבולת שועל" },
       surface:["תבנית אלומיניום קטנה","המיץ המתוק נוטף ונשרף בתחתית. התבנית אוספת אותו והוא חוזר לתפוח."],
@@ -2596,7 +2615,7 @@
       ],
       note:"קינוח בלי סוכר מוסף — כל המתיקות מהתפוח עצמו, שמתרכזת באפייה. 20 גרם סוכר טבעי." },
 
-    { id:"ninja_grilled_banana", name:"בננה קרמלית על הגריל", min:10, when:["nashnush"], ninja:true, snack:true, kids:true,
+    { id:"ninja_grilled_banana", dessert:true, name:"בננה קרמלית על הגריל", min:10, when:["nashnush"], ninja:true, snack:true, kids:true,
       need:["banana"], nice:["cocoa","peanut_butter","walnuts","yogurt"],
       amounts:{ banana:"2 בננות", cocoa:"כפית קקאו", peanut_butter:"כף חמאת בוטנים", walnuts:"חופן אגוזים", yogurt:"חצי גביע יוגורט" },
       surface:["משטח חשוף","הקליפה היא הכלי. רק הצד החתוך נוגע במתכת ומתקרמל."],
@@ -2612,7 +2631,7 @@
       ],
       note:"אפס תוספת סוכר: החום מרכז את הסוכר שכבר בבננה. הקינוח הכי מהיר כאן." },
 
-    { id:"ninja_grilled_peaches", name:"אפרסקים על הגריל עם יוגורט", min:12, when:["nashnush","erev"], ninja:true, snack:true,
+    { id:"ninja_grilled_peaches", dessert:true, name:"אפרסקים על הגריל עם יוגורט", min:12, when:["nashnush","erev"], ninja:true, snack:true,
       need:["peach","yogurt"], nice:["honey","walnuts","mint"],
       amounts:{ peach:"2 אפרסקים בשלים", yogurt:"גביע יוגורט", honey:"כפית דבש", walnuts:"חופן אגוזים", mint:"כמה עלי נענע" },
       surface:["משטח חשוף","החתך צריך מגע ישיר כדי להשחים לפני שהפרי נמס."],
@@ -3383,7 +3402,7 @@
   // בכל פתיחה מתחילים מאף אחד — בוחרים מי אוכל הפעם
   let cooking = new Set();
 
-  const filters = { fast: false, nocook: false, snack: false, ninja: false, sauce: false, meat: false, shake: false, kids: false, empty: false, fav: false };
+  const filters = { fast: false, nocook: false, snack: false, ninja: false, sauce: false, meat: false, dessert: false, side: false, shake: false, kids: false, empty: false, fav: false };
   let lastShown = null;
   let showHidden = false;
   let slotPick = null;          // מועד שנבחר ידנית, למשל לתכנן ערב כבר מהמשרד
@@ -3459,6 +3478,14 @@
   }
   const menu = () => R.filter(r => !whyOut(r));
 
+  // מנה שלמה: לא רוטב, לא תוספת, לא קינוח, לא הכנה מראש. שייק רק לבוקר ולנשנוש
+  const MEALS = ["tsohorayim", "erev"];
+  function isDish(r, slot) {
+    if (r.sauce || r.side || r.dessert || r.prep) return false;
+    if (r.shake && MEALS.indexOf(slot) !== -1) return false;
+    return true;
+  }
+
   const labelOf = alts => alts.map(nameOf).join(" או ");
 
   /* ---------------- כרטיס מנה ---------------- */
@@ -3485,6 +3512,8 @@
     if (r.shake) tags.push(["שייק", false]);
     if (r.ninja) tags.push(["נינג'ה גריל", true]);
     if (r.sauce) tags.push(["רוטב לפסטה", false]);
+    if (r.side) tags.push(["תוספת", false]);
+    if (r.dessert) tags.push(["קינוח", false]);
     if (r.meat) tags.push(["בשר בקר", false]);
     if (r.prep) tags.push(["הכנה מראש", false]);
     r.when.forEach(w => tags.push([SLOT_HE[w], false]));
@@ -3736,6 +3765,8 @@
     ["ninja", "נינג'ה גריל", r => r.ninja],
     ["sauce", "רטבים לפסטה", r => r.sauce],
     ["meat", "בשר בקר", r => r.meat],
+    ["dessert", "קינוחים", r => r.dessert],
+    ["side", "תוספות", r => r.side],
     ["shake", "שייקים", r => r.shake],
     ["snack", "במקום נשנוש", r => r.snack],
     ["fast", "עד 10 דקות", r => r.min <= 10],
@@ -3822,7 +3853,7 @@
 
   function renderHero() {
     const d = new Date(), slot = activeSlot();
-    const pool = menu().filter(r => r.when.indexOf(slot) !== -1);
+    const pool = menu().filter(r => r.when.indexOf(slot) !== -1 && isDish(r, slot));
     const ready = pool.filter(r => stateOf(r).missing.length === 0).length;
     $("#hero-moment").textContent = SLOT_HE[slot];
     renderSlots();
@@ -3838,7 +3869,8 @@
   function pickNow() {
     const slot = activeSlot();
     const all = menu();
-    let pool = all.filter(r => r.when.indexOf(slot) !== -1);
+    let pool = all.filter(r => r.when.indexOf(slot) !== -1 && isDish(r, slot));
+    if (!pool.length) pool = all.filter(r => r.when.indexOf(slot) !== -1);
     if (!pool.length) pool = all;
     if (!pool.length) {
       $("#now-slot").innerHTML = '<p class="empty">כל המנות סוננו החוצה. נסה לבחור פחות מגבלות בלשונית «הטעמים שלנו».</p>';
@@ -3856,9 +3888,21 @@
     }
     const pick = pool[Math.floor(Math.random() * pool.length)];
     lastShown = pick.id;
-    $("#now-slot").innerHTML = cardHTML(pick);
+    $("#now-slot").innerHTML = cardHTML(pick) + sideHint(pick, slot);
 
     renderHero();
+  }
+
+  // שתי תוספות מהירות שמשלימות את המנה
+  function sideHint(r, slot) {
+    if (MEALS.indexOf(slot) === -1) return "";
+    const sides = menu().filter(x => x.side && x.id !== r.id)
+      .sort((a, b) => stateOf(a).missing.length - stateOf(b).missing.length || a.min - b.min)
+      .slice(0, 2);
+    if (!sides.length) return "";
+    return '<div class="sidehint"><span class="lab">להשלמה</span>' +
+      sides.map(x => '<button data-open="' + x.id + '">' + esc(x.name) +
+        ' <b>' + x.min + '</b></button>').join("") + '</div>';
   }
 
   /* ---------------- מצב "מה יש לי" ---------------- */
@@ -3933,6 +3977,8 @@
     if (filters.ninja) list = list.filter(r => r.ninja);
     if (filters.sauce) list = list.filter(r => r.sauce);
     if (filters.meat) list = list.filter(r => r.meat);
+    if (filters.dessert) list = list.filter(r => r.dessert);
+    if (filters.side) list = list.filter(r => r.side);
     if (filters.shake) list = list.filter(r => r.shake);
     if (filters.kids) list = list.filter(r => r.kids);
     if (filters.empty) list = list.filter(r => r.empty);
@@ -4679,7 +4725,7 @@
   });
 
   [["#f-fast","fast"],["#f-nocook","nocook"],["#f-snack","snack"],
-   ["#f-ninja","ninja"],["#f-sauce","sauce"],["#f-meat","meat"],["#f-shake","shake"],["#f-kids","kids"],["#f-empty","empty"],["#f-fav","fav"]].forEach(pair => {
+   ["#f-ninja","ninja"],["#f-sauce","sauce"],["#f-meat","meat"],["#f-dessert","dessert"],["#f-side","side"],["#f-shake","shake"],["#f-kids","kids"],["#f-empty","empty"],["#f-fav","fav"]].forEach(pair => {
     $(pair[0]).addEventListener("click", () => {
       filters[pair[1]] = !filters[pair[1]];
       $(pair[0]).setAttribute("aria-pressed", String(filters[pair[1]]));
