@@ -4,7 +4,7 @@ Une petite app pour arrêter de grignoter faute d'idée : elle propose des repas
 **simples et à peu près équilibrés**, à partir de ce qu'on a déjà à la maison,
 avec des produits qu'on trouve dans n'importe quel supermarché en Israël.
 
-Interface **en hébreu** (RTL). 92 idées de repas, dont 20 au Ninja Foodi Grill et 13 smoothies.
+Interface **en hébreu** (RTL). 112 idées de repas, dont 35 au Ninja Foodi Grill, 13 smoothies et 5 sauces pour pâtes.
 
 ## Deux façons de s'en servir
 
@@ -35,7 +35,7 @@ peut les renommer, en ajouter, en supprimer.
 
 ## Ninja Foodi Grill
 
-Vingt recettes pour le gril d'intérieur, écrites sous une contrainte simple :
+Trente-cinq recettes pour le gril d'intérieur, écrites sous une contrainte simple :
 **le moins de découpe possible**. Légumes entiers ou fendus en deux, surgelés
 versés directement du sac, aubergine et pommes de terre grenaille telles quelles,
 viande hachée roulée à la main. Plusieurs recettes ne demandent aucun couteau.
@@ -50,15 +50,42 @@ Cinq recettes cuisent des œufs : durs dans le panier sans une goutte d'eau,
 shakshuka individuelle en ramequin, muffins aux œufs pour la semaine, œuf cuit
 dans un demi-avocat, et l'œuf au milieu du pain grillé.
 
-Chaque recette porte un encadré dépliable avec les sept règles de l'appareil :
+Elles couvrent le poisson (dorade entière, saumon glacé, croquettes de thon,
+schnitzel de poisson), le végétarien complet (chou-fleur entier, boulettes de
+pois chiches, poivrons farcis, tofu croustillant), les pains et sandwichs
+chauds (chips de pita, croque au fromage, bruschetta, pain plat à deux
+ingrédients) et les desserts aux fruits sans sucre ajouté.
+
+Chaque recette porte un encadré dépliable avec les huit règles de l'appareil :
 préchauffage systématique, plaque contre panier, à quoi servent LO / MED / HI /
 MAX, la couche unique, comment limiter la fumée avec les viandes grasses, et
-quand retourner, et **quels récipients peuvent entrer** — « oven safe »
+quand retourner, **comment utiliser le papier cuisson sans risque** — jamais
+pendant un préchauffage à vide, où rien ne le lest et où il s'envole vers la
+résistance — et **quels récipients peuvent entrer** — « oven safe »
 uniquement, jamais une assiette de table, et « va au micro-ondes » ne veut pas
 dire « va au four ». Les réglages sont donnés tels qu'on les compose sur
 l'appareil (GRILL HI, AIR CRISP 200°) et non en degrés génériques.
 
 Un filtre « נינג'ה גריל » les regroupe.
+
+## Sauces pour pâtes
+
+Cinq sauces qui se préparent **pendant que les pâtes cuisent** : la première
+étape est toujours de lancer les pâtes, et la sauce tient dans le temps indiqué
+sur le paquet. Aucune ne contient de crème.
+
+| Sauce | Protéines |
+|---|---|
+| Tomate, ail et basilic | 12 g |
+| Tomate, thon et olives | 34 g |
+| Yaourt-citron aux petits pois | 20 g |
+| Courgettes mixées, façon crème | 16 g |
+| Ail, huile d'olive et citron | 10 g |
+
+Deux points techniques reviennent partout : garder une demi-tasse d'eau de
+cuisson, qui transforme la sauce en quelque chose qui adhère aux pâtes, et pour
+la version au yaourt, le tempérer avec cette eau chaude **hors du feu** — sinon
+il tranche.
 
 ## Smoothies
 
