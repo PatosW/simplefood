@@ -4,7 +4,7 @@ Une petite app pour arrêter de grignoter faute d'idée : elle propose des repas
 **simples et à peu près équilibrés**, à partir de ce qu'on a déjà à la maison,
 avec des produits qu'on trouve dans n'importe quel supermarché en Israël.
 
-Interface **en hébreu** (RTL). 72 idées de repas dont 13 smoothies, aucune ne dépasse 25 minutes.
+Interface **en hébreu** (RTL). 87 idées de repas, dont 15 au Ninja Foodi Grill et 13 smoothies.
 
 ## Deux façons de s'en servir
 
@@ -32,6 +32,27 @@ Ce choix pilote tout le reste :
 
 Deux profils existent au départ — אני (piquant) et הילדים (pas piquant) — et on
 peut les renommer, en ajouter, en supprimer.
+
+## Ninja Foodi Grill
+
+Quinze recettes pour le gril d'intérieur, écrites sous une contrainte simple :
+**le moins de découpe possible**. Légumes entiers ou fendus en deux, surgelés
+versés directement du sac, aubergine et pommes de terre grenaille telles quelles,
+viande hachée roulée à la main. Plusieurs recettes ne demandent aucun couteau.
+
+Huit sont des repas complets sortis d'une seule fournée — pilons et patate douce
+dans le même panier, saumon et courgettes sur la plaque, poisson blanc et brocoli
+avec leurs deux temps de cuisson décalés. Sept sont des bases à préparer d'avance
+et à combiner ensuite : blancs de poulet pour la semaine, légumes surgelés à
+l'air fry, pois chiches croustillants, halloumi grillé.
+
+Chaque recette porte un encadré dépliable avec les six règles de l'appareil :
+préchauffage systématique, plaque contre panier, à quoi servent LO / MED / HI /
+MAX, la couche unique, comment limiter la fumée avec les viandes grasses, et
+quand retourner. Les réglages sont donnés tels qu'on les compose sur l'appareil
+(GRILL HI, AIR CRISP 200°) et non en degrés génériques.
+
+Un filtre « נינג'ה גריל » les regroupe.
 
 ## Smoothies
 
