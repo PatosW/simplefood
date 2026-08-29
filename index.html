@@ -293,6 +293,14 @@
     margin-inline-start: auto; font-family: "Heebo", sans-serif; font-size: var(--step--1);
     color: var(--olive); font-variant-numeric: tabular-nums; white-space: nowrap;
   }
+  .serves .how { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; width: 100%; margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--line-soft); }
+  .serves .how button {
+    border-radius: 999px; padding: 4px 12px; min-width: 0; font-weight: 400;
+  }
+  .serves .how button[aria-pressed="true"] { font-weight: 600; }
+  .serves .how .note {
+    margin-inline-start: auto; font-family: "Assistant", sans-serif; font-size: var(--step--1); color: var(--ink-3);
+  }
 
   .tools { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
   .tools li {
@@ -623,6 +631,7 @@
       <button class="chip" id="f-snack" aria-pressed="false">במקום נשנוש</button>
       <button class="chip" id="f-ninja" aria-pressed="false">נינג'ה גריל</button>
       <button class="chip" id="f-sauce" aria-pressed="false">רטבים לפסטה</button>
+      <button class="chip" id="f-meat" aria-pressed="false">בשר בקר</button>
       <button class="chip" id="f-shake" aria-pressed="false">שייקים</button>
       <button class="chip" id="f-kids" aria-pressed="false">מתאים לילדים</button>
       <button class="chip" id="f-empty" aria-pressed="false">לרוקן את המקרר</button>
@@ -768,6 +777,7 @@
       ["tofu","טופו"],["hummus_ready","חומוס מוכן"],["salmon","פילה סלמון"],["chicken","חזה עוף"],
       ["white_cheese","גבינה לבנה"],["sour_cream","שמנת חמוצה"],["ground_meat","עוף או בשר טחון"],
       ["protein_yogurt","יוגורט חלבון"],["chicken_legs","שוקי עוף"],["sausages","נקניקיות עוף"],
+      ["beef_steak","סטייק דק"],["beef_cubes","קוביות בקר"],
       ["white_fish","פילה דג לבן"],["halloumi","גבינת חלומי"],["fish_whole","דג שלם"]
     ]},
     { title: "ירקות ופירות", items: [
@@ -2821,6 +2831,188 @@
         { t:"המון פטרוזיליה, שרי חצויות ושקדים קצוצים." }
       ],
       note:"נשמע מוזר ועובד מצוין — הטחינה נותנת קרמיות ו-17 גרם חלבון בלי גבינה ובלי בישול." },
+
+    { id:"ninja_steak_thin", name:"סטייק דק על הגריל", min:14, when:["erev"], ninja:true, meat:true,
+      need:["beef_steak"], nice:["garlic","lemon","parsley","cherry"],
+      amounts:{ beef_steak:"2 סטייקים דקים (כ-200 גרם כל אחד, עובי 1.5 ס״מ)", garlic:"כפית שום אבקה", lemon:"חצי לימון", parsley:"מעט פטרוזיליה", cherry:"חופן עגבניות שרי" },
+      tools:["נינג'ה פודי גריל — משטח הגריל","מגבת נייר","צלחת למנוחה"],
+      surface:["משטח חשוף, בלי שום נייר","בשר על נייר לא נצרב. הפסים והקרום הם כל ההבדל בין סטייק לבשר מבושל."],
+      p:42, f:1, s:1,
+      steps:[
+        { t:"מוציאים את הסטייקים מהמקרר 20 דקות לפני, ומשאירים אותם על השיש מכוסים.",
+          tip:"בשר קר מהמקרר מתבשל לא אחיד: החוץ נשרף בזמן שהמרכז עוד קר. עשרים דקות מספיקות.", sec:1200 },
+        { t:"מחממים מראש: GRILL על MAX. מחכים לצפצוף עד הסוף.",
+          tip:"MAX ולא HI. סטייק דק צריך חום קיצוני לזמן קצר — כל דקה נוספת על אש בינונית מייבשת אותו.", sec:480 },
+        { t:"מייבשים את הסטייקים במגבת נייר משני הצדדים, חזק.",
+          tip:"לחות על פני הבשר מתאדה ומקררת את המשטח. בשר יבש = קרום חום; בשר לח = אפור." },
+        { t:"מולחים בנדיבות משני הצדדים רק עכשיו, שנייה לפני שהם נכנסים.",
+          tip:"מלח מוקדם מושך נוזלים החוצה. מולחים ממש בסוף, או שעה לפני — לא באמצע." },
+        { t:"מניחים על המשטח ולא נוגעים 2 דקות.", sec:120 },
+        { t:"הופכים פעם אחת בלבד ועוד דקה וחצי לצד השני. זה הזמן לנא-ורדרד.",
+          tip:"למדיום מוסיפים 45 שניות לכל צד. לעשוי היטב — עוד דקה וחצי, אבל אז זה כבר לא סטייק דק.", sec:90 },
+        { t:"מעבירים לצלחת ומחכים 5 דקות בלי לגעת.",
+          tip:"זה לא אופציונלי. חיתוך מיידי מרוקן את כל הנוזלים לצלחת, והסטייק יוצא יבש למרות שבישלת אותו נכון.", sec:300 },
+        { t:"פורסים בניצב לסיבים — מחפשים את כיוון הקווים בבשר וחותכים לרוחבם.",
+          tip:"פריסה לרוחב הסיבים מקצרת אותם והבשר יוצא רך. פריסה לאורכם משאירה אותו קשיח." }
+      ],
+      note:"שלושה דברים קובעים: בשר בטמפרטורת החדר, משטח בחום מקסימלי, ומנוחה של חמש דקות. הזמנים כאן לעובי סנטימטר וחצי — לסטייק דק יותר מורידים חצי דקה מכל צד." },
+
+    { id:"ninja_steak_onion", name:"סטייק עם בצל מקורמל", min:22, when:["erev"], ninja:true, meat:true,
+      need:["beef_steak","onion"], nice:["garlic","parsley","bread","mushrooms"],
+      amounts:{ beef_steak:"2 סטייקים דקים", onion:"2 בצלים", garlic:"2 שיני שום", parsley:"מעט פטרוזיליה", bread:"2 פרוסות לחם מלא", mushrooms:"6 פטריות" },
+      tools:["נינג'ה פודי גריל — משטח הגריל","סכין","צלחת למנוחה"],
+      surface:["משטח חשוף","הבצל מקבל את המתיקות שלו מהמגע הישיר עם המתכת החמה."],
+      p:44, f:3, s:6,
+      steps:[
+        { t:"מוציאים את הבשר מהמקרר ופורסים 2 בצלים לטבעות דקות.", sec:1200 },
+        { t:"מחממים מראש: GRILL על HI.", sec:480 },
+        { t:"מפזרים את טבעות הבצל על המשטח עם כף שמן זית וקורט מלח. 8 דקות, מהפכים פעמיים.",
+          tip:"הבצל מוכן כשהוא רך וחום־זהוב בקצוות. אם הוא עוד לבן — הוא רק התחמם, הוא לא התקרמל.", sec:480 },
+        { t:"אוספים את הבצל לצד אחד של המשטח ומעלים ל-MAX. מחכים דקה.", sec:60 },
+        { t:"מייבשים את הסטייקים, מולחים, ומניחים בצד הפנוי. 2 דקות.", sec:120 },
+        { t:"הופכים, עוד דקה וחצי, ומכבים.", sec:90 },
+        { t:"מנוחה של 5 דקות לפני הפריסה, עם הבצל מעל.", sec:300 }
+      ],
+      note:"הבצל נכנס ראשון כי הוא צריך פי ארבעה זמן מהבשר. כלי אחד, שתי טמפרטורות." },
+
+    { id:"ninja_beef_skewers", name:"שיפודי בקר", min:20, when:["erev"], ninja:true, meat:true,
+      need:["beef_cubes"], nice:["pepper","onion","garlic","lemon","parsley"],
+      amounts:{ beef_cubes:"500 גרם קוביות בקר", pepper:"פלפל אחד", onion:"בצל אחד", garlic:"כפית שום אבקה", lemon:"חצי לימון", parsley:"מעט פטרוזיליה" },
+      tools:["נינג'ה פודי גריל — משטח הגריל","שיפודי מתכת או עץ","קערה"],
+      surface:["משטח חשוף","השיפודים מונחים ישירות; הפסים נוצרים בכל סיבוב."],
+      p:40, f:2, s:4,
+      steps:[
+        { t:"אם השיפודים מעץ — משרים אותם במים 10 דקות כדי שלא יישרפו.",
+          tip:"שיפודי מתכת עדיפים כאן: הם מוליכים חום ומבשלים את הקוביות גם מבפנים.", sec:600 },
+        { t:"מערבבים את הקוביות בקערה עם 2 כפות שמן זית, מלח, פפריקה ושום אבקה. 10 דקות מנוחה.", sec:600 },
+        { t:"מחממים מראש: GRILL על MAX.", sec:480 },
+        { t:"משחילים את הקוביות עם רווח קטן ביניהן.",
+          tip:"קוביות דחוקות זו לזו לא נצרבות בין לבין ומתבשלות באדים." },
+        { t:"3 דקות, מסובבים רבע סיבוב, ועוד 3 דקות — סך הכול שני סיבובים.", sec:360 },
+        { t:"בודקים קובייה אחת: לנא-ורדרד היא אדומה במרכז וחמה. אם רוצים יותר — עוד דקה בלבד." },
+        { t:"מנוחה של 4 דקות, לימון ופטרוזיליה מעל.", sec:240 }
+      ],
+      note:"קוביות בקר שלמות אפשר להשאיר ורדרדות בפנים — הן חתיכה אחת, לא טחון." },
+
+    { id:"ninja_beef_strips_pita", name:"רצועות בקר לפיתה", min:16, when:["erev","tsohorayim"], ninja:true, meat:true,
+      need:["beef_steak","pita"], nice:["onion","tahini","lettuce","tomato","chili"],
+      amounts:{ beef_steak:"300 גרם סטייק דק", pita:"2 פיתות", onion:"בצל אחד", tahini:"3 כפות טחינה", lettuce:"כמה עלים", tomato:"עגבנייה אחת", chili:"קורט פלפל חריף" },
+      tools:["נינג'ה פודי גריל — משטח הגריל","סכין חדה"],
+      surface:["משטח חשוף","הרצועות דקות ומתבשלות בשניות; נייר היה מונע את הצריבה."],
+      p:38, f:6, s:5,
+      steps:[
+        { t:"מכניסים את הבשר ל-15 דקות במקפיא לפני הפריסה.",
+          tip:"בשר קפוא קלות נפרס דק בהרבה. זה הטריק היחיד שצריך כאן.", sec:900 },
+        { t:"מחממים מראש: GRILL על MAX.", sec:480 },
+        { t:"פורסים רצועות דקות בניצב לסיבים ומערבבים עם שמן, מלח, כמון ופפריקה." },
+        { t:"מפזרים על המשטח בשכבה אחת. 2 דקות.", sec:120 },
+        { t:"מהפכים הכול פעם אחת ועוד דקה. לא יותר — רצועות דקות מתייבשות מיד.", sec:60 },
+        { t:"ממלאים פיתה עם טחינה, ירקות ורצועות חמות." }
+      ],
+      note:"הקירור הקצר במקפיא הוא מה שמאפשר לפרוס דק בלי סכין מקצועית." },
+
+    { id:"ninja_beef_rice_bowl", name:"קערת בקר ואורז", min:18, when:["erev"], ninja:true, meat:true,
+      need:["beef_steak","rice"], nice:["frozen_veg","soy_sauce","garlic","green_onion","cucumber"],
+      amounts:{ beef_steak:"300 גרם סטייק דק", rice:"2 כוסות אורז מבושל", frozen_veg:"2 חופנים ירקות קפואים", soy_sauce:"2 כפות סויה", garlic:"2 שיני שום", green_onion:"2 גבעולים", cucumber:"מלפפון אחד" },
+      tools:["נינג'ה פודי גריל — משטח הגריל","קערה"],
+      surface:["משטח חשוף","רוצים צריבה חזקה על הרצועות לפני שהסויה נכנסת."],
+      p:40, f:5, s:5,
+      steps:[
+        { t:"פורסים את הבשר לרצועות ומערבבים עם כף סויה ושום כתוש. 10 דקות מנוחה.", sec:600 },
+        { t:"מחממים מראש: GRILL על MAX.", sec:480 },
+        { t:"צולים את הירקות הקפואים על המשטח 4 דקות, ומזיזים לצד.", sec:240 },
+        { t:"מפזרים את הרצועות בצד הפנוי. 2 דקות, הופכים, עוד דקה.", sec:180 },
+        { t:"מוסיפים כף סויה על הבשר בשנייה האחרונה בלבד ומכבים.",
+          tip:"סויה על משטח לוהט נשרפת תוך שניות ומשאירה מרירות." },
+        { t:"מרכיבים בקערה: אורז חם למטה, ירקות ובשר מעל, בצל ירוק ומלפפון." }
+      ],
+      note:"הדרך הכי טובה לנצל אורז מאתמול. הכול על משטח אחד, בשני זמנים." },
+    { id:"ninja_beef_meatballs", name:"קציצות בקר ברוטב עגבניות", min:28, when:["erev"], ninja:true, meat:true, kids:true,
+      need:["ground_meat","onion",["passata","tomato"]], nice:["eggs","garlic","parsley","rice","oats"],
+      amounts:{ ground_meat:"500 גרם בשר בקר טחון", onion:"בצל אחד", passata:"קופסת רסק עגבניות", tomato:"5 עגבניות", eggs:"ביצה אחת", garlic:"2 שיני שום", parsley:"חופן פטרוזיליה", rice:"כוס אורז", oats:"3 כפות שיבולת שועל" },
+      tools:["נינג'ה פודי גריל — משטח הגריל","קערה","מגררת","תבנית אלומיניום"],
+      surface:["משטח חשוף להשחמה, ואז תבנית אלומיניום לשלב הרוטב","קודם צריבה ישירה לטעם, אחר כך כלי שמחזיק את הרוטב."],
+      p:36, f:4, s:7,
+      steps:[
+        { t:"מגררים בצל ישר לתוך הבשר, מוסיפים ביצה, 3 כפות שיבולת שועל, מלח, פלפל ופטרוזיליה." },
+        { t:"מרטיבים ידיים ומגלגלים 16 כדורים בגודל אגוז." },
+        { t:"מחממים מראש: GRILL על HI.", sec:480 },
+        { t:"משחימים את הכדורים על המשטח 4 דקות, מגלגלים אותם פעם או פעמיים.", sec:240 },
+        { t:"מעבירים לתבנית אלומיניום, יוצקים רסק עגבניות וחצי כוס מים, ומחזירים לנינג'ה." },
+        { t:"מבשלים 15 דקות על AIR CRISP 170 מעלות.", sec:900 },
+        { t:"חוצים קציצה אחת ובודקים שאין ורוד בכלל במרכז.",
+          tip:"בשר טחון חייב להיות עשוי לגמרי — לא כמו סטייק. בטחינה, החיידקים מפני השטח מתערבבים לתוך כל הכדור, ורק חום מלא הורג אותם." }
+      ],
+      note:"הכלל היחיד שלא מתגמשים בו: סטייק שלם אפשר ורדרד, בשר טחון אף פעם. 36 גרם חלבון למנה." },
+
+    { id:"ninja_kebab", name:"קבב על הגריל", min:20, when:["erev"], ninja:true, meat:true,
+      need:["ground_meat","onion","parsley"], nice:["garlic","tahini","pita","chili"],
+      amounts:{ ground_meat:"500 גרם בשר בקר טחון", onion:"בצל אחד", parsley:"צרור פטרוזיליה", garlic:"2 שיני שום", tahini:"3 כפות טחינה", pita:"2 פיתות", chili:"קורט פלפל חריף" },
+      tools:["נינג'ה פודי גריל — משטח הגריל","קערה","מגררת"],
+      surface:["משטח חשוף, וכוס מים בתחתית הכלי","הקבב שמן; המים בתחתית סופגים את הטפטוף ומורידים את העשן."],
+      p:34, f:3, s:4,
+      steps:[
+        { t:"מגררים בצל וסוחטים ממנו את המים בכף היד מעל הכיור.",
+          tip:"בצל מגורר בלי סחיטה הופך את הקבב לרך מדי והוא מתפרק על המשטח." },
+        { t:"מערבבים עם הבשר, המון פטרוזיליה קצוצה, כפית כמון, כפית פפריקה ומלח. לשים ביד דקה שלמה.",
+          tip:"הלישה היא מה שמלכד קבב בלי ביצה. תערובת שנלושה מספיק נדבקת לכף היד.", sec:60 },
+        { t:"מקררים את התערובת 15 דקות במקרר.", sec:900 },
+        { t:"מחממים מראש: GRILL על HI.", sec:480 },
+        { t:"מגלגלים 8 אצבעות שטוחות ומניחים על המשטח. 5 דקות בלי לגעת.", sec:300 },
+        { t:"הופכים פעם אחת, עוד 4 דקות.", sec:240 },
+        { t:"חוצים אחד: אין ורוד ואין נוזל אדום. בשר טחון תמיד עשוי לגמרי." }
+      ],
+      note:"הקירור לפני הגלגול מונע מהקבב להתפרק. עם טחינה ופיתה זו ארוחה שלמה." },
+
+    { id:"ninja_beef_veg_tray", name:"בשר טחון וירקות בסל אחד", min:25, when:["erev"], ninja:true, meat:true, empty:true,
+      need:["ground_meat",["zucchini","pepper","potato","broccoli"]], nice:["onion","garlic","passata","parsley"],
+      amounts:{ ground_meat:"400 גרם בשר בקר טחון", zucchini:"2 קישואים", pepper:"פלפל אחד", potato:"2 תפוחי אדמה", broccoli:"חצי ראש", onion:"בצל אחד", garlic:"כפית שום אבקה", passata:"חצי קופסת רסק עגבניות", parsley:"מעט פטרוזיליה" },
+      tools:["נינג'ה פודי גריל — סל האייר קריספ","תבנית אלומיניום"],
+      surface:["תבנית אלומיניום בתוך הסל","הבשר הטחון משחרר נוזלים ושומן שאסור שיטפטפו לתחתית; התבנית אוספת אותם והם הופכים לרוטב."],
+      p:32, f:7, s:6,
+      steps:[
+        { t:"מחממים מראש: AIR CRISP על 190 מעלות.", sec:180 },
+        { t:"חותכים כל ירק לקוביות של 2 סנטימטר ומערבבים בתבנית עם שמן, מלח ופפריקה." },
+        { t:"מפוררים את הבשר הטחון מעל הירקות בחתיכות קטנות, לא בגוש אחד.",
+          tip:"גוש אחד מתבשל מבחוץ ונשאר נא בפנים. חתיכות קטנות מתבשלות אחיד." },
+        { t:"12 דקות, ואז מערבבים הכול עם מרית ומפוררים את הבשר שוב.", sec:720 },
+        { t:"מוסיפים חצי קופסת רסק עגבניות ומחזירים ל-8 דקות.", sec:480 },
+        { t:"בודקים שכל הבשר חום לגמרי, בלי חתיכות ורודות." }
+      ],
+      note:"תבנית אחת, ארוחה שלמה, ואפשר להחליף את הירקות בכל מה שנשאר במקרר." },
+
+    { id:"ninja_steak_salad", name:"סלט סטייק", min:18, when:["erev","tsohorayim"], ninja:true, meat:true,
+      need:["beef_steak","lettuce"], nice:["cherry","cucumber","onion","lemon","bulgarit","almonds"],
+      amounts:{ beef_steak:"300 גרם סטייק דק", lettuce:"שקית עלים ירוקים", cherry:"חופן עגבניות שרי", cucumber:"מלפפון אחד", onion:"רבע בצל", lemon:"חצי לימון", bulgarit:"50 גרם בולגרית", almonds:"חופן שקדים" },
+      tools:["נינג'ה פודי גריל — משטח הגריל","קערה גדולה","צלחת למנוחה"],
+      surface:["משטח חשוף","סלט עם בשר צלוי נשען כולו על הצריבה — בלעדיה זה בשר מבושל בסלט."],
+      p:40, f:6, s:5,
+      steps:[
+        { t:"מוציאים את הבשר מהמקרר ל-20 דקות ומכינים בינתיים את הסלט.", sec:1200 },
+        { t:"מחממים מראש: GRILL על MAX.", sec:480 },
+        { t:"מייבשים ומולחים את הסטייק, 2 דקות על צד אחד.", sec:120 },
+        { t:"הופכים, דקה וחצי, ומורידים. ורדרד בפנים זה בדיוק מה שרוצים בסלט.", sec:90 },
+        { t:"מנוחה של 5 דקות בזמן שמערבבים את הסלט עם לימון, שמן זית ומלח.", sec:300 },
+        { t:"פורסים דק בניצב לסיבים ומסדרים את הפרוסות מעל הסלט, לא מעורבבות." }
+      ],
+      note:"הבשר מעל ולא מעורבב: כך הוא נשאר חם והעלים לא נובלים. 40 גרם חלבון וסלט שלם." },
+
+    { id:"ninja_beef_tacos", name:"טאקו בקר בטורטייה", min:22, when:["erev"], ninja:true, meat:true, kids:true,
+      need:["ground_meat","tortilla"], nice:["onion","yellow_cheese","lettuce","tomato","sour_cream","corn"],
+      amounts:{ ground_meat:"400 גרם בשר בקר טחון", tortilla:"6 טורטיות", onion:"בצל אחד", yellow_cheese:"כוס גבינה מגוררת", lettuce:"כמה עלים", tomato:"2 עגבניות", sour_cream:"3 כפות שמנת חמוצה", corn:"חצי קופסת תירס" },
+      tools:["נינג'ה פודי גריל — משטח הגריל ואז הסל","תבנית אלומיניום"],
+      surface:["תבנית אלומיניום לבשר, משטח חשוף לטורטיות","הבשר משחרר שומן שצריך כלי; הטורטיות רוצות מגע ישיר כדי להתפצח."],
+      p:34, f:6, s:6,
+      steps:[
+        { t:"מחממים מראש: GRILL על HI.", sec:480 },
+        { t:"מפוררים את הבשר בתבנית אלומיניום עם בצל קצוץ, כמון, פפריקה, אורגנו ומלח." },
+        { t:"מניחים את התבנית על המשטח, 10 דקות, מפוררים ומערבבים כל 3 דקות.", sec:600 },
+        { t:"בודקים שאין ורוד בכלל. בשר טחון תמיד עשוי לגמרי.",
+          tip:"אם יצאו נוזלים רבים — מטים את התבנית ומסלקים אותם, אחרת הטאקו נרטב." },
+        { t:"מוציאים את התבנית ומחממים כל טורטייה ישירות על המשטח, 30 שניות לכל צד.", sec:60 },
+        { t:"מרכיבים: בשר, גבינה, ירקות קצוצים וכף שמנת חמוצה." }
+      ],
+      note:"הילדים מרכיבים בעצמם, וזה חצי מהעניין. תבנית לבשר, משטח לטורטיות — כלי אחד, שני שימושים." },
   ];
   /* ---------------- תחליפים ----------------
      מה להשתמש כשמרכיב חובה הוא משהו שמישהו בבית לא אוהב.  */
@@ -2918,7 +3110,17 @@
     sauce_tuna_white:   { tuna:"קופסת סרדינים" },
     sauce_spinach_cheese:{ spinach_frozen:"ברוקולי קפוא", white_cheese:"יוגורט סמיך" },
     sauce_grilled_chicken:{ chicken:"קופסת שעועית לבנה" },
-    sauce_tahini_lemon: { tahini:"יוגורט עם לימון ושום" }
+    sauce_tahini_lemon: { tahini:"יוגורט עם לימון ושום" },
+    ninja_steak_thin:   { beef_steak:"חזה עוף פרוס דק" },
+    ninja_steak_onion:  { beef_steak:"פרגיות", onion:"בצל ירוק" },
+    ninja_beef_skewers: { beef_cubes:"קוביות עוף או טופו" },
+    ninja_beef_strips_pita:{ beef_steak:"רצועות חזה עוף", pita:"טורטייה" },
+    ninja_beef_rice_bowl:{ beef_steak:"קוביות טופו", rice:"קוסקוס מלא" },
+    ninja_beef_meatballs:{ ground_meat:"עוף טחון" },
+    ninja_kebab:        { ground_meat:"עוף טחון", parsley:"כוסברה" },
+    ninja_beef_veg_tray:{ ground_meat:"עוף טחון או עדשים מבושלות" },
+    ninja_steak_salad:  { beef_steak:"חזה עוף צלוי", lettuce:"מלפפון ועגבנייה קצוצים" },
+    ninja_beef_tacos:   { ground_meat:"עוף טחון", tortilla:"פיתות" }
   };
 
   /* ---------------- כמויות לקנייה ----------------
@@ -2949,7 +3151,8 @@
     frozen_berries:"שקית פירות יער קפואים", frozen_mango:"שקית מנגו קפוא", frozen_strawberry:"שקית תות קפוא",
     protein_yogurt:[2,"גביעי יוגורט חלבון"], orange:[3,"תפוזים"], mint:"צרור נענע",
     mango_fresh:[1,"מנגו"], peach:[3,"אפרסקים"], plum:[3,"שזיפים"],
-    chicken_legs:[4,"שוקי עוף"], sausages:"חבילת נקניקיות עוף", white_fish:[2,"פילה דג לבן"],
+    chicken_legs:[4,"שוקי עוף"], sausages:"חבילת נקניקיות עוף",
+    beef_steak:[2,"סטייקים דקים"], beef_cubes:[500,"גרם קוביות בקר"], white_fish:[2,"פילה דג לבן"],
     halloumi:"חבילת חלומי", cherry:"קופסת עגבניות שרי", fish_whole:[1,"דג שלם מנוקה"],
     cauliflower:[1,"כרובית"], basil:"עציץ בזיליקום", peas:"שקית אפונה קפואה"
   };
@@ -3000,7 +3203,7 @@
   ]);
   let cooking = new Set(store.get(KEY.cooking, people.map(p => p.id)));
 
-  const filters = { fast: false, nocook: false, snack: false, ninja: false, sauce: false, shake: false, kids: false, empty: false, fav: false };
+  const filters = { fast: false, nocook: false, snack: false, ninja: false, sauce: false, meat: false, shake: false, kids: false, empty: false, fav: false };
   let lastShown = null;
   let showHidden = false;
   let slotPick = null;          // מועד שנבחר ידנית, למשל לתכנן ערב כבר מהמשרד
@@ -3092,6 +3295,7 @@
     if (r.shake) tags.push(["שייק", false]);
     if (r.ninja) tags.push(["נינג'ה גריל", true]);
     if (r.sauce) tags.push(["רוטב לפסטה", false]);
+    if (r.meat) tags.push(["בשר בקר", false]);
     if (r.prep) tags.push(["הכנה מראש", false]);
     r.when.forEach(w => tags.push([SLOT_HE[w], false]));
 
@@ -3238,11 +3442,16 @@
   const SERVE = [1, 2, 4, 6];                 // 100 / 200 / 400 / 600 גרם פסטה
   let serves = store.get("mlo.serves.v1", 2);
   if (SERVE.indexOf(serves) === -1) serves = 2;
+  // רוטב שמוגש בצד נגמר מהר יותר מרוטב שמעורבב בפסטה
+  let sauceAside = store.get("mlo.sauceaside.v1", false);
+  const ASIDE = 1.45;
 
-  function scaleOne(item, people) {
+  function scaleOne(item, people, ing) {
     const n = item[0], sing = item[1], plur = item[2] || item[1], mode = item[3];
     if (!n) return sing;                       // טקסט חופשי בלי מספר
-    const f = people / 2;
+    // הפסטה לא משתנה כשמגישים בצד — רק הרוטב
+    let f = people / 2;
+    if (sauceAside && ing !== "pasta") f *= ASIDE;
     // שום, חריף, לימון ושמן עולים לאט יותר — אחרת רוטב לשישה יוצא חד מדי
     const k = mode === "soft" ? 1 + (f - 1) * 0.6 : f;
     let v = n * k;
@@ -3260,7 +3469,7 @@
   // הכמות של מרכיב במתכון, לפי מספר הסועדים שנבחר
   function amountOf(r, ing) {
     const t = SAUCE_QTY[r.id];
-    if (t && t[ing]) return scaleOne(t[ing], serves);
+    if (t && t[ing]) return scaleOne(t[ing], serves, ing);
     return (r.amounts && r.amounts[ing]) ? r.amounts[ing] : nameOf(ing);
   }
 
@@ -3270,8 +3479,12 @@
     if (!SAUCE_QTY[r.id]) return "";
     return '<div class="serves"><span class="lab">לכמה</span>' +
       SERVE.map(n => '<button data-serves="' + n + '" aria-pressed="' + (n === serves) + '">' + n + '</button>').join("") +
-      '<span class="state">' + (serves * 100) + ' גרם פסטה · ' +
-      (serves === 1 ? "סועד אחד" : serves + " סועדים") + '</span></div>';
+      '<span class="state">' + (serves === 1 ? "סועד אחד" : serves + " סועדים") + '</span>' +
+      '<div class="how"><button data-aside="0" aria-pressed="' + (!sauceAside) + '">מעורבב בפסטה</button>' +
+      '<button data-aside="1" aria-pressed="' + sauceAside + '">מוגש בצד</button>' +
+      '<span class="note">' + (sauceAside
+        ? "בצד נגמר מהר יותר — הרוטב גדל בכחצי, הפסטה לא"
+        : (serves * 100) + " גרם פסטה") + '</span></div></div>';
   }
 
   const mmss = sec => Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0");
@@ -3306,6 +3519,7 @@
   const CATS = [
     ["ninja", "נינג'ה גריל", r => r.ninja],
     ["sauce", "רטבים לפסטה", r => r.sauce],
+    ["meat", "בשר בקר", r => r.meat],
     ["shake", "שייקים", r => r.shake],
     ["snack", "במקום נשנוש", r => r.snack],
     ["fast", "עד 10 דקות", r => r.min <= 10],
@@ -3459,6 +3673,7 @@
     if (filters.snack) list = list.filter(r => r.snack);
     if (filters.ninja) list = list.filter(r => r.ninja);
     if (filters.sauce) list = list.filter(r => r.sauce);
+    if (filters.meat) list = list.filter(r => r.meat);
     if (filters.shake) list = list.filter(r => r.shake);
     if (filters.kids) list = list.filter(r => r.kids);
     if (filters.empty) list = list.filter(r => r.empty);
@@ -3583,7 +3798,7 @@
 
     if (big.sec === "ings") {
       $("#big-sub").textContent = SAUCE_QTY[r.id]
-        ? "מה להוציא לשיש · " + (serves * 100) + " גרם פסטה ל-" + serves
+        ? "מה להוציא לשיש · ל-" + serves + (sauceAside ? " · הרוטב מוגש בצד" : " · מעורבב בפסטה")
         : "מה להוציא לשיש לפני שמתחילים";
       const av = avoidSet(), sw = SWAPS[r.id] || {};
       let html = '<div class="big-sec">מרכיבים</div>';
@@ -3675,7 +3890,7 @@
 
   /* ---------------- רשימת קניות למנה אחת ---------------- */
   function qtyText(ing, servings, r) {
-    if (r && SAUCE_QTY[r.id] && SAUCE_QTY[r.id][ing]) return scaleOne(SAUCE_QTY[r.id][ing], servings);
+    if (r && SAUCE_QTY[r.id] && SAUCE_QTY[r.id][ing]) return scaleOne(SAUCE_QTY[r.id][ing], servings, ing);
     const q = QTY[ing];
     if (!q) return nameOf(ing);
     if (typeof q === "string") return q;
@@ -3875,6 +4090,15 @@
 
   document.addEventListener("click", e => {
     const t = e.target;
+
+    const asd = t.closest("[data-aside]");
+    if (asd) {
+      sauceAside = asd.dataset.aside === "1";
+      store.set("mlo.sauceaside.v1", sauceAside);
+      const c = document.querySelector(".card [data-cook]");
+      if (c) $("#now-slot").innerHTML = cardHTML(R.find(x => x.id === c.dataset.cook));
+      return;
+    }
 
     const sv = t.closest("[data-serves]");
     if (sv) {
@@ -4115,7 +4339,7 @@
   });
 
   [["#f-fast","fast"],["#f-nocook","nocook"],["#f-snack","snack"],
-   ["#f-ninja","ninja"],["#f-sauce","sauce"],["#f-shake","shake"],["#f-kids","kids"],["#f-empty","empty"],["#f-fav","fav"]].forEach(pair => {
+   ["#f-ninja","ninja"],["#f-sauce","sauce"],["#f-meat","meat"],["#f-shake","shake"],["#f-kids","kids"],["#f-empty","empty"],["#f-fav","fav"]].forEach(pair => {
     $(pair[0]).addEventListener("click", () => {
       filters[pair[1]] = !filters[pair[1]];
       $(pair[0]).setAttribute("aria-pressed", String(filters[pair[1]]));

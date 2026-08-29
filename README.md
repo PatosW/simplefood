@@ -4,7 +4,7 @@ Une petite app pour arrêter de grignoter faute d'idée : elle propose des repas
 **simples et à peu près équilibrés**, à partir de ce qu'on a déjà à la maison,
 avec des produits qu'on trouve dans n'importe quel supermarché en Israël.
 
-Interface **en hébreu** (RTL). 122 idées de repas, dont 35 au Ninja Foodi Grill, 15 sauces pour pâtes et 13 smoothies.
+Interface **en hébreu** (RTL). 132 idées de repas, dont 45 au Ninja Foodi Grill, 15 sauces pour pâtes et 13 smoothies.
 
 ## Deux façons de s'en servir
 
@@ -35,7 +35,7 @@ peut les renommer, en ajouter, en supprimer.
 
 ## Ninja Foodi Grill
 
-Trente-cinq recettes pour le gril d'intérieur, écrites sous une contrainte simple :
+Quarante-cinq recettes pour le gril d'intérieur, écrites sous une contrainte simple :
 **le moins de découpe possible**. Légumes entiers ou fendus en deux, surgelés
 versés directement du sac, aubergine et pommes de terre grenaille telles quelles,
 viande hachée roulée à la main. Plusieurs recettes ne demandent aucun couteau.
@@ -55,6 +55,16 @@ schnitzel de poisson), le végétarien complet (chou-fleur entier, boulettes de
 pois chiches, poivrons farcis, tofu croustillant), les pains et sandwichs
 chauds (chips de pita, croque au fromage, bruschetta, pain plat à deux
 ingrédients) et les desserts aux fruits sans sucre ajouté.
+
+Dix recettes sont à base de **viande rouge** : le steak fin traité comme une
+technique à part entière — viande sortie du froid vingt minutes avant, plaque à
+MAX, séchage, salage à la dernière seconde, un seul retournement, repos de cinq
+minutes, découpe perpendiculaire aux fibres — puis brochettes, lanières pour
+pita, bol de riz, salade au steak, boulettes, kebab, plat de haché aux légumes
+et tacos. Les temps visent une cuisson saignante à rosée pour les pièces
+entières. **Le haché fait exception et est cuit à cœur** : le hachage mélange la
+surface de la viande dans toute la masse, et seule une cuisson complète la rend
+sûre — c'est écrit dans chaque recette concernée.
 
 Chaque recette indique **sur quoi poser l'aliment** — panier nu, plaque nue,
 papier cuisson, barquette aluminium, moule en silicone, ramequin — et pourquoi
@@ -84,9 +94,12 @@ Quinze sauces qui se préparent **pendant que les pâtes cuisent** : la premièr
 sur le paquet. Aucune ne contient de crème ; sept sont prêtes en douze minutes
 ou moins, deux ne demandent aucune cuisson.
 
-Chaque sauce porte un sélecteur **1 / 2 / 4 / 6 convives**, affiché en même temps
-en grammes — « 400 גרם פסטה · 4 סועדים ». Les quantités, le texte des étapes et
-la liste de courses suivent ce choix, qui est mémorisé d'une fois sur l'autre.
+Chaque sauce porte un sélecteur **1 / 2 / 4 / 6 convives**, et un second choix
+qui compte autant : **מעורבב בפסטה** ou **מוגש בצד**. Une sauce mélangée enrobe
+et il en faut peu ; une sauce servie à part, que chacun se sert à la louche, part
+bien plus vite — en mode « à part », la sauce augmente de moitié tandis que les
+pâtes ne bougent pas. Les quantités, le texte des étapes et la liste de courses
+suivent ces deux choix, mémorisés d'une fois sur l'autre.
 
 Les ingrédients ne sont pas tous multipliés par le même facteur : les pâtes, les
 tomates, le thon ou le yaourt suivent le poids, tandis que l'ail, le piment, le
