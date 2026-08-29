@@ -4,7 +4,7 @@ Une petite app pour arrêter de grignoter faute d'idée : elle propose des repas
 **simples et à peu près équilibrés**, à partir de ce qu'on a déjà à la maison,
 avec des produits qu'on trouve dans n'importe quel supermarché en Israël.
 
-Interface **en hébreu** (RTL). 87 idées de repas, dont 15 au Ninja Foodi Grill et 13 smoothies.
+Interface **en hébreu** (RTL). 92 idées de repas, dont 20 au Ninja Foodi Grill et 13 smoothies.
 
 ## Deux façons de s'en servir
 
@@ -35,7 +35,7 @@ peut les renommer, en ajouter, en supprimer.
 
 ## Ninja Foodi Grill
 
-Quinze recettes pour le gril d'intérieur, écrites sous une contrainte simple :
+Vingt recettes pour le gril d'intérieur, écrites sous une contrainte simple :
 **le moins de découpe possible**. Légumes entiers ou fendus en deux, surgelés
 versés directement du sac, aubergine et pommes de terre grenaille telles quelles,
 viande hachée roulée à la main. Plusieurs recettes ne demandent aucun couteau.
@@ -46,11 +46,17 @@ avec leurs deux temps de cuisson décalés. Sept sont des bases à préparer d'a
 et à combiner ensuite : blancs de poulet pour la semaine, légumes surgelés à
 l'air fry, pois chiches croustillants, halloumi grillé.
 
-Chaque recette porte un encadré dépliable avec les six règles de l'appareil :
+Cinq recettes cuisent des œufs : durs dans le panier sans une goutte d'eau,
+shakshuka individuelle en ramequin, muffins aux œufs pour la semaine, œuf cuit
+dans un demi-avocat, et l'œuf au milieu du pain grillé.
+
+Chaque recette porte un encadré dépliable avec les sept règles de l'appareil :
 préchauffage systématique, plaque contre panier, à quoi servent LO / MED / HI /
 MAX, la couche unique, comment limiter la fumée avec les viandes grasses, et
-quand retourner. Les réglages sont donnés tels qu'on les compose sur l'appareil
-(GRILL HI, AIR CRISP 200°) et non en degrés génériques.
+quand retourner, et **quels récipients peuvent entrer** — « oven safe »
+uniquement, jamais une assiette de table, et « va au micro-ondes » ne veut pas
+dire « va au four ». Les réglages sont donnés tels qu'on les compose sur
+l'appareil (GRILL HI, AIR CRISP 200°) et non en degrés génériques.
 
 Un filtre « נינג'ה גריל » les regroupe.
 
