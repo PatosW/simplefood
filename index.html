@@ -155,12 +155,16 @@
 
   .sidehint {
     display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
-    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
-    padding: 11px 14px; margin-top: 12px;
+    background: var(--olive-soft); border-radius: 10px;
+    padding: 10px 13px; margin: 12px 20px 0;
+  }
+  .sidehint .more {
+    margin-inline-start: auto; border: 0; background: none; color: var(--olive);
+    font-size: var(--step--1); font-weight: 600; text-decoration: underline; padding: 0;
   }
   .sidehint .lab { font-family: "Heebo", sans-serif; font-size: .72rem; font-weight: 700; letter-spacing: .08em; color: var(--ink-3); }
-  .sidehint button {
-    border: 1px solid var(--line); background: var(--surface-2); border-radius: 999px;
+  .sidehint button:not(.more) {
+    border: 1px solid var(--line); background: var(--surface); border-radius: 999px;
     padding: 6px 13px; font-size: var(--step--1); display: inline-flex; align-items: center; gap: 7px;
   }
   .sidehint button:hover { border-color: var(--olive); background: var(--olive-soft); }
@@ -3543,6 +3547,7 @@
             : (st.missing.length ? "רשימת קניות" : "רשימת קניות · יש לך הכל")) +
         '</button>' +
       '</div>' +
+      sideHint(r) +
       '<div class="nutri">' +
         '<div class="nut p"><div class="lab">חלבון</div><div class="val">' + r.p + ' ג\'</div><div class="bar"><i style="width:' + nutBar(r.p, 40) + '%"></i></div></div>' +
         '<div class="nut f"><div class="lab">סיבים</div><div class="val">' + r.f + ' ג\'</div><div class="bar"><i style="width:' + nutBar(r.f, 16) + '%"></i></div></div>' +
@@ -3900,21 +3905,22 @@
     }
     const pick = pool[Math.floor(Math.random() * pool.length)];
     lastShown = pick.id;
-    $("#now-slot").innerHTML = cardHTML(pick) + sideHint(pick, slot);
+    $("#now-slot").innerHTML = cardHTML(pick);
 
     renderHero();
   }
 
-  // שתי תוספות מהירות שמשלימות את המנה
-  function sideHint(r, slot) {
-    if (MEALS.indexOf(slot) === -1) return "";
+  // שתי תוספות מהירות שמשלימות את המנה, מוצגות בראש הכרטיס
+  function sideHint(r) {
+    if (!isDish(r, activeSlot()) || MEALS.indexOf(activeSlot()) === -1) return "";
     const sides = menu().filter(x => x.side && x.id !== r.id)
       .sort((a, b) => stateOf(a).missing.length - stateOf(b).missing.length || a.min - b.min)
       .slice(0, 2);
     if (!sides.length) return "";
-    return '<div class="sidehint"><span class="lab">להשלמה</span>' +
+    return '<div class="sidehint"><span class="lab">להשלמה — תוספת מהירה</span>' +
       sides.map(x => '<button data-open="' + x.id + '">' + esc(x.name) +
-        ' <b>' + x.min + '</b></button>').join("") + '</div>';
+        ' <b>' + x.min + '</b></button>').join("") +
+      '<button class="more" data-cat="side">עוד תוספות</button></div>';
   }
 
   /* ---------------- מצב "מה יש לי" ---------------- */
