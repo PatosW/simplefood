@@ -107,6 +107,13 @@ supposent aucun savoir préalable. 314 étapes en tout, dont :
   apparaissent ».
 - **80 minuteurs intégrés** — chaque étape chronométrée a un bouton qui
   décompte, sonne et fait vibrer le téléphone à la fin.
+- **Deux écrans agrandis**, ouverts en appuyant sur le titre de la section.
+  « מה צריך » devient une **liste de mise en place** : chaque ingrédient avec sa
+  quantité, les facultatifs, les épices du placard et les ustensiles, chacun
+  cochable au fur et à mesure qu'on le sort sur le plan de travail, avec un
+  compteur et un bouton pour enchaîner sur la cuisson. « איך » affiche toutes
+  les étapes en grand, avec leurs repères et leurs minuteurs. La taille du
+  texte se règle par deux boutons א− / א+ et le choix est mémorisé.
 - **Un mode « בישול שלב אחרי שלב »** : une étape à la fois en gros caractères,
   avec son repère et son minuteur, une barre de progression, et le temps
   d'attente restant. Lisible à un mètre, mains sales, sur le plan de travail.

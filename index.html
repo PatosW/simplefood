@@ -265,6 +265,63 @@
   }
 
   /* ---------- מצב בישול ---------- */
+  /* ---------- מסך מוגדל ---------- */
+  #big { max-width: 760px; }
+  .bigwrap { padding: 16px 18px 18px; display: grid; gap: 14px; --bs: 1.15; }
+  .big-top { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+  .big-id { flex: 1; min-width: 55%; }
+  .big-top h2 { font-size: var(--step-1); }
+  .big-top p { margin: 3px 0 0; color: var(--ink-3); font-size: var(--step--1); }
+  .sizer { display: flex; gap: 4px; }
+  .sizer button {
+    border: 1px solid var(--line); background: var(--surface-2); border-radius: 8px;
+    padding: 5px 11px; font-family: "Heebo", sans-serif; font-weight: 700; font-size: .8rem; color: var(--ink-2);
+  }
+  .sizer button:disabled { opacity: .4; }
+  .big-body {
+    max-height: 66vh; overflow-y: auto; padding-inline-end: 4px;
+    font-size: calc(1rem * var(--bs)); line-height: 1.55;
+  }
+  .big-foot { display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 13px; }
+
+  .big-sec { font-family: "Heebo", sans-serif; font-size: .74rem; font-weight: 700; letter-spacing: .12em;
+    color: var(--ink-3); margin: 16px 0 8px; display: flex; align-items: center; gap: 8px; }
+  .big-sec:first-child { margin-top: 0; }
+  .big-sec::after { content: ""; flex: 1; height: 1px; background: var(--line-soft); }
+
+  .mise { display: flex; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px solid var(--line-soft); cursor: pointer; }
+  .mise:last-child { border-bottom: 0; }
+  .mise input { accent-color: var(--olive); width: 21px; height: 21px; flex: none; }
+  .mise .txt { flex: 1; }
+  .mise .opt { color: var(--ink-3); font-size: .85em; }
+  .mise input:checked ~ .txt { color: var(--ink-3); text-decoration: line-through; }
+  .mise.no .txt { color: var(--ink-3); text-decoration: line-through; }
+
+  .bigstep { display: grid; grid-template-columns: 30px 1fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line-soft); }
+  .bigstep:last-child { border-bottom: 0; }
+  .bigstep::before {
+    content: attr(data-n); font-family: "Heebo", sans-serif; font-weight: 700; font-size: .8em;
+    color: var(--olive); background: var(--olive-soft); width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; margin-top: 2px;
+  }
+  .bigstep .tip { display: block; margin-top: 7px; padding-inline-start: 10px;
+    border-inline-start: 2px solid var(--line); color: var(--ink-2); font-size: .82em; }
+  .bigstep .tip b { color: var(--olive); }
+  .bigstep .timer { font-size: .8em; }
+
+  .blockbtn {
+    border: 0; background: none; padding: 0; margin-bottom: 8px;
+    font-family: "Heebo", sans-serif; font-size: .72rem; font-weight: 700; letter-spacing: .12em;
+    color: var(--ink-3); display: flex; align-items: center; gap: 7px; width: 100%;
+  }
+  .blockbtn:hover { color: var(--olive); }
+  .blockbtn .grow { flex: 1; height: 1px; background: var(--line-soft); }
+  .blockbtn .zoom {
+    border: 1px solid var(--line); border-radius: 6px; padding: 1px 7px;
+    font-size: .68rem; letter-spacing: .04em; color: var(--olive); font-weight: 600;
+  }
+  .blockbtn:hover .zoom { border-color: var(--olive); background: var(--olive-soft); }
+
   #cook { max-width: 700px; }
   .cook { padding: 18px 20px 20px; display: grid; gap: 16px; }
   .cook-top { display: flex; align-items: center; gap: 12px; }
@@ -592,6 +649,24 @@
 </div>
 
 <datalist id="all-ings"></datalist>
+
+<dialog id="big">
+  <div class="bigwrap">
+    <div class="big-top">
+      <div class="big-id">
+        <h2 id="big-title"></h2>
+        <p id="big-sub"></p>
+      </div>
+      <div class="sizer">
+        <button id="big-minus" aria-label="טקסט קטן יותר">א−</button>
+        <button id="big-plus" aria-label="טקסט גדול יותר">א+</button>
+      </div>
+      <button class="linkbtn" id="big-close">סגור</button>
+    </div>
+    <div class="big-body" id="big-body"></div>
+    <div class="big-foot" id="big-foot"></div>
+  </div>
+</dialog>
 
 <dialog id="cook">
   <div class="cook">
@@ -2080,7 +2155,7 @@
         st.swaps.map(w =>
           '<p class="swapline"><b>במקום</b> <s>' + esc(nameOf(w.from)) + '</s> <span>' + esc(w.text) + '</span></p>'
         ).join("") +
-        '<div class="block"><h3>מה צריך</h3><ul class="ings">' +
+        '<div class="block">' + blockTitle("ings", r.id, "מה צריך") + '<ul class="ings">' +
           rows.map(f => {
             const isMiss = !f.opt && !f.no && !f.alts.some(satisfies) && have.size > 0;
             const cls = f.no ? "no" : (f.opt ? "opt" : (isMiss ? "miss" : ""));
@@ -2096,7 +2171,7 @@
           ? '<div class="block"><h3>כלים</h3><ul class="tools">' +
             r.tools.map(t => "<li>" + esc(t) + "</li>").join("") + '</ul></div>'
           : "") +
-        '<div class="block"><h3>איך</h3><ol class="steps">' + r.steps.map(stepHTML).join("") + '</ol></div>' +
+        '<div class="block">' + blockTitle("steps", r.id, "איך") + '<ol class="steps">' + r.steps.map(stepHTML).join("") + '</ol></div>' +
         (r.note ? '<p class="note"><b>שווה לדעת:</b> ' + esc(r.note) + '</p>' : "") +
         '<div class="block notebox"><h3>ההערה שלי</h3>' +
           '<textarea data-note="' + r.id + '" placeholder="מה עבד, מה לשנות בפעם הבאה, מי אהב">' + esc(note) + '</textarea>' +
@@ -2418,6 +2493,100 @@
     }, 1000);
   }
 
+
+  /* ---------------- מסך מוגדל: מה צריך / איך ----------------
+     "מה צריך" נפתח כרשימת הכנה עם סימון מה כבר הוצאת לשיש.
+     "איך" נפתח כל השלבים בגדול, לגלילה, לצד מצב שלב־שלב.  */
+  let big = null;                                   // { id, sec }
+  let mise = { id: null, checked: new Set() };      // מה כבר על השיש — נשמר רק לזמן הבישול
+  let bigScale = store.get("mlo.bigsize.v1", 1.15);
+  const SCALES = [1, 1.15, 1.3, 1.5, 1.75];
+
+  function blockTitle(sec, id, label) {
+    return '<button class="blockbtn" data-big="' + sec + '|' + id + '">' +
+      esc(label) + '<span class="zoom">הגדל</span><span class="grow"></span></button>';
+  }
+
+  function openBig(sec, id) {
+    big = { id: id, sec: sec };
+    if (mise.id !== id) mise = { id: id, checked: new Set() };
+    renderBig();
+    $("#big").showModal();
+  }
+
+  function applyScale() {
+    document.querySelector("#big .bigwrap").style.setProperty("--bs", bigScale);
+    const i = SCALES.indexOf(bigScale);
+    $("#big-minus").disabled = i <= 0;
+    $("#big-plus").disabled = i >= SCALES.length - 1;
+  }
+
+  function renderBig() {
+    const r = R.find(x => x.id === big.id);
+    if (!r) return;
+    $("#big-title").textContent = r.name;
+
+    if (big.sec === "ings") {
+      $("#big-sub").textContent = "מה להוציא לשיש לפני שמתחילים";
+      const av = avoidSet(), sw = SWAPS[r.id] || {};
+      let html = '<div class="big-sec">מרכיבים</div>';
+
+      r.need.forEach(n => {
+        const alts = Array.isArray(n) ? n : [n];
+        const ok = alts.filter(a => !av.has(a));
+        if (ok.length === 0) {
+          const key = alts.find(a => sw[a]);
+          html += key
+            ? miseRow("swap:" + key, "במקום " + nameOf(key) + ": " + sw[key], false)
+            : miseRow("no:" + alts[0], amountLabel(r, alts), false, true);
+          return;
+        }
+        html += miseRow(ok[0], amountLabel(r, ok), false);
+      });
+
+      const opt = (r.nice || []).filter(a => NAME[a] && !av.has(a));
+      if (opt.length) {
+        html += '<div class="big-sec">אם יש</div>';
+        opt.forEach(a => { html += miseRow(a, amountLabel(r, [a]), true); });
+      }
+
+      const bas = basicsOf(r);
+      if (bas.length) {
+        html += '<div class="big-sec">מהארון</div>';
+        bas.forEach(b => { html += miseRow("basic:" + b[0], b[0], true); });
+      }
+
+      if (r.tools && r.tools.length) {
+        html += '<div class="big-sec">כלים</div>';
+        r.tools.forEach(t => { html += miseRow("tool:" + t, t, false); });
+      }
+
+      $("#big-body").innerHTML = html;
+      const total = $("#big-body").querySelectorAll("[data-mise]").length;
+      $("#big-foot").innerHTML =
+        '<span class="count" id="mise-count">' + mise.checked.size + " מתוך " + total + " מוכן</span>" +
+        '<button class="btn primary" data-cook="' + r.id + '" style="margin-inline-start:auto">קדימה לבשל</button>';
+    } else {
+      $("#big-sub").textContent = r.steps.length + " שלבים · " + r.min + " דקות";
+      $("#big-body").innerHTML = r.steps.map((st, i) =>
+        '<div class="bigstep" data-n="' + (i + 1) + '"><div>' + esc(st.t) +
+        (st.tip ? '<span class="tip"><b>איך יודעים:</b> ' + esc(st.tip) + '</span>' : "") +
+        (st.sec ? '<button class="timer" data-timer="' + st.sec + '">התחל טיימר ' + mmss(st.sec) + '</button>' : "") +
+        '</div></div>'
+      ).join("");
+      $("#big-foot").innerHTML =
+        '<button class="btn" data-big="ings|' + r.id + '">מה צריך</button>' +
+        '<button class="btn primary" data-cook="' + r.id + '" style="margin-inline-start:auto">שלב אחרי שלב</button>';
+    }
+    applyScale();
+  }
+
+  function miseRow(key, label, optional, missing) {
+    return '<label class="mise' + (missing ? " no" : "") + '">' +
+      '<input type="checkbox" data-mise="' + esc(key) + '"' + (mise.checked.has(key) ? " checked" : "") + '>' +
+      '<span class="txt' + (optional ? " opt" : "") + '">' + esc(label) + '</span></label>';
+  }
+
   /* ---------------- מצב בישול, שלב אחרי שלב ---------------- */
   let cook = null;
 
@@ -2698,11 +2867,22 @@
       return;
     }
 
+    const bg = t.closest("[data-big]");
+    if (bg) {
+      const parts = bg.dataset.big.split("|");
+      openBig(parts[0], parts[1]);
+      return;
+    }
+
     const tm = t.closest("[data-timer]");
     if (tm) { toggleTimer(tm); return; }
 
     const ck = t.closest("[data-cook]");
-    if (ck) { openCook(ck.dataset.cook); return; }
+    if (ck) {
+      if ($("#big").open) $("#big").close();
+      openCook(ck.dataset.cook);
+      return;
+    }
 
     const shopBtn = t.closest("[data-shop]");
     if (shopBtn) { openShop(shopBtn.dataset.shop); return; }
@@ -2775,6 +2955,16 @@
   });
 
   document.addEventListener("change", e => {
+    const ms = e.target.closest("[data-mise]");
+    if (ms) {
+      const k = ms.dataset.mise;
+      if (ms.checked) mise.checked.add(k); else mise.checked.delete(k);
+      const total = $("#big-body").querySelectorAll("[data-mise]").length;
+      const c = $("#mise-count");
+      if (c) c.textContent = mise.checked.size + " מתוך " + total + " מוכן";
+      return;
+    }
+
     const buy = e.target.closest("[data-buy]");
     if (buy) {
       const id = buy.dataset.buy;
@@ -2861,6 +3051,16 @@
       $(pair[0]).setAttribute("aria-pressed", String(filters[pair[1]]));
       renderResults();
     });
+  });
+
+  $("#big-close").addEventListener("click", () => $("#big").close());
+  $("#big-minus").addEventListener("click", () => {
+    const i = SCALES.indexOf(bigScale);
+    if (i > 0) { bigScale = SCALES[i - 1]; store.set("mlo.bigsize.v1", bigScale); applyScale(); }
+  });
+  $("#big-plus").addEventListener("click", () => {
+    const i = SCALES.indexOf(bigScale);
+    if (i < SCALES.length - 1) { bigScale = SCALES[i + 1]; store.set("mlo.bigsize.v1", bigScale); applyScale(); }
   });
 
   $("#cook-close").addEventListener("click", () => $("#cook").close());
