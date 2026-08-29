@@ -153,11 +153,26 @@
   :root[data-theme="dark"] .quick.byfood button[aria-pressed="true"],
   :root:not([data-theme="light"]) .quick.byfood button[aria-pressed="true"] { color: #101512; }
 
+  .card.extra { margin-top: 14px; border-color: var(--olive); }
+  .extrabar {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--olive-soft); padding: 8px 20px;
+    font-family: "Heebo", sans-serif; font-size: .72rem; font-weight: 700;
+    letter-spacing: .08em; color: var(--olive);
+  }
+  .extrabar button {
+    margin-inline-start: auto; border: 0; background: none; color: var(--ink-2);
+    font-family: "Assistant", sans-serif; font-size: var(--step--1); font-weight: 600;
+    text-decoration: underline; letter-spacing: 0; padding: 0;
+  }
+  .extrabar button:hover { color: var(--pomegranate); }
+
   .sidehint {
     display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
     background: var(--olive-soft); border-radius: 10px;
     padding: 10px 13px; margin: 12px 20px 0;
   }
+  .sidehint + .sidehint { margin-top: 8px; }
   .sidehint .more {
     margin-inline-start: auto; border: 0; background: none; color: var(--olive);
     font-size: var(--step--1); font-weight: 600; text-decoration: underline; padding: 0;
@@ -3420,6 +3435,7 @@
 
   const filters = { fast: false, nocook: false, snack: false, ninja: false, sauce: false, meat: false, dessert: false, side: false, shake: false, kids: false, empty: false, fav: false };
   let lastShown = null;
+  let meal = { main: null, extras: [] };     // מנה עיקרית + תוספות וקינוחים שהוספת
   let showHidden = false;
   let slotPick = null;          // מועד שנבחר ידנית, למשל לתכנן ערב כבר מהמשרד
   let query = "";
@@ -3507,7 +3523,7 @@
   /* ---------------- כרטיס מנה ---------------- */
   function nutBar(v, max) { return Math.max(4, Math.min(100, Math.round(v / max * 100))); }
 
-  function cardHTML(r) {
+  function cardHTML(r, isExtra) {
     const st = stateOf(r), av = avoidSet();
     const rows = [];
     r.need.forEach(n => {
@@ -3536,15 +3552,20 @@
 
     const note = notes[r.id] || "";
 
-    return '<article class="card fade">' +
+    return '<article class="card fade' + (isExtra ? " extra" : "") + '">' +
+      (isExtra ? '<div class="extrabar"><span>נוסף לארוחה</span>' +
+        '<button data-unextra="' + r.id + '">הסר</button></div>' : "") +
       '<div class="card-head"><h2>' + esc(r.name) + '</h2>' +
         '<div class="timebox"><b>' + r.min + '</b><span>דקות</span></div></div>' +
       '<div class="tags">' + tags.map(t => '<span class="tag' + (t[1] ? " hot" : "") + '">' + esc(t[0]) + '</span>').join("") + '</div>' +
       '<div class="cardbar">' +
-        '<button class="btn primary" data-cook="' + r.id + '">בישול שלב־שלב</button>' +
+        '<button class="btn primary" data-cook="' + r.id + '">' +
+          (!isExtra && meal.extras.length && r.id === meal.main ? "בישול כל הארוחה" : "בישול שלב־שלב") +
+        '</button>' +
         '<button class="btn" data-shop="' + r.id + '">' +
-          (have.size && st.missing.length ? "רשימת קניות · חסר " + st.missing.length
-            : (st.missing.length ? "רשימת קניות" : "רשימת קניות · יש לך הכל")) +
+          (!isExtra && meal.extras.length && r.id === meal.main ? "קניות לכל הארוחה"
+            : (have.size && st.missing.length ? "רשימת קניות · חסר " + st.missing.length
+              : (st.missing.length ? "רשימת קניות" : "רשימת קניות · יש לך הכל"))) +
         '</button>' +
       '</div>' +
       sideHint(r) +
@@ -3699,11 +3720,32 @@
     else if (WHOLE_ONLY.indexOf(ing) !== -1) v = Math.max(1, Math.round(v));
     else v = Math.max(0.5, Math.round(v * 2) / 2);
     if (WHOLE_ONLY.indexOf(ing) !== -1) v = Math.max(1, Math.round(v));
+    return fmtQty(v, sing, plur);
+  }
+
+  function fmtQty(v, sing, plur) {
     if (v === 0.5) return "חצי " + sing;
     if (v === 1) return sing;
     const whole = Math.floor(v), half = v - whole >= 0.5;
     const num = half ? whole + " וחצי" : String(whole);
     return num + " " + (v > 1 ? plur : sing);
+  }
+
+  // הכמות המספרית בלבד, כדי לחבר בין מתכונים באותה רשימת קניות
+  function scaleVal(item, people, ing) {
+    const n = item[0];
+    if (!n) return null;
+    let f = people / 2;
+    if (sauceAside && ing !== "pasta") f *= ASIDE;
+    const k = item[3] === "soft" ? 1 + (f - 1) * 0.6 : f;
+    let v = n * k;
+    if (v >= 100) v = Math.round(v / 50) * 50;
+    else if (v >= 20) v = Math.round(v / 5) * 5;
+    else if (v >= 3) v = Math.round(v);
+    else if (WHOLE_ONLY.indexOf(ing) !== -1) v = Math.max(1, Math.round(v));
+    else v = Math.max(0.5, Math.round(v * 2) / 2);
+    if (WHOLE_ONLY.indexOf(ing) !== -1) v = Math.max(1, Math.round(v));
+    return { v: v, sing: item[1], plur: item[2] || item[1] };
   }
 
   // הכמות של מרכיב במתכון, לפי מספר הסועדים שנבחר
@@ -3905,22 +3947,40 @@
     }
     const pick = pool[Math.floor(Math.random() * pool.length)];
     lastShown = pick.id;
-    $("#now-slot").innerHTML = cardHTML(pick);
+    meal = { main: pick.id, extras: [] };
+    renderMeal();
 
     renderHero();
   }
 
   // שתי תוספות מהירות שמשלימות את המנה, מוצגות בראש הכרטיס
-  function sideHint(r) {
-    if (!isDish(r, activeSlot()) || MEALS.indexOf(activeSlot()) === -1) return "";
-    const sides = menu().filter(x => x.side && x.id !== r.id)
+  function pickTwo(kind, r) {
+    return menu().filter(x => x[kind] && x.id !== r.id && meal.extras.indexOf(x.id) === -1)
       .sort((a, b) => stateOf(a).missing.length - stateOf(b).missing.length || a.min - b.min)
       .slice(0, 2);
-    if (!sides.length) return "";
-    return '<div class="sidehint"><span class="lab">להשלמה — תוספת מהירה</span>' +
-      sides.map(x => '<button data-open="' + x.id + '">' + esc(x.name) +
+  }
+
+  function hintRow(kind, label, catKey, r) {
+    const list = pickTwo(kind, r);
+    if (!list.length) return "";
+    return '<div class="sidehint"><span class="lab">' + esc(label) + '</span>' +
+      list.map(x => '<button data-addextra="' + x.id + '">+ ' + esc(x.name) +
         ' <b>' + x.min + '</b></button>').join("") +
-      '<button class="more" data-cat="side">עוד תוספות</button></div>';
+      '<button class="more" data-cat="' + catKey + '">עוד</button></div>';
+  }
+
+  function sideHint(r) {
+    if (!isDish(r, activeSlot()) || MEALS.indexOf(activeSlot()) === -1) return "";
+    return hintRow("side", "להשלמה — תוספת מהירה", "side", r) +
+           hintRow("dessert", "לקינוח", "dessert", r);
+  }
+
+  const mealIds = () => (meal.main ? [meal.main].concat(meal.extras) : []);
+  const mealRecipes = () => mealIds().map(id => R.find(x => x.id === id)).filter(Boolean);
+
+  function renderMeal() {
+    if (!meal.main) { $("#now-slot").innerHTML = ""; return; }
+    $("#now-slot").innerHTML = mealRecipes().map((r, i) => cardHTML(r, i > 0)).join("");
   }
 
   /* ---------------- מצב "מה יש לי" ---------------- */
@@ -4195,27 +4255,57 @@
   let cook = null;
 
   function openCook(id) {
-    cook = { id: id, i: 0 };
+    // מהמנה העיקרית — כל הארוחה בסדר הנכון; מתוספת — רק היא
+    const ids = (id === meal.main && meal.extras.length) ? mealIds() : [id];
+    const rs = ids.map(i => R.find(x => x.id === i)).filter(Boolean);
+    cook = { i: 0, title: rs.map(r => r.name).join(" + "), steps: buildSteps(rs) };
     renderCook();
     $("#cook").showModal();
   }
 
+  // סדר בישול אחד: הארוך מתחיל ראשון, והקינוח תמיד בסוף
+  function buildSteps(rs) {
+    if (rs.length === 1) return rs[0].steps.map(x => ({ t: x.t, tip: x.tip, sec: x.sec }));
+    const savoury = rs.filter(r => !r.dessert).sort((a, b) => b.min - a.min);
+    const sweets  = rs.filter(r => r.dessert);
+    const order = savoury.concat(sweets);
+
+    // מקבצים מנות באותו אורך לאותו משפט, כדי לא לחזור על "כשנשארו X דקות"
+    const groups = [];
+    savoury.forEach(r => {
+      const g = groups[groups.length - 1];
+      if (g && g.min === r.min) g.names.push(r.name);
+      else groups.push({ min: r.min, names: [r.name] });
+    });
+    const parts = groups.map((g, i) => {
+      const names = g.names.join(" ו");
+      return i === 0
+        ? "מתחילים ב" + names + " (" + g.min + " דקות)"
+        : "כשנשארו " + g.min + " דקות — מתחילים ב" + names;
+    });
+    if (sweets.length) parts.push("את " + sweets.map(r => r.name).join(" ו") + " מכינים בסוף, אחרי האוכל");
+    const steps = [{ t: parts.join(". ") + ".",
+                     tip: "התוכנית לכל הארוחה. אפשר לחזור לשלב הזה בכל רגע.", sec: 0 }];
+    order.forEach(r => {
+      r.steps.forEach(x => steps.push({ t: r.name + " · " + x.t, tip: x.tip, sec: x.sec }));
+    });
+    return steps;
+  }
+
   function renderCook() {
-    const r = R.find(x => x.id === cook.id);
-    if (!r) return;
-    const st = r.steps[cook.i], last = cook.i === r.steps.length - 1;
-    $("#cook-name").textContent = r.name;
-    $("#cook-num").textContent = "שלב " + (cook.i + 1) + " מתוך " + r.steps.length +
-      (SAUCE_QTY[r.id] ? " · ל-" + serves : "");
-    $("#cook-progress").style.width = ((cook.i + 1) / r.steps.length * 100) + "%";
-    $("#cook-do").textContent = stepText(st, r);
+    if (!cook || !cook.steps.length) return;
+    const st = cook.steps[cook.i], last = cook.i === cook.steps.length - 1;
+    $("#cook-name").textContent = cook.title;
+    $("#cook-num").textContent = "שלב " + (cook.i + 1) + " מתוך " + cook.steps.length;
+    $("#cook-progress").style.width = ((cook.i + 1) / cook.steps.length * 100) + "%";
+    $("#cook-do").textContent = st.t;
     $("#cook-tip").hidden = !st.tip;
     if (st.tip) $("#cook-tip").innerHTML = "<b>איך יודעים:</b> " + esc(st.tip);
     $("#cook-timer").innerHTML = st.sec
       ? '<button class="timer" data-timer="' + st.sec + '">התחל טיימר ' + mmss(st.sec) + '</button>' : "";
     $("#cook-prev").disabled = cook.i === 0;
     $("#cook-next").textContent = last ? "סיימתי" : "הבא";
-    const rest = r.steps.slice(cook.i + 1).reduce((a, x) => a + (x.sec || 0), 0);
+    const rest = cook.steps.slice(cook.i + 1).reduce((a, x) => a + (x.sec || 0), 0);
     $("#cook-left").textContent = rest ? "עוד " + Math.ceil(rest / 60) + " דקות המתנה" : "";
   }
 
@@ -4233,7 +4323,35 @@
   }
 
   // מה לקנות: מרכיבי החובה שאין בבית (או כולם), בלי מה שמישהו לא אוהב
-  function shopItems(r, onlyMissing) {
+  const qtyTableFor = r => SAUCE_QTY[r.id] || RECIPE_QTY[r.id] || null;
+
+  // כמות מאוחדת: אותו מרכיב בשתי מנות מתחבר לשורה אחת
+  function qtyForRecipes(ing, servings, rs) {
+    const withQty = rs.filter(r => (qtyTableFor(r) || {})[ing]);
+    if (!withQty.length) return qtyText(ing, servings, rs[0]);
+    let total = null, unit = null, ok = true;
+    withQty.forEach(r => {
+      const b = SAUCE_QTY[r.id] ? 2 : (RECIPE_BASE[r.id] || 2);
+      const people = SAUCE_QTY[r.id] ? serves
+        : (eaters().length ? portions() * 2 / b : 2);
+      const q = scaleVal(qtyTableFor(r)[ing], people, ing);
+      if (!q) { ok = false; return; }
+      if (unit && unit.sing !== q.sing) ok = false;
+      unit = q; total = (total || 0) + q.v;
+    });
+    if (!ok || total === null) return qtyText(ing, servings, withQty[0]);
+    return fmtQty(total >= 3 ? Math.round(total) : Math.round(total * 2) / 2, unit.sing, unit.plur);
+  }
+
+  function shopItems(rs, onlyMissing) {
+    const out = [];
+    (Array.isArray(rs) ? rs : [rs]).forEach(r => {
+      shopItemsOne(r, onlyMissing).forEach(i => { if (out.indexOf(i) === -1) out.push(i); });
+    });
+    return out;
+  }
+
+  function shopItemsOne(r, onlyMissing) {
     const av = avoidSet(), sw = SWAPS[r.id] || {}, out = [];
     r.need.forEach(n => {
       const alts = Array.isArray(n) ? n : [n];
@@ -4254,8 +4372,11 @@
   };
 
   function openShop(id) {
-    const same = shop && shop.id === id;
+    // מהמנה העיקרית — כל הארוחה; מתוספת — רק היא
+    const ids = (id === meal.main && meal.extras.length) ? mealIds() : [id];
+    const same = shop && shop.ids && shop.ids.join() === ids.join();
     shop = {
+      ids: ids,
       id: id,
       servings: same ? shop.servings
         : (SAUCE_QTY[id] ? serves : (eaters().length ? Math.max(1, Math.round(portions())) : 2)),
@@ -4268,13 +4389,14 @@
 
   function renderShop() {
     if (!shop) return;
-    const r = R.find(x => x.id === shop.id);
+    const rs = (shop.ids || [shop.id]).map(i => R.find(x => x.id === i)).filter(Boolean);
+    const r = rs[0];
     if (!r) { shop = null; return; }
-    const items = shopItems(r, shop.onlyMissing);
+    const items = shopItems(rs, shop.onlyMissing);
     const checked = new Set(shop.checked.filter(c => items.indexOf(c) !== -1));
     shop.checked = Array.from(checked);
 
-    $("#dlg-title").textContent = r.name;
+    $("#dlg-title").textContent = rs.length > 1 ? rs.map(x => x.name).join(" + ") : r.name;
     $("#dlg-sub").textContent = (!have.size && shop.onlyMissing)
       ? "לא סימנת מה יש בבית, אז הרשימה כוללת את כל המנה. סמן כל מה שכבר יש לך."
       : r.min + " דקות · " + r.p + " ג\' חלבון למנה";
@@ -4301,7 +4423,7 @@
         byAisle[t].map(i =>
           '<label class="shop-item"><input type="checkbox" data-buy="' + i + '"' +
           (checked.has(i) ? " checked" : "") + '><span class="q">' +
-          esc(isBasic(i) ? basicLabel(i) : qtyText(i, shop.servings, r)) + '</span></label>'
+          esc(isBasic(i) ? basicLabel(i) : qtyForRecipes(i, shop.servings, rs)) + '</span></label>'
         ).join("") + '</div>'
       ).join("");
     }
@@ -4317,18 +4439,19 @@
   function renderListButton() {
     const btn = $("#open-list");
     if (!shop || !shop.checked.length) { btn.hidden = true; return; }
-    const r = R.find(x => x.id === shop.id);
-    if (!r) { btn.hidden = true; return; }
-    const total = shopItems(r, shop.onlyMissing).length;
+    const rs = (shop.ids || [shop.id]).map(i => R.find(x => x.id === i)).filter(Boolean);
+    if (!rs.length) { btn.hidden = true; return; }
+    const total = shopItems(rs, shop.onlyMissing).length;
     if (!total) { btn.hidden = true; return; }
     btn.hidden = false;
     btn.textContent = "הרשימה שלי · " + shop.checked.length + "/" + total;
   }
 
   function shopAsText() {
-    const r = R.find(x => x.id === shop.id);
-    return "קניות ל" + r.name + " (" + shop.servings + " מנות)\n" +
-      shopItems(r, shop.onlyMissing).map(i => "• " + (isBasic(i) ? basicLabel(i) : qtyText(i, shop.servings, r))).join("\n");
+    const rs = (shop.ids || [shop.id]).map(i => R.find(x => x.id === i)).filter(Boolean);
+    return "קניות ל" + rs.map(x => x.name).join(" + ") + " (" + shop.servings + " מנות)\n" +
+      shopItems(rs, shop.onlyMissing).map(i =>
+        "• " + (isBasic(i) ? basicLabel(i) : qtyForRecipes(i, shop.servings, rs))).join("\n");
   }
 
   /* ---------------- לוח הטעמים ---------------- */
@@ -4527,11 +4650,31 @@
       return;
     }
 
+    const ax = t.closest("[data-addextra]");
+    if (ax) {
+      const id = ax.dataset.addextra;
+      if (meal.main && meal.extras.indexOf(id) === -1) meal.extras.push(id);
+      else if (!meal.main) meal = { main: id, extras: [] };
+      setTab("now");
+      renderMeal();
+      const cards = document.querySelectorAll("#now-slot .card");
+      if (cards.length) cards[cards.length - 1].scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    const ux = t.closest("[data-unextra]");
+    if (ux) {
+      meal.extras = meal.extras.filter(x => x !== ux.dataset.unextra);
+      renderMeal();
+      return;
+    }
+
     const open = t.closest("[data-open]");
     if (open) {
       const r = R.find(x => x.id === open.dataset.open);
       lastShown = r.id;
-      $("#now-slot").innerHTML = cardHTML(r);
+      meal = { main: r.id, extras: [] };
+      renderMeal();
       renderHero();
       setTab("now");
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -4663,7 +4806,8 @@
       if (buy.checked) { if (i === -1) shop.checked.push(id); }
       else if (i !== -1) shop.checked.splice(i, 1);
       const r = R.find(x => x.id === shop.id);
-      const total = shopItems(r, shop.onlyMissing).length;
+      const rs2 = (shop.ids || [shop.id]).map(i => R.find(x => x.id === i)).filter(Boolean);
+      const total = shopItems(rs2, shop.onlyMissing).length;
       $("#dlg-count").textContent = shop.checked.length + " מתוך " + total + " בעגלה";
       $("#dlg-done").hidden = !shop.checked.length;
       saveAll();
@@ -4766,8 +4910,7 @@
   $("#cook-close").addEventListener("click", () => $("#cook").close());
   $("#cook-prev").addEventListener("click", () => { if (cook.i > 0) { cook.i--; renderCook(); } });
   $("#cook-next").addEventListener("click", () => {
-    const r = R.find(x => x.id === cook.id);
-    if (cook.i < r.steps.length - 1) { cook.i++; renderCook(); }
+    if (cook && cook.i < cook.steps.length - 1) { cook.i++; renderCook(); }
     else $("#cook").close();
   });
   document.addEventListener("keydown", e => {

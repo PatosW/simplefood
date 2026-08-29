@@ -203,7 +203,28 @@ Elles restent accessibles par leurs raccourcis — **רטבים לפסטה**, **
 **קינוחים** — et deux accompagnements assortis sont suggérés en tête de chaque plat, à l'heure
 d'un repas, choisis parmi les plus rapides et les plus proches de ce qu'on a
 déjà — avec un lien vers la liste complète. La suggestion apparaît aussi bien
-sur un plat tiré au hasard que sur un plat ouvert depuis la liste.
+sur un plat tiré au hasard que sur un plat ouvert depuis la liste. Une seconde
+rangée, **לקינוח**, propose de la même façon deux desserts.
+
+### Un repas se compose, il ne se remplace pas
+
+Cliquer sur un accompagnement ou un dessert **l'ajoute au repas** : le plat
+principal reste en haut, la nouvelle recette se range en dessous avec un
+bandeau « נוסף לארוחה » et un bouton **הסר** pour la retirer. On peut en
+empiler plusieurs.
+
+Dès qu'il y a plus d'une recette, les deux boutons du plat principal changent
+de nom et couvrent tout le repas :
+
+- **קניות לכל הארוחה** — une seule liste de courses, fusionnée. Les ingrédients
+  communs sont additionnés quand l'unité est la même (deux recettes qui
+  demandent chacune 2 œufs donnent « 4 ביצים »), et la liste porte le nom des
+  plats réunis.
+- **בישול כל הארוחה** — un seul pas-à-pas. Il s'ouvre sur une étape de plan qui
+  dit dans quel ordre démarrer : le plat le plus long commence, les autres
+  s'enchaînent au bon décompte (« כשנשארו 15 דקות — מתחילים בלביבות תירס »), et
+  les desserts sont toujours renvoyés à la fin, après le repas. Chaque étape
+  suivante est préfixée du nom de sa recette, minuteurs compris.
 
 ## Partir d'un aliment
 
