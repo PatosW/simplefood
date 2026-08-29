@@ -10,7 +10,7 @@ Interface **en hébreu** (RTL). 132 idées de repas, dont 45 au Ninja Foodi Gril
 
 | Mode | À quoi ça sert |
 |---|---|
-| **אני רעב עכשיו** | Un bloc d'accueil en haut de page : quatre boutons pour choisir le moment du repas — celui de l'heure actuelle est marqué « עכשיו », mais on peut préparer le dîner depuis le bureau —, le nombre d'idées disponibles, et un grand bouton dont le libellé s'adapte à l'heure (« תן לי רעיון לארוחת ערב »). En dessous, des raccourcis par catégorie avec leur nombre de recettes — שייקים, במקום נשנוש, עד 10 דקות, מתאים לילדים, לרוקן את המקרר — qui ouvrent la liste filtrée en un geste. |
+| **אני רעב עכשיו** | Un bloc d'accueil en haut de page : quatre boutons pour choisir le moment du repas — celui de l'heure actuelle est marqué « עכשיו », mais on peut préparer le dîner depuis le bureau —, le nombre d'idées disponibles, et un grand bouton dont le libellé s'adapte à l'heure (« תן לי רעיון לארוחת ערב »). En dessous, des raccourcis par catégorie avec leur nombre de recettes — נינג'ה גריל, רטבים לפסטה, שייקים, במקום נשנוש, עד 10 דקות, מתאים לילדים, לרוקן את המקרר — puis une rangée **לפי מרכיב עיקרי** : dix aliments de base (œufs, pâtes, riz, poulet, bœuf haché, steak, thon, yaourt, pain, banane) avec le nombre de recettes de chacun. Un clic ouvre la liste filtrée, triée du plus rapide au plus long. |
 | **מה יש לי בבית** | Un champ de recherche pour retrouver un aliment parmi 69, puis on coche ce qu'on a (le choix est mémorisé sur l'appareil). Les recettes sont classées en trois groupes : réalisables tout de suite, il manque un ingrédient, il en manque plusieurs. |
 | **הטעמים שלנו** | Qui mange, et ce que chacun n'aime pas. Plus les ingrédients perso, les recettes écartées et les notes. |
 
@@ -185,6 +185,17 @@ bâtie pour la consistance plutôt que pour le goût : l'avoine et les amandes s
 broyées à sec avant tout le reste, faute de quoi elles restent en morceaux.
 
 Un filtre « שייקים » les regroupe.
+
+## Partir d'un aliment
+
+Dix aliments structurants suffisent à atteindre l'essentiel du répertoire : les
+œufs ouvrent 27 recettes, la banane 25, le yaourt 23, les pâtes 18. La rangée
+**לפי מרכיב עיקרי** est volontairement courte : une liste des 85 ingrédients
+ferait doublon avec « מה יש לי בבית », qui croise déjà tout le garde-manger, et
+un tiers d'entre eux n'ouvrent qu'une ou deux recettes.
+
+Les résultats sont triés du plus rapide au plus long, et la rangée est reprise en
+tête de la liste pour changer d'aliment sans revenir en arrière.
 
 ## Faire les courses pour un plat
 

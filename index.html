@@ -145,6 +145,25 @@
     background: var(--olive-soft); border-radius: 999px; padding: 1px 7px; font-variant-numeric: tabular-nums;
   }
   .quick button:hover b { background: var(--surface); }
+  .quick.byfood { border-top: 0; padding-top: 0; margin-top: 8px; }
+  .quick.byfood.inlist { margin: 0 0 14px; padding: 10px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+  .quick.byfood button b { background: var(--surface-2); color: var(--ink-2); }
+  .quick.byfood button[aria-pressed="true"] { background: var(--olive); border-color: var(--olive); color: var(--surface); }
+  .quick.byfood button[aria-pressed="true"] b { background: rgba(255,255,255,.22); color: inherit; }
+  :root[data-theme="dark"] .quick.byfood button[aria-pressed="true"],
+  :root:not([data-theme="light"]) .quick.byfood button[aria-pressed="true"] { color: #101512; }
+
+  .foodbar {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    background: var(--olive-soft); border-radius: 10px; padding: 9px 13px; margin-bottom: 12px;
+    font-size: var(--step--1); color: var(--ink);
+  }
+  .foodbar b { color: var(--olive); }
+  .foodbar button {
+    margin-inline-start: auto; border: 0; background: none; color: var(--olive);
+    font-weight: 600; text-decoration: underline; padding: 0;
+  }
+
   .chip .n { font-family: "Heebo", sans-serif; font-size: .7rem; color: var(--ink-3); font-variant-numeric: tabular-nums; margin-inline-start: 5px; }
   .chip[aria-pressed="true"] .n { color: inherit; opacity: .8; }
 
@@ -650,6 +669,7 @@
       <button class="btn primary big" id="roll">תן לי רעיון</button>
       <p class="hero-hint" id="now-hint"></p>
       <div class="quick" id="quick"></div>
+      <div class="quick byfood" id="byfood"></div>
     </div>
     <div id="now-slot"></div>
   </section>
@@ -670,6 +690,8 @@
       <button class="chip" id="f-empty" aria-pressed="false">לרוקן את המקרר</button>
       <button class="chip" id="f-fav" aria-pressed="false">מועדפים</button>
     </div>
+
+    <div class="quick byfood inlist" id="byfood2"></div>
 
     <div id="hidden-banner"></div>
 
@@ -3740,7 +3762,48 @@
     });
   }
 
+  // מרכיבים ראשיים: מה שבאמת מתחילים ממנו ארוחה
+  const FOODS = [
+    ["eggs", "ביצים"], ["pasta", "פסטה"], ["rice", "אורז"],
+    ["chicken", "חזה עוף"], ["ground_meat", "בשר טחון"], ["beef_steak", "סטייק"],
+    ["tuna", "טונה"], ["yogurt", "יוגורט"], ["bread", "לחם"], ["banana", "בננה"]
+  ];
+  let foodPick = null;
+
+  const usesFood = (r, ing) =>
+    r.need.some(n => (Array.isArray(n) ? n : [n]).indexOf(ing) !== -1) ||
+    (r.nice || []).indexOf(ing) !== -1;
+
+  function renderFoods() {
+    const pool = menu();
+    const html = '<span class="lab">לפי מרכיב עיקרי</span>' +
+      FOODS.map(f => {
+        const n = pool.filter(r => usesFood(r, f[0])).length;
+        return n ? '<button data-food="' + f[0] + '" aria-pressed="' + (foodPick === f[0]) + '">' +
+          esc(f[1]) + ' <b>' + n + '</b></button>' : "";
+      }).join("");
+    $("#byfood").innerHTML = html;
+    $("#byfood2").innerHTML = html;      // גם בראש הרשימה, כדי להחליף מרכיב בלי לחזור אחורה
+  }
+
+  function showFood(ing, stay) {
+    foodPick = ing;
+    Object.keys(filters).forEach(k => {
+      filters[k] = false;
+      const btn = $("#f-" + k);
+      if (btn) btn.setAttribute("aria-pressed", "false");
+    });
+    setTab("pantry");
+    renderResults();
+    renderFoods();
+    if (!stay) {
+      const box = $("#results");
+      if (box) box.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
   function showCat(key) {
+    foodPick = null;
     Object.keys(filters).forEach(k => {
       filters[k] = (k === key);
       const btn = $("#f-" + k);
@@ -3774,6 +3837,7 @@
       ? "<b>" + ready + "</b> מתוך " + pool.length + " הרעיונות " + SLOT_FOR[slot] + " אפשר להכין ממה שיש לך עכשיו."
       : "<b>" + pool.length + "</b> רעיונות מתאימים לשעה הזו. סמן מה יש בבית כדי לצמצם למה שאפשר להכין.";
     renderQuick();
+    renderFoods();
   }
 
   function pickNow() {
@@ -3866,6 +3930,7 @@
 
   function renderResults() {
     let list = menu();
+    if (foodPick) list = list.filter(r => usesFood(r, foodPick));
     if (showHidden) list = list.concat(R.filter(r => whyOut(r) && whyOut(r) !== "off"));
     if (filters.fast) list = list.filter(r => r.min <= 10);
     if (filters.nocook) list = list.filter(r => r.nocook);
@@ -3895,8 +3960,16 @@
     }
 
     const box = $("#results");
+    const banner = foodPick
+      ? '<div class="foodbar"><span>מנות עם <b>' +
+        esc((FOODS.find(f => f[0] === foodPick) || [, foodPick])[1]) +
+        '</b> · מהמהיר לארוך</span><button id="food-clear">בטל</button></div>'
+      : "";
     if (!list.length) {
-      box.innerHTML = '<p class="empty">אין מנה שעונה על הסינון הזה. נסה להוריד סינון אחד.</p>';
+      box.innerHTML = banner + '<p class="empty">אין מנה שעונה על הסינון הזה. נסה להוריד סינון אחד.</p>';
+    } else if (foodPick) {
+      // כשבוחרים מרכיב — הכי מהיר קודם
+      box.innerHTML = banner + list.slice().sort((a, b) => a.r.min - b.r.min).map(row).join("");
     } else if (have.size === 0) {
       box.innerHTML = list.sort((a, b) => a.r.min - b.r.min).map(row).join("");
     } else {
@@ -4496,6 +4569,16 @@
     const dn = t.closest("[data-delnote]");
     if (dn) { delete notes[dn.dataset.delnote]; refreshAll(); return; }
 
+    const fd = t.closest("[data-food]");
+    if (fd) {
+      const inList = !!fd.closest("#byfood2");
+      showFood(fd.dataset.food === foodPick ? null : fd.dataset.food, inList);
+      return;
+    }
+
+    const fc = t.closest("#food-clear");
+    if (fc) { foodPick = null; renderResults(); renderFoods(); return; }
+
     const th = t.closest("#toggle-hidden");
     if (th) { showHidden = !showHidden; renderResults(); return; }
   });
@@ -4602,7 +4685,9 @@
     $(pair[0]).addEventListener("click", () => {
       filters[pair[1]] = !filters[pair[1]];
       $(pair[0]).setAttribute("aria-pressed", String(filters[pair[1]]));
+      foodPick = null;
       renderResults();
+      renderFoods();
     });
   });
 
