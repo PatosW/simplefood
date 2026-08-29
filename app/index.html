@@ -288,6 +288,11 @@
     border-radius: 999px; padding: 4px 12px; min-width: 0; font-weight: 400;
   }
   .serves .how button[aria-pressed="true"] { font-weight: 600; }
+  .serves.batch .note { margin-inline-start: 0; }
+  .serves select {
+    font-size: var(--step--1); padding: 5px 8px; border-radius: 8px;
+    background: var(--surface); border: 1px solid var(--line); color: var(--ink);
+  }
   .serves .how .note {
     margin-inline-start: auto; font-family: "Assistant", sans-serif; font-size: var(--step--1); color: var(--ink-3);
   }
@@ -3166,6 +3171,128 @@
     sauce_tahini_lemon: { pasta:[200,"גרם פסטה","","lin"], tahini:[4,"כפות טחינה גולמית","","lin"], lemon:[1,"לימון","לימונים","soft"], garlic:[1,"שן שום","שיני שום","soft"], parsley:[0,"חופן גדול פטרוזיליה","","soft"], cherry:[1,"חופן עגבניות שרי","חופנים עגבניות שרי","lin"], chili:[0,"קורט פלפל חריף","","soft"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"] },
   };
 
+  /* ---------------- כמויות לכל המתכונים ----------------
+     [כמות, יחיד, רבים, סוג]. נוצר מהכמויות המקוריות ונבדק ידנית.
+     lin נצמד למספר הסועדים; soft — שום, חריף, לימון ועשבים — עולה לאט יותר.  */
+  const RECIPE_QTY = {
+    avocado_toast: { bread:[2,"פרוסה לחם מלא","פרוסות לחם מלא","lin"], avocado:[1,"אבוקדו בשל","","lin"], eggs:[1,"ביצה","ביצים","lin"], lemon:[0.25,"לימון","לימונים","soft"], tomato:[1,"עגבנייה","עגבניות","lin"] },
+    beans_tomato: { white_beans:[1,"קופסת שעועית לבנה (400 גרם)","קופסאות שעועית לבנה (400 גרם)","lin"], passata:[0.5,"קופסת רסק עגבניות","קופסאות רסק עגבניות","lin"], tomato:[3,"עגבנייה","עגבניות","lin"], garlic:[3,"שן שום","שיני שום","soft"], onion:[1,"בצל","בצלים","lin"], parsley:[1,"חופן פטרוזיליה","חופנים פטרוזיליה","soft"], rice:[1,"כוס אורז מבושל","כוסות אורז מבושל","lin"], bread:[2,"פרוסה לחם מלא","פרוסות לחם מלא","lin"] },
+    berry_shake: { frozen_berries:[1,"כוס פירות יער קפואים","כוסות פירות יער קפואים","lin"], banana:[1,"בננה טרייה","בננות טרייה","lin"], milk:[0.5,"כוס חלב","כוסות חלב","lin"], yogurt:[0.5,"גביע יוגורט","גביעי יוגורט","lin"], honey:[1,"כפית דבש","כפיות דבש","soft"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"], oats:[2,"כף שיבולת שועל","כפות שיבולת שועל","lin"] },
+    cheese_sandwich: { bread:[2,"פרוסה לחם מלא","פרוסות לחם מלא","lin"], yellow_cheese:[2,"פרוסה גבינה צהובה","פרוסות גבינה צהובה","lin"], bulgarit:[50,"גרם בולגרית","","lin"], tomato:[1,"עגבנייה","עגבניות","lin"], cucumber:[1,"מלפפון","מלפפונים","lin"], avocado:[0.5,"אבוקדו","","lin"], lettuce:[2,"עלי חסה","","lin"], olives:[5,"זיתים","","soft"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    chicken_balls: { ground_meat:[300,"גרם עוף טחון","","lin"], passata:[1,"קופסת רסק עגבניות","קופסאות רסק עגבניות","lin"], tomato:[4,"עגבנייה","עגבניות","lin"], onion:[1,"בצל","בצלים","lin"], garlic:[2,"שן שום","שיני שום","soft"], parsley:[1,"חופן פטרוזיליה","חופנים פטרוזיליה","soft"], rice:[1,"כוס אורז","כוסות אורז","lin"], eggs:[1,"ביצה","ביצים","lin"] },
+    chicken_pan: { chicken:[1,"חזה עוף (200 גרם)","","lin"], lemon:[0.5,"לימון","לימונים","soft"], garlic:[2,"שן שום","שיני שום","soft"], frozen_veg:[2,"חופן ירקות קפואים","חופנים ירקות קפואים","lin"], lettuce:[1,"חופן עלים","חופנים עלים","lin"] },
+    choco_banana_shake: { banana:[2,"בננה (אחת קפואה אם יש)","בננות (אחת קפואה אם יש)","lin"], milk:[1,"כוס חלב","כוסות חלב","lin"], cocoa:[1,"כף קקאו לא ממותק","כפות קקאו לא ממותק","soft"], peanut_butter:[1,"כף חמאת בוטנים","כפות חמאת בוטנים","lin"], dates:[1,"תמר","תמרים","lin"], oats:[2,"כף שיבולת שועל","כפות שיבולת שועל","lin"], protein_yogurt:[0.5,"גביע יוגורט חלבון","גביעי יוגורט חלבון","lin"] },
+    choco_yogurt: { yogurt:[1,"גביע יוגורט","גביעי יוגורט","lin"], cocoa:[1,"כף קקאו לא ממותק","כפות קקאו לא ממותק","soft"], honey:[1,"כפית דבש או סילאן","כפיות דבש או סילאן","soft"], walnuts:[1,"חופן אגוזים","חופנים אגוזים","lin"], dark_chocolate:[1,"ריבוע שוקולד מריר","ריבועים שוקולד מריר","lin"], banana:[0.5,"בננה","בננות","lin"] },
+    clean_soup: { carrot:[2,"גזר","גזרים","lin"], zucchini:[1,"קישוא","קישואים","lin"], potato:[1,"תפוח אדמה","תפוחים אדמה","lin"], broccoli:[0.5,"ראש","ראשי","lin"], sweet_potato:[1,"בטטה","בטטות","lin"], onion:[1,"בצל","בצלים","lin"], lentils:[1,"כוס עדשים כתומות","כוסות עדשים כתומות","lin"], garlic:[3,"שן שום","שיני שום","soft"], lemon:[0.5,"לימון","לימונים","soft"], parsley:[1,"חופן פטרוזיליה","חופנים פטרוזיליה","soft"], tomato:[1,"עגבנייה","עגבניות","lin"] },
+    corn_pancakes: { corn:[1,"קופסת תירס (300 גרם)","קופסאות תירס (300 גרם)","lin"], eggs:[2,"ביצה","ביצים","lin"], flour:[3,"כף קמח","כפות קמח","lin"], green_onion:[2,"גבעול","גבעולים","lin"], white_cheese:[2,"כף גבינה לבנה","כפות גבינה לבנה","lin"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    cottage_crackers: { cottage:[0.5,"גביע קוטג'","גביעי קוטג'","lin"], crackers:[4,"קרקרים מלאים","","lin"], tomato:[6,"עגבנייה שרי","עגבניות שרי","lin"], olives:[6,"זיתים","","soft"], cucumber:[0.5,"מלפפון","מלפפונים","lin"] },
+    couscous_salad: { couscous:[1,"כוס קוסקוס מלא","כוסות קוסקוס מלא","lin"], cucumber:[1,"מלפפון","מלפפונים","lin"], tomato:[2,"עגבנייה","עגבניות","lin"], pepper:[1,"פלפל","פלפלים","lin"], carrot:[1,"גזר","גזרים","lin"], lemon:[0.5,"לימון","לימונים","soft"], parsley:[0,"חופן גדול","","soft"], chickpeas:[0.5,"קופסת חומוס","קופסאות חומוס","lin"], olives:[8,"זיתים","","soft"], bulgarit:[50,"גרם בולגרית","","lin"] },
+    cucumber_mint_shake: { cucumber:[1,"מלפפון","מלפפונים","lin"], apple:[1,"תפוח ירוק","תפוחים ירוק","lin"], mint:[10,"עלי נענע","","soft"], lemon:[0.5,"לימון","לימונים","soft"], yogurt:[2,"כף יוגורט","כפות יוגורט","lin"], spinach_frozen:[1,"חופן תרד קפוא","חופנים תרד קפוא","lin"] },
+    date_shake: { dates:[3,"תמר","תמרים","lin"], almonds:[1,"חופן שקדים (20 גרם)","חופנים שקדים (20 גרם)","lin"], milk:[1,"כוס חלב","כוסות חלב","lin"], yogurt:[1,"גביע יוגורט","גביעי יוגורט","lin"], banana:[0.5,"בננה","בננות","lin"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"], cocoa:[1,"כפית קקאו","כפיות קקאו","soft"] },
+    edamame: { edamame:[2,"חופן אדממה קפואה (כ-150 גרם)","חופנים אדממה קפואה (כ-150 גרם)","lin"], soy_sauce:[1,"כפית רוטב סויה","כפיות רוטב סויה","soft"], lemon:[0.25,"לימון","לימונים","soft"] },
+    egg_wrap: { tortilla:[1,"טורטייה","טורטיות","lin"], eggs:[2,"ביצה","ביצים","lin"], white_cheese:[3,"כף גבינה לבנה","כפות גבינה לבנה","lin"], tomato:[1,"עגבנייה","עגבניות","lin"], lettuce:[2,"עלי חסה","","lin"], avocado:[0.5,"אבוקדו","","lin"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    fattoush: { pita:[1,"פיתה יבשה","פיתות יבשה","lin"], tomato:[3,"עגבנייה","עגבניות","lin"], cucumber:[2,"מלפפון","מלפפונים","lin"], lemon:[0.5,"לימון","לימונים","soft"], parsley:[0,"חופן גדול","","soft"], onion:[0.25,"בצל","בצלים","lin"], olives:[8,"זיתים","","soft"], bulgarit:[50,"גרם בולגרית","","lin"], lettuce:[0,"כמה עלים","","lin"] },
+    fried_rice: { rice:[2,"כוס אורז מבושל מאתמול","כוסות אורז מבושל מאתמול","lin"], eggs:[2,"ביצה","ביצים","lin"], frozen_veg:[1,"חופן ירקות קפואים","חופנים ירקות קפואים","lin"], green_onion:[2,"גבעול","גבעולים","lin"], soy_sauce:[2,"כף סויה","כפות סויה","soft"], chicken:[0.5,"חזה מבושל","","lin"], carrot:[1,"גזר","גזרים","lin"], garlic:[2,"שן שום","שיני שום","soft"] },
+    frittata_left: { eggs:[4,"ביצה","ביצים","lin"], zucchini:[1,"קישוא","קישואים","lin"], pepper:[1,"פלפל","פלפלים","lin"], mushrooms:[6,"פטריות","","lin"], potato:[1,"תפוח אדמה","תפוחים אדמה","lin"], broccoli:[0.5,"ראש","ראשי","lin"], carrot:[1,"גזר","גזרים","lin"], onion:[1,"בצל","בצלים","lin"], white_cheese:[3,"כף גבינה לבנה","כפות גבינה לבנה","lin"], bulgarit:[50,"גרם בולגרית","","lin"], parsley:[1,"חופן פטרוזיליה","חופנים פטרוזיליה","soft"], garlic:[2,"שן שום","שיני שום","soft"] },
+    fruit_cottage: { cottage:[1,"גביע קוטג'","גביעי קוטג'","lin"], apple:[1,"תפוח","תפוחים","lin"], banana:[1,"בננה","בננות","lin"], granola:[1,"חופן גרנולה (30 גרם)","חופנים גרנולה (30 גרם)","lin"], honey:[1,"כפית דבש","כפיות דבש","soft"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"], dates:[2,"תמר","תמרים","lin"] },
+    green_salad_feta: { lettuce:[0.5,"שקית עלים ירוקים","שקיות עלים ירוקים","lin"], avocado:[1,"אבוקדו","","lin"], bulgarit:[60,"גרם גבינה בולגרית","","lin"], walnuts:[1,"חופן אגוזי מלך","חופנים אגוזי מלך","lin"], lemon:[0.5,"לימון","לימונים","soft"], cucumber:[1,"מלפפון","מלפפונים","lin"], tomato:[1,"עגבנייה","עגבניות","lin"] },
+    green_shake: { banana:[1,"בננה","בננות","lin"], spinach_frozen:[1,"חופן תרד קפוא","חופנים תרד קפוא","lin"], frozen_veg:[1,"חופן ירקות קפואים","חופנים ירקות קפואים","lin"], yogurt:[1,"גביע יוגורט","גביעי יוגורט","lin"], milk:[1,"כוס חלב","כוסות חלב","lin"], peanut_butter:[1,"כף חמאת בוטנים","כפות חמאת בוטנים","lin"], chia:[1,"כף צ'יה","כפות צ'יה","soft"], honey:[1,"כפית דבש","כפיות דבש","soft"] },
+    green_water_shake: { spinach_frozen:[1,"חופן תרד קפוא","חופנים תרד קפוא","lin"], apple:[1,"תפוח","תפוחים","lin"], banana:[1,"בננה טרייה","בננות טרייה","lin"], lemon:[0.5,"לימון","לימונים","soft"], mint:[5,"עלי נענע","","soft"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"] },
+    hidden_veg_pasta: { pasta:[200,"גרם פסטה","","lin"], passata:[1,"קופסת רסק עגבניות","קופסאות רסק עגבניות","lin"], carrot:[2,"גזר","גזרים","lin"], zucchini:[1,"קישוא","קישואים","lin"], onion:[1,"בצל","בצלים","lin"], garlic:[2,"שן שום","שיני שום","soft"], yellow_cheese:[0,"גבינה צהובה מגוררת","","lin"] },
+    hot_oats: { oats:[0.5,"כוס שיבולת שועל","כוסות שיבולת שועל","lin"], milk:[1,"כוס חלב","כוסות חלב","lin"], yogurt:[0.5,"גביע יוגורט","גביעי יוגורט","lin"], apple:[1,"תפוח","תפוחים","lin"], walnuts:[1,"חופן אגוזים","חופנים אגוזים","lin"], honey:[1,"כפית דבש","כפיות דבש","soft"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"], banana:[0.5,"בננה","בננות","lin"] },
+    hummus_bowl: { chickpeas:[1,"קופסת חומוס (400 גרם)","קופסאות חומוס (400 גרם)","lin"], tahini:[2,"כף טחינה גולמית","כפות טחינה גולמית","lin"], lemon:[0.5,"לימון","לימונים","soft"], eggs:[1,"ביצה קשה","ביצים קשה","lin"], pita:[1,"פיתה","פיתות","lin"], parsley:[0,"מעט פטרוזיליה","","soft"], olives:[6,"זיתים","","soft"] },
+    hummus_hot: { chickpeas:[1,"קופסת חומוס","קופסאות חומוס","lin"], chili:[1,"פלפל חריף","פלפלים חריף","soft"], harissa:[1,"כף הריסה","כפות הריסה","soft"], schug:[1,"כפית שוג","כפיות שוג","soft"], lemon:[0.5,"לימון","לימונים","soft"], tahini:[1,"כף טחינה","כפות טחינה","lin"], eggs:[1,"ביצה קשה","ביצים קשה","lin"], pita:[1,"פיתה","פיתות","lin"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    hummus_plate: { hummus_ready:[0.5,"גביע חומוס","גביעי חומוס","lin"], eggs:[1,"ביצה","ביצים","lin"], pita:[1,"פיתה","פיתות","lin"], cucumber:[1,"מלפפון","מלפפונים","lin"], tomato:[1,"עגבנייה","עגבניות","lin"], olives:[6,"זיתים","","soft"], parsley:[0,"מעט פטרוזיליה","","soft"], tahini:[1,"כף טחינה","כפות טחינה","lin"] },
+    israeli_salad: { tomato:[3,"עגבנייה","עגבניות","lin"], cucumber:[3,"מלפפון","מלפפונים","lin"], tahini:[2,"כף טחינה גולמית","כפות טחינה גולמית","lin"], bulgarit:[50,"גרם בולגרית","","lin"], lemon:[0.5,"לימון","לימונים","soft"], parsley:[1,"חופן פטרוזיליה","חופנים פטרוזיליה","soft"], olives:[8,"זיתים","","soft"], onion:[0.25,"בצל","בצלים","lin"] },
+    labaneh_plate: { labaneh:[0.5,"גביע לבנה","גביעי לבנה","lin"], crackers:[5,"קרקרים","","lin"], pita:[1,"פיתה","פיתות","lin"], bread:[2,"פרוסה לחם","פרוסות לחם","lin"], olives:[8,"זיתים","","soft"], cucumber:[1,"מלפפון","מלפפונים","lin"], tomato:[1,"עגבנייה","עגבניות","lin"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    lentil_soup: { lentils:[1,"כוס עדשים כתומות","כוסות עדשים כתומות","lin"], onion:[1,"בצל","בצלים","lin"], carrot:[2,"גזר","גזרים","lin"], garlic:[3,"שן שום","שיני שום","soft"], lemon:[0.5,"לימון","לימונים","soft"], parsley:[1,"חופן פטרוזיליה","חופנים פטרוזיליה","soft"] },
+    mango_fresh_shake: { mango_fresh:[1,"מנגו בשל","","lin"], banana:[1,"בננה","בננות","lin"], oats:[2,"כף שיבולת שועל","כפות שיבולת שועל","lin"], milk:[0.5,"כוס חלב","כוסות חלב","lin"], yogurt:[0.5,"גביע יוגורט","גביעי יוגורט","lin"], lemon:[0.25,"לימון","לימונים","soft"], mint:[0,"כמה עלי נענע","","soft"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"] },
+    mango_yogurt_shake: { frozen_mango:[1,"כוס מנגו קפוא","כוסות מנגו קפוא","lin"], mango_fresh:[1,"מנגו טרי ו-4 קוביות קרח","","lin"], yogurt:[0.5,"גביע יוגורט","גביעי יוגורט","lin"], milk:[0.5,"כוס חלב","כוסות חלב","lin"], honey:[1,"כפית דבש","כפיות דבש","soft"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"], banana:[0.5,"בננה","בננות","lin"], orange:[1,"תפוז","תפוזים","lin"] },
+    ninja_baby_potatoes: { potato:[600,"גרם תפוחי אדמה קטנים","","lin"], garlic:[1,"כפית שום אבקה","כפיות שום אבקה","soft"], parsley:[0,"מעט פטרוזיליה","","soft"], sour_cream:[3,"כף שמנת חמוצה","כפות שמנת חמוצה","lin"] },
+    ninja_baked_apples: { apple:[2,"תפוח","תפוחים","lin"], walnuts:[1,"חופן אגוזי מלך","חופנים אגוזי מלך","lin"], honey:[1,"כפית דבש","כפיות דבש","soft"], yogurt:[0.5,"גביע יוגורט","גביעי יוגורט","lin"], oats:[2,"כף שיבולת שועל","כפות שיבולת שועל","lin"] },
+    ninja_beef_meatballs: { ground_meat:[500,"גרם בשר בקר טחון","","lin"], onion:[1,"בצל","בצלים","lin"], passata:[1,"קופסת רסק עגבניות","קופסאות רסק עגבניות","lin"], tomato:[5,"עגבנייה","עגבניות","lin"], eggs:[1,"ביצה","ביצים","lin"], garlic:[2,"שן שום","שיני שום","soft"], parsley:[1,"חופן פטרוזיליה","חופנים פטרוזיליה","soft"], rice:[1,"כוס אורז","כוסות אורז","lin"], oats:[3,"כף שיבולת שועל","כפות שיבולת שועל","lin"] },
+    ninja_beef_rice_bowl: { beef_steak:[300,"גרם סטייק דק","","lin"], rice:[2,"כוס אורז מבושל","כוסות אורז מבושל","lin"], frozen_veg:[2,"חופן ירקות קפואים","חופנים ירקות קפואים","lin"], soy_sauce:[2,"כף סויה","כפות סויה","soft"], garlic:[2,"שן שום","שיני שום","soft"], green_onion:[2,"גבעול","גבעולים","lin"], cucumber:[1,"מלפפון","מלפפונים","lin"] },
+    ninja_beef_skewers: { beef_cubes:[500,"גרם קוביות בקר","","lin"], pepper:[1,"פלפל","פלפלים","lin"], onion:[1,"בצל","בצלים","lin"], garlic:[1,"כפית שום אבקה","כפיות שום אבקה","soft"], lemon:[0.5,"לימון","לימונים","soft"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    ninja_beef_strips_pita: { beef_steak:[300,"גרם סטייק דק","","lin"], pita:[2,"פיתה","פיתות","lin"], onion:[1,"בצל","בצלים","lin"], tahini:[3,"כף טחינה","כפות טחינה","lin"], lettuce:[0,"כמה עלים","","lin"], tomato:[1,"עגבנייה","עגבניות","lin"], chili:[0,"קורט פלפל חריף","","soft"] },
+    ninja_beef_tacos: { ground_meat:[400,"גרם בשר בקר טחון","","lin"], tortilla:[6,"טורטייה","טורטיות","lin"], onion:[1,"בצל","בצלים","lin"], yellow_cheese:[1,"כוס גבינה מגוררת","כוסות גבינה מגוררת","lin"], lettuce:[0,"כמה עלים","","lin"], tomato:[2,"עגבנייה","עגבניות","lin"], sour_cream:[3,"כף שמנת חמוצה","כפות שמנת חמוצה","lin"], corn:[0.5,"קופסת תירס","קופסאות תירס","lin"] },
+    ninja_beef_veg_tray: { ground_meat:[400,"גרם בשר בקר טחון","","lin"], zucchini:[2,"קישוא","קישואים","lin"], pepper:[1,"פלפל","פלפלים","lin"], potato:[2,"תפוחי אדמה","","lin"], broccoli:[0.5,"ראש","ראשי","lin"], onion:[1,"בצל","בצלים","lin"], garlic:[1,"כפית שום אבקה","כפיות שום אבקה","soft"], passata:[0.5,"קופסת רסק עגבניות","קופסאות רסק עגבניות","lin"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    ninja_bruschetta: { bread:[4,"פרוסה לחם מלא","פרוסות לחם מלא","lin"], tomato:[3,"עגבנייה","עגבניות","lin"], garlic:[2,"שן שום","שיני שום","soft"], basil:[0,"כמה עלי בזיליקום","","soft"], bulgarit:[50,"גרם בולגרית","","lin"], olives:[6,"זיתים","","soft"] },
+    ninja_burger: { ground_meat:[400,"גרם טחון","","lin"], bread:[2,"לחמניות או 4 פרוסות לחם מלא","","lin"], yellow_cheese:[2,"פרוסה גבינה צהובה","פרוסות גבינה צהובה","lin"], tomato:[1,"עגבנייה","עגבניות","lin"], lettuce:[2,"עלי חסה","","lin"], onion:[0.25,"בצל","בצלים","lin"] },
+    ninja_cauliflower: { cauliflower:[1,"כרובית שלמה בינונית","כרוביות שלמה בינונית","lin"], tahini:[3,"כף טחינה","כפות טחינה","lin"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"], lemon:[0.5,"לימון","לימונים","soft"], garlic:[1,"כפית שום אבקה","כפיות שום אבקה","soft"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    ninja_chicken_cherry: { chicken:[2,"חזה עוף","","lin"], cherry:[1,"קופסת עגבניות שרי","קופסאות עגבניות שרי","lin"], garlic:[1,"כפית שום אבקה","כפיות שום אבקה","soft"], lemon:[0.5,"לימון","לימונים","soft"], parsley:[0,"מעט פטרוזיליה","","soft"], bulgarit:[50,"גרם בולגרית","","lin"] },
+    ninja_crispy_tofu: { tofu:[1,"חבילת טופו (300 גרם)","חבילות טופו (300 גרם)","lin"], soy_sauce:[2,"כף סויה","כפות סויה","soft"], garlic:[1,"כפית שום אבקה","כפיות שום אבקה","soft"], rice:[1,"כוס אורז מבושל","כוסות אורז מבושל","lin"], green_onion:[2,"גבעול","גבעולים","lin"], chili:[0,"קורט פלפל חריף","","soft"] },
+    ninja_egg_avocado: { eggs:[2,"ביצה","ביצים","lin"], avocado:[1,"אבוקדו גדול","","lin"], bulgarit:[2,"כף בולגרית","כפות בולגרית","lin"], parsley:[0,"מעט פטרוזיליה","","soft"], lemon:[0.25,"לימון","לימונים","soft"], chili:[0,"קורט פלפל חריף","","soft"] },
+    ninja_egg_toast: { bread:[2,"פרוסה לחם מלא עבות","פרוסות לחם מלא עבות","lin"], eggs:[2,"ביצה","ביצים","lin"], yellow_cheese:[1,"פרוסת גבינה צהובה","פרוסות גבינה צהובה","lin"], tomato:[1,"עגבנייה","עגבניות","lin"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    ninja_eggplant: { eggplant:[1,"חציל גדול","חצילים גדול","lin"], tahini:[3,"כף טחינה גולמית","כפות טחינה גולמית","lin"], lemon:[0.5,"לימון","לימונים","soft"], garlic:[1,"שן שום","שיני שום","soft"], parsley:[0,"מעט פטרוזיליה","","soft"], eggs:[1,"ביצה קשה","ביצים קשה","lin"] },
+    ninja_falafel_balls: { chickpeas:[1,"קופסת חומוס","קופסאות חומוס","lin"], onion:[0.5,"בצל","בצלים","lin"], flour:[3,"כף קמח","כפות קמח","lin"], parsley:[0,"חופן גדול פטרוזיליה","","soft"], garlic:[2,"שן שום","שיני שום","soft"], tahini:[2,"כף טחינה","כפות טחינה","lin"], pita:[2,"פיתה","פיתות","lin"] },
+    ninja_fish_cakes: { tuna:[2,"קופסת טונה","קופסאות טונה","lin"], eggs:[1,"ביצה","ביצים","lin"], oats:[3,"כף שיבולת שועל","כפות שיבולת שועל","lin"], onion:[0.25,"בצל","בצלים","lin"], parsley:[1,"חופן פטרוזיליה","חופנים פטרוזיליה","soft"], lemon:[0.5,"לימון","לימונים","soft"] },
+    ninja_fish_schnitzel: { white_fish:[2,"פילה דג לבן","","lin"], eggs:[1,"ביצה","ביצים","lin"], oats:[1,"כוס שיבולת שועל","כוסות שיבולת שועל","lin"], flour:[3,"כף קמח","כפות קמח","lin"], lemon:[0.5,"לימון","לימונים","soft"], garlic:[1,"כפית שום אבקה","כפיות שום אבקה","soft"] },
+    ninja_flatbread: { flour:[1,"כוס וחצי קמח","כוסות וחצי קמח","lin"], yogurt:[1,"גביע יוגורט (180 גרם)","גביעי יוגורט (180 גרם)","lin"], tahini:[2,"כף טחינה","כפות טחינה","lin"], bulgarit:[50,"גרם בולגרית","","lin"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    ninja_frozen_veg: { frozen_veg:[1,"שקית ירקות קפואים (500 גרם)","שקיות ירקות קפואים (500 גרם)","lin"], garlic:[1,"כפית שום אבקה","כפיות שום אבקה","soft"], lemon:[0.5,"לימון","לימונים","soft"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"], tahini:[2,"כף טחינה","כפות טחינה","lin"] },
+    ninja_grilled_banana: { banana:[2,"בננה","בננות","lin"], cocoa:[1,"כפית קקאו","כפיות קקאו","soft"], peanut_butter:[1,"כף חמאת בוטנים","כפות חמאת בוטנים","lin"], walnuts:[1,"חופן אגוזים","חופנים אגוזים","lin"], yogurt:[0.5,"גביע יוגורט","גביעי יוגורט","lin"] },
+    ninja_grilled_cheese: { bread:[2,"פרוסה לחם מלא","פרוסות לחם מלא","lin"], yellow_cheese:[2,"פרוסה גבינה צהובה","פרוסות גבינה צהובה","lin"], bulgarit:[50,"גרם בולגרית","","lin"], white_cheese:[3,"כף גבינה לבנה","כפות גבינה לבנה","lin"], tomato:[1,"עגבנייה","עגבניות","lin"], olives:[5,"זיתים","","soft"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    ninja_grilled_peaches: { peach:[2,"אפרסק בשלים","אפרסקים בשלים","lin"], yogurt:[1,"גביע יוגורט","גביעי יוגורט","lin"], honey:[1,"כפית דבש","כפיות דבש","soft"], walnuts:[1,"חופן אגוזים","חופנים אגוזים","lin"], mint:[0,"כמה עלי נענע","","soft"] },
+    ninja_halloumi: { halloumi:[1,"חבילת חלומי (200 גרם)","חבילות חלומי (200 גרם)","lin"], lemon:[0.5,"לימון","לימונים","soft"], cherry:[1,"חופן עגבניות שרי","חופנים עגבניות שרי","lin"], lettuce:[1,"חופן עלים","חופנים עלים","lin"], honey:[1,"כפית דבש","כפיות דבש","soft"] },
+    ninja_kebab: { ground_meat:[500,"גרם בשר בקר טחון","","lin"], onion:[1,"בצל","בצלים","lin"], parsley:[0,"צרור פטרוזיליה","","soft"], garlic:[2,"שן שום","שיני שום","soft"], tahini:[3,"כף טחינה","כפות טחינה","lin"], pita:[2,"פיתה","פיתות","lin"], chili:[0,"קורט פלפל חריף","","soft"] },
+    ninja_kefta: { ground_meat:[400,"גרם טחון","","lin"], onion:[1,"בצל","בצלים","lin"], parsley:[1,"חופן פטרוזיליה","חופנים פטרוזיליה","soft"], pita:[2,"פיתה","פיתות","lin"], cherry:[1,"חופן עגבניות שרי","חופנים עגבניות שרי","lin"], tahini:[2,"כף טחינה","כפות טחינה","lin"] },
+    ninja_legs_sweet: { chicken_legs:[4,"שוק עוף","שוקי עוף","lin"], sweet_potato:[2,"בטטה","בטטות","lin"], lemon:[0.5,"לימון","לימונים","soft"], garlic:[1,"כפית שום אבקה","כפיות שום אבקה","soft"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    ninja_mushrooms: { mushrooms:[1,"חבילת פטריות (250 גרם)","חבילות פטריות (250 גרם)","lin"], onion:[1,"בצל","בצלים","lin"], garlic:[1,"כפית שום אבקה","כפיות שום אבקה","soft"], parsley:[0,"מעט פטרוזיליה","","soft"], bread:[2,"פרוסה לחם מלא","פרוסות לחם מלא","lin"], chicken:[0,"חזה עוף מבושל","","lin"] },
+    ninja_salmon_glaze: { salmon:[2,"פילה סלמון","","lin"], soy_sauce:[2,"כף רוטב סויה","כפות רוטב סויה","soft"], honey:[1,"כף דבש","כפות דבש","soft"], garlic:[1,"שן שום","שיני שום","soft"], lemon:[0.25,"לימון","לימונים","soft"], green_onion:[1,"גבעול בצל ירוק","גבעולים בצל ירוק","lin"] },
+    ninja_salmon_zucchini: { salmon:[2,"פילה סלמון","","lin"], zucchini:[2,"קישוא","קישואים","lin"], lemon:[1,"לימון","לימונים","soft"], garlic:[1,"כפית שום אבקה","כפיות שום אבקה","soft"] },
+    ninja_sausage_frozen: { sausages:[6,"נקניקיות עוף","","lin"], frozen_veg:[3,"חופן ירקות קפואים","חופנים ירקות קפואים","lin"], garlic:[1,"כפית שום אבקה","כפיות שום אבקה","soft"], lemon:[0.5,"לימון","לימונים","soft"] },
+    ninja_shakshuka_ramekin: { eggs:[2,"ביצה","ביצים","lin"], passata:[0.5,"כוס רסק עגבניות","כוסות רסק עגבניות","lin"], tomato:[2,"עגבנייה מרוסקות","עגבניות מרוסקות","lin"], bulgarit:[2,"כף בולגרית","כפות בולגרית","lin"], parsley:[0,"מעט פטרוזיליה","","soft"], pita:[1,"פיתה","פיתות","lin"], onion:[0.25,"בצל","בצלים","lin"], schug:[1,"כפית שוג","כפיות שוג","soft"] },
+    ninja_steak_onion: { beef_steak:[2,"סטייק דקים","סטייקים דקים","lin"], onion:[2,"בצל","בצלים","lin"], garlic:[2,"שן שום","שיני שום","soft"], parsley:[0,"מעט פטרוזיליה","","soft"], bread:[2,"פרוסה לחם מלא","פרוסות לחם מלא","lin"], mushrooms:[6,"פטריות","","lin"] },
+    ninja_steak_salad: { beef_steak:[300,"גרם סטייק דק","","lin"], lettuce:[1,"שקית עלים ירוקים","שקיות עלים ירוקים","lin"], cherry:[1,"חופן עגבניות שרי","חופנים עגבניות שרי","lin"], cucumber:[1,"מלפפון","מלפפונים","lin"], onion:[0.25,"בצל","בצלים","lin"], lemon:[0.5,"לימון","לימונים","soft"], bulgarit:[50,"גרם בולגרית","","lin"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"] },
+    ninja_steak_thin: { beef_steak:[2,"סטייק דקים (כ-200 גרם כל, עובי 1.5 ס״מ)","סטייקים דקים (כ-200 גרם כל, עובי 1.5 ס״מ)","lin"], garlic:[1,"כפית שום אבקה","כפיות שום אבקה","soft"], lemon:[0.5,"לימון","לימונים","soft"], parsley:[0,"מעט פטרוזיליה","","soft"], cherry:[1,"חופן עגבניות שרי","חופנים עגבניות שרי","lin"] },
+    ninja_stuffed_peppers: { pepper:[3,"פלפל","פלפלים","lin"], quinoa:[1,"כוס קינואה מבושלת","כוסות קינואה מבושלת","lin"], tomato:[1,"עגבנייה","עגבניות","lin"], onion:[0.5,"בצל","בצלים","lin"], bulgarit:[50,"גרם בולגרית","","lin"], parsley:[0,"מעט פטרוזיליה","","soft"], chickpeas:[0.5,"קופסת חומוס","קופסאות חומוס","lin"] },
+    ninja_sweet_fries: { sweet_potato:[2,"בטטה","בטטות","lin"], tahini:[2,"כף טחינה","כפות טחינה","lin"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"] },
+    ninja_whitefish: { white_fish:[2,"פילה דג לבן","","lin"], broccoli:[1,"ראש ברוקולי או שקית פרחים קפואים","ראשי ברוקולי או שקית פרחים קפואים","lin"], lemon:[1,"לימון","לימונים","soft"], garlic:[1,"כפית שום אבקה","כפיות שום אבקה","soft"] },
+    ninja_whole_fish: { fish_whole:[0,"דג שלם מנוקה (דניס או לברק, כ-400 גרם)","","lin"], lemon:[1,"לימון","לימונים","soft"], garlic:[2,"שן שום","שיני שום","soft"], parsley:[0,"צרור פטרוזיליה","","soft"], cherry:[1,"חופן עגבניות שרי","חופנים עגבניות שרי","lin"] },
+    oat_date_shake: { banana:[1,"בננה גדולה ובשלה","בננות גדולה ובשלה","lin"], oats:[0.25,"כוס שיבולת שועל","כוסות שיבולת שועל","lin"], almonds:[1,"חופן שקדים (20 גרם)","חופנים שקדים (20 גרם)","lin"], walnuts:[1,"חופן אגוזי מלך","חופנים אגוזי מלך","lin"], dates:[1,"תמר או שניים","תמרים או שניים","lin"], milk:[1,"כוס חלב או מים","כוסות חלב או מים","lin"], yogurt:[0.5,"גביע יוגורט","גביעי יוגורט","lin"], cocoa:[1,"כפית קקאו","כפיות קקאו","soft"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"] },
+    oats_shake: { oats:[0.25,"כוס שיבולת שועל","כוסות שיבולת שועל","lin"], banana:[1,"בננה","בננות","lin"], milk:[1,"כוס חלב","כוסות חלב","lin"], yogurt:[0.5,"גביע יוגורט","גביעי יוגורט","lin"], peanut_butter:[1,"כף חמאת בוטנים","כפות חמאת בוטנים","lin"], dates:[2,"תמר","תמרים","lin"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"], cocoa:[1,"כפית קקאו","כפיות קקאו","soft"] },
+    orange_mango_shake: { orange:[2,"תפוז","תפוזים","lin"], frozen_mango:[0.5,"כוס מנגו קפוא","כוסות מנגו קפוא","lin"], yogurt:[0.5,"גביע יוגורט","גביעי יוגורט","lin"], banana:[0.5,"בננה","בננות","lin"], mint:[0,"כמה עלי נענע","","soft"], honey:[1,"כפית דבש","כפיות דבש","soft"] },
+    oven_schnitzel: { chicken:[2,"חזה עוף","","lin"], eggs:[2,"ביצה","ביצים","lin"], oats:[1,"כוס וחצי שיבולת שועל","כוסות וחצי שיבולת שועל","lin"], flour:[0.5,"כוס קמח","כוסות קמח","lin"], garlic:[1,"כפית שום אבקה","כפיות שום אבקה","soft"], lemon:[0.5,"לימון","לימונים","soft"] },
+    oven_veg: { eggplant:[1,"חציל","חצילים","lin"], zucchini:[2,"קישוא","קישואים","lin"], sweet_potato:[1,"בטטה","בטטות","lin"], potato:[2,"תפוחי אדמה","","lin"], broccoli:[1,"ראש","ראשי","lin"], carrot:[3,"גזר","גזרים","lin"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"], tahini:[2,"כף טחינה","כפות טחינה","lin"], garlic:[3,"שן שום","שיני שום","soft"], lemon:[0.5,"לימון","לימונים","soft"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    overnight_oats: { oats:[0.5,"כוס שיבולת שועל","כוסות שיבולת שועל","lin"], yogurt:[0.5,"כוס יוגורט","כוסות יוגורט","lin"], milk:[0.5,"כוס חלב","כוסות חלב","lin"], banana:[0.5,"בננה","בננות","lin"], chia:[1,"כף צ'יה","כפות צ'יה","soft"], peanut_butter:[1,"כף חמאת בוטנים","כפות חמאת בוטנים","lin"], honey:[1,"כפית דבש","כפיות דבש","soft"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"] },
+    pancake_banana: { banana:[1,"בננה בשלה","בננות בשלה","lin"], eggs:[2,"ביצה","ביצים","lin"], oats:[3,"כף שיבולת שועל","כפות שיבולת שועל","lin"], yogurt:[2,"כף יוגורט","כפות יוגורט","lin"], peanut_butter:[1,"כף חמאת בוטנים","כפות חמאת בוטנים","lin"], honey:[1,"כפית דבש","כפיות דבש","soft"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"] },
+    pasta_chili: { pasta:[150,"גרם פסטה מלאה","","lin"], garlic:[4,"שן שום","שיני שום","soft"], chili:[1,"פלפל חריף","פלפלים חריף","soft"], parsley:[0,"חופן גדול פטרוזיליה","","soft"], tuna:[1,"קופסת טונה","קופסאות טונה","lin"], lemon:[0.25,"לימון","לימונים","soft"] },
+    pasta_tuna: { pasta:[150,"גרם פסטה מלאה","","lin"], tuna:[1,"קופסת טונה","קופסאות טונה","lin"], garlic:[3,"שן שום","שיני שום","soft"], lemon:[0.5,"לימון","לימונים","soft"], parsley:[1,"חופן פטרוזיליה","חופנים פטרוזיליה","soft"], olives:[8,"זיתים","","soft"], pepper:[0.5,"פלפל","פלפלים","lin"] },
+    pasta_veg_yogurt: { pasta:[150,"גרם פסטה מלאה","","lin"], zucchini:[1,"קישוא","קישואים","lin"], broccoli:[0.5,"ראש","ראשי","lin"], mushrooms:[6,"פטריות","","lin"], pepper:[1,"פלפל","פלפלים","lin"], yogurt:[0.5,"גביע יוגורט","גביעי יוגורט","lin"], sour_cream:[3,"כף שמנת חמוצה","כפות שמנת חמוצה","lin"], garlic:[2,"שן שום","שיני שום","soft"], parsley:[1,"חופן פטרוזיליה","חופנים פטרוזיליה","soft"], lemon:[0.25,"לימון","לימונים","soft"], white_cheese:[2,"כף גבינה לבנה","כפות גבינה לבנה","lin"] },
+    pb_banana: { bread:[1,"פרוסת לחם מלא","פרוסות לחם מלא","lin"], peanut_butter:[1,"כף וחצי חמאת בוטנים","כפות וחצי חמאת בוטנים","lin"], banana:[1,"בננה","בננות","lin"], honey:[1,"כפית דבש","כפיות דבש","soft"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"] },
+    peach_plum_shake: { peach:[2,"אפרסק בשלים","אפרסקים בשלים","lin"], plum:[1,"שזיף","שזיפים","lin"], banana:[0.5,"בננה","בננות","lin"], yogurt:[0.5,"גביע יוגורט","גביעי יוגורט","lin"], mint:[5,"עלי נענע","","soft"], lemon:[0.25,"לימון","לימונים","soft"], honey:[1,"כפית דבש","כפיות דבש","soft"], oats:[2,"כף שיבולת שועל","כפות שיבולת שועל","lin"] },
+    pita_pizza: { pita:[2,"פיתה מלאות","פיתות מלאות","lin"], passata:[4,"כף רסק עגבניות","כפות רסק עגבניות","lin"], yellow_cheese:[1,"כוס גבינה צהובה מגוררת","כוסות גבינה צהובה מגוררת","lin"], olives:[8,"זיתים","","soft"], corn:[0.5,"קופסת תירס","קופסאות תירס","lin"], pepper:[0.5,"פלפל","פלפלים","lin"], mushrooms:[4,"פטריות","","lin"] },
+    pita_tahini_egg: { pita:[1,"פיתה מלאה","פיתות מלאה","lin"], tahini:[2,"כף טחינה גולמית","כפות טחינה גולמית","lin"], eggs:[2,"ביצה","ביצים","lin"], cucumber:[1,"מלפפון","מלפפונים","lin"], tomato:[1,"עגבנייה","עגבניות","lin"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    pita_toaster: { pita:[1,"פיתה מלאה","פיתות מלאה","lin"], eggs:[2,"ביצה","ביצים","lin"], white_cheese:[3,"כף גבינה לבנה","כפות גבינה לבנה","lin"], tomato:[1,"עגבנייה","עגבניות","lin"], parsley:[0,"מעט פטרוזיליה","","soft"], olives:[5,"זיתים","","soft"] },
+    protein_shake: { protein_yogurt:[1,"גביע יוגורט חלבון","גביעי יוגורט חלבון","lin"], frozen_berries:[1,"כוס פירות יער קפואים","כוסות פירות יער קפואים","lin"], milk:[0.5,"כוס חלב","כוסות חלב","lin"], peanut_butter:[1,"כף חמאת בוטנים","כפות חמאת בוטנים","lin"], banana:[0.5,"בננה","בננות","lin"], oats:[2,"כף שיבולת שועל","כפות שיבולת שועל","lin"], honey:[1,"כפית דבש","כפיות דבש","soft"] },
+    quinoa_lentils: { quinoa:[1,"כוס קינואה","כוסות קינואה","lin"], lentils:[1,"קופסת עדשים או כוס מבושלות","קופסאות עדשים או כוס מבושלות","lin"], lemon:[0.5,"לימון","לימונים","soft"], parsley:[0,"חופן גדול פטרוזיליה","","soft"], tomato:[2,"עגבנייה","עגבניות","lin"], tahini:[2,"כף טחינה","כפות טחינה","lin"], onion:[0.25,"בצל","בצלים","lin"] },
+    rice_lentils_kids: { rice:[0.5,"כוס אורז","כוסות אורז","lin"], lentils:[0.5,"כוס עדשים","כוסות עדשים","lin"], carrot:[2,"גזר","גזרים","lin"], onion:[1,"בצל","בצלים","lin"], garlic:[2,"שן שום","שיני שום","soft"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    ricotta_toast: { bread:[2,"פרוסה לחם מלא","פרוסות לחם מלא","lin"], white_cheese:[4,"כף גבינה לבנה","כפות גבינה לבנה","lin"], honey:[1,"כפית דבש או סילאן","כפיות דבש או סילאן","soft"], walnuts:[1,"חופן אגוזים","חופנים אגוזים","lin"], banana:[0.5,"בננה","בננות","lin"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"], apple:[0.5,"תפוח","תפוחים","lin"] },
+    rosti: { potato:[2,"תפוחי אדמה","","lin"], eggs:[1,"ביצה","ביצים","lin"], onion:[0.5,"בצל","בצלים","lin"], parsley:[0,"מעט פטרוזיליה","","soft"], sour_cream:[2,"כף שמנת חמוצה","כפות שמנת חמוצה","lin"], green_onion:[1,"גבעול","גבעולים","lin"] },
+    salmon_oven: { salmon:[1,"פילה סלמון (150-200 גרם)","","lin"], lemon:[0.5,"לימון","לימונים","soft"], garlic:[2,"שן שום","שיני שום","soft"], frozen_veg:[2,"חופן ירקות קפואים","חופנים ירקות קפואים","lin"], sweet_potato:[1,"בטטה","בטטות","lin"] },
+    sardines_toast: { sardines:[1,"קופסת סרדינים","קופסאות סרדינים","lin"], bread:[2,"פרוסה לחם מלא","פרוסות לחם מלא","lin"], lemon:[0.25,"לימון","לימונים","soft"], onion:[0.25,"בצל","בצלים","lin"], parsley:[0,"מעט פטרוזיליה","","soft"], tomato:[1,"עגבנייה","עגבניות","lin"] },
+    scrambled_soft: { eggs:[3,"ביצה","ביצים","lin"], green_onion:[2,"גבעולי בצל ירוק","","lin"], white_cheese:[2,"כף גבינה לבנה","כפות גבינה לבנה","lin"], bread:[2,"פרוסה לחם","פרוסות לחם","lin"], parsley:[0,"מעט פטרוזיליה","","soft"], mushrooms:[4,"פטריות","","lin"] },
+    shakshuka: { eggs:[2,"ביצה","ביצים","lin"], passata:[0.5,"קופסת רסק עגבניות (200 גרם)","קופסאות רסק עגבניות (200 גרם)","lin"], tomato:[3,"עגבנייה","עגבניות","lin"], onion:[1,"בצל","בצלים","lin"], pepper:[0.5,"פלפל","פלפלים","lin"], parsley:[0,"כמה גבעולי פטרוזיליה","","soft"], bulgarit:[2,"כף גבינה בולגרית","כפות גבינה בולגרית","lin"], pita:[1,"פיתה","פיתות","lin"] },
+    shakshuka_hot: { eggs:[2,"ביצה","ביצים","lin"], passata:[0.5,"קופסת רסק עגבניות","קופסאות רסק עגבניות","lin"], tomato:[3,"עגבנייה","עגבניות","lin"], schug:[1,"כפית שוג","כפיות שוג","soft"], chili:[1,"פלפל חריף","פלפלים חריף","soft"], harissa:[1,"כפית הריסה","כפיות הריסה","soft"], onion:[1,"בצל","בצלים","lin"], pepper:[0.5,"פלפל","פלפלים","lin"], parsley:[0,"מעט פטרוזיליה","","soft"], pita:[1,"פיתה","פיתות","lin"] },
+    strawberry_banana: { frozen_strawberry:[1,"כוס תות קפוא","כוסות תות קפוא","lin"], banana:[1,"בננה טרייה","בננות טרייה","lin"], milk:[0.5,"כוס חלב","כוסות חלב","lin"], honey:[1,"כפית דבש","כפיות דבש","soft"], oats:[2,"כף שיבולת שועל","כפות שיבולת שועל","lin"], yogurt:[2,"כף יוגורט","כפות יוגורט","lin"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"] },
+    sweet_omelette: { eggs:[2,"ביצה","ביצים","lin"], banana:[1,"בננה","בננות","lin"], oats:[1,"כף שיבולת שועל","כפות שיבולת שועל","lin"], honey:[1,"כפית דבש","כפיות דבש","soft"], white_cheese:[2,"כף גבינה לבנה","כפות גבינה לבנה","lin"] },
+    sweet_potato_tahini: { sweet_potato:[1,"בטטה בינונית","בטטות בינונית","lin"], tahini:[2,"כף טחינה גולמית","כפות טחינה גולמית","lin"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"], lemon:[0.25,"לימון","לימונים","soft"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    tofu_chili: { tofu:[0.5,"חבילת טופו","חבילות טופו","lin"], chili:[1,"פלפל חריף","פלפלים חריף","soft"], schug:[1,"כפית שוג","כפיות שוג","soft"], soy_sauce:[2,"כף סויה","כפות סויה","soft"], frozen_veg:[1,"חופן ירקות קפואים","חופנים ירקות קפואים","lin"], garlic:[2,"שן שום","שיני שום","soft"], rice:[1,"כוס אורז מבושל","כוסות אורז מבושל","lin"], green_onion:[2,"גבעול","גבעולים","lin"] },
+    tofu_stirfry: { tofu:[0.5,"חבילת טופו (150 גרם)","חבילות טופו (150 גרם)","lin"], frozen_veg:[2,"חופן ירקות קפואים","חופנים ירקות קפואים","lin"], soy_sauce:[2,"כף רוטב סויה","כפות רוטב סויה","soft"], garlic:[2,"שן שום","שיני שום","soft"], rice:[1,"כוס אורז מבושל","כוסות אורז מבושל","lin"] },
+    tuna_chickpea: { tuna:[1,"קופסת טונה (160 גרם)","קופסאות טונה (160 גרם)","lin"], chickpeas:[1,"קופסת חומוס (400 גרם)","קופסאות חומוס (400 גרם)","lin"], lemon:[0.5,"לימון","לימונים","soft"], onion:[0.25,"בצל","בצלים","lin"], parsley:[1,"חופן פטרוזיליה","חופנים פטרוזיליה","soft"], olives:[8,"זיתים","","soft"], tomato:[1,"עגבנייה","עגבניות","lin"] },
+    tuna_harissa: { tuna:[1,"קופסת טונה","קופסאות טונה","lin"], harissa:[1,"כפית הריסה","כפיות הריסה","soft"], schug:[1,"כפית שוג","כפיות שוג","soft"], chili:[0.5,"פלפל חריף","פלפלים חריף","soft"], lemon:[0.5,"לימון","לימונים","soft"], onion:[0.25,"בצל","בצלים","lin"], parsley:[1,"חופן פטרוזיליה","חופנים פטרוזיליה","soft"], chickpeas:[0.5,"קופסת חומוס","קופסאות חומוס","lin"], olives:[6,"זיתים","","soft"] },
+    veg_omelette: { eggs:[3,"ביצה","ביצים","lin"], tomato:[1,"עגבנייה","עגבניות","lin"], pepper:[0.5,"פלפל","פלפלים","lin"], green_onion:[2,"גבעולי בצל ירוק","","lin"], bulgarit:[2,"כף בולגרית","כפות בולגרית","lin"], yellow_cheese:[1,"פרוסת גבינה צהובה","פרוסות גבינה צהובה","lin"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    veg_sticks_dip: { carrot:[3,"גזר","גזרים","lin"], cucumber:[2,"מלפפון","מלפפונים","lin"], pepper:[1,"פלפל","פלפלים","lin"], yogurt:[1,"גביע יוגורט","גביעי יוגורט","lin"], lemon:[0.25,"לימון","לימונים","soft"], garlic:[1,"שן שום","שיני שום","soft"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    water_shake: { frozen_berries:[1,"כוס פירות יער קפואים","כוסות פירות יער קפואים","lin"], banana:[1,"בננה טרייה","בננות טרייה","lin"], dates:[2,"תמר","תמרים","lin"], lemon:[0.25,"לימון","לימונים","soft"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"], mint:[0,"כמה עלי נענע","","soft"] },
+    white_cheese_bowl: { white_cheese:[1,"גביע גבינה לבנה","גביעי גבינה לבנה","lin"], walnuts:[1,"חופן אגוזי מלך","חופנים אגוזי מלך","lin"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"], cashews:[1,"חופן קשיו","חופנים קשיו","lin"], honey:[1,"כפית סילאן או דבש","כפיות סילאן או דבש","soft"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"], apple:[0.5,"תפוח","תפוחים","lin"], banana:[0.5,"בננה","בננות","lin"] },
+    yogurt_bowl: { yogurt:[1,"גביע יוגורט (150-200 גרם)","גביעי יוגורט (150-200 גרם)","lin"], walnuts:[1,"חופן אגוזים (כ-20 גרם)","חופנים אגוזים (כ-20 גרם)","lin"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"], cashews:[1,"חופן קשיו","חופנים קשיו","lin"], dates:[2,"תמר","תמרים","lin"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"], banana:[0.5,"בננה","בננות","lin"] },
+  };
+
+  /* לכמה סועדים כל מתכון כתוב במקור */
+  const RECIPE_BASE = {"avocado_toast": 1, "yogurt_bowl": 1, "shakshuka": 1, "tuna_chickpea": 2, "veg_omelette": 2, "pita_tahini_egg": 1, "quinoa_lentils": 2, "salmon_oven": 1, "cottage_crackers": 1, "edamame": 1, "pasta_tuna": 2, "green_salad_feta": 2, "overnight_oats": 2, "hummus_bowl": 1, "tofu_stirfry": 1, "lentil_soup": 2, "pb_banana": 1, "sardines_toast": 1, "israeli_salad": 2, "green_shake": 1, "sweet_potato_tahini": 1, "choco_yogurt": 1, "beans_tomato": 1, "chicken_pan": 1, "labaneh_plate": 1, "hummus_plate": 1, "cheese_sandwich": 1, "shakshuka_hot": 1, "pasta_chili": 2, "hummus_hot": 1, "tofu_chili": 1, "tuna_harissa": 1, "pancake_banana": 1, "ricotta_toast": 1, "pita_toaster": 1, "hot_oats": 2, "scrambled_soft": 2, "fruit_cottage": 1, "egg_wrap": 1, "date_shake": 1, "white_cheese_bowl": 1, "frittata_left": 2, "fried_rice": 1, "clean_soup": 2, "couscous_salad": 2, "pasta_veg_yogurt": 2, "oven_veg": 1, "rosti": 1, "fattoush": 1, "chicken_balls": 2, "hidden_veg_pasta": 2, "oven_schnitzel": 2, "pita_pizza": 2, "sweet_omelette": 1, "veg_sticks_dip": 1, "rice_lentils_kids": 1, "corn_pancakes": 1, "berry_shake": 1, "protein_shake": 1, "mango_yogurt_shake": 1, "water_shake": 1, "strawberry_banana": 1, "green_water_shake": 1, "choco_banana_shake": 1, "orange_mango_shake": 1, "cucumber_mint_shake": 1, "oats_shake": 1, "oat_date_shake": 1, "mango_fresh_shake": 1, "peach_plum_shake": 1, "ninja_legs_sweet": 2, "ninja_salmon_zucchini": 2, "ninja_kefta": 3, "ninja_chicken_cherry": 2, "ninja_sausage_frozen": 2, "ninja_whitefish": 2, "ninja_eggplant": 1, "ninja_burger": 3, "ninja_frozen_veg": 2, "ninja_sweet_fries": 2, "ninja_halloumi": 1, "ninja_baby_potatoes": 2, "ninja_mushrooms": 1, "ninja_shakshuka_ramekin": 1, "ninja_egg_avocado": 1, "ninja_egg_toast": 1, "ninja_whole_fish": 2, "ninja_salmon_glaze": 2, "ninja_fish_cakes": 1, "ninja_fish_schnitzel": 2, "ninja_cauliflower": 2, "ninja_falafel_balls": 2, "ninja_stuffed_peppers": 2, "ninja_crispy_tofu": 1, "ninja_grilled_cheese": 1, "ninja_bruschetta": 2, "ninja_flatbread": 2, "ninja_baked_apples": 1, "ninja_grilled_banana": 1, "ninja_grilled_peaches": 1, "ninja_steak_thin": 1, "ninja_steak_onion": 2, "ninja_beef_skewers": 2, "ninja_beef_strips_pita": 2, "ninja_beef_rice_bowl": 2, "ninja_beef_meatballs": 3, "ninja_kebab": 3, "ninja_beef_veg_tray": 3, "ninja_steak_salad": 2, "ninja_beef_tacos": 3};
+
+  /* מתכוני מנה גדולה — לא משתנים לפי מספר הסועדים */
+  const BATCH = ["batch_eggs", "bento", "ninja_chicken_batch", "ninja_chickpeas", "ninja_egg_muffins", "ninja_hard_eggs", "ninja_pita_chips"];
+
   const AISLE = {};
   GROUPS.forEach(g => g.items.forEach(it => { AISLE[it[0]] = g.title; }));
 
@@ -3186,9 +3313,11 @@
   let custom  = store.get(KEY.custom, []);                // [{id, name, alias}]
   let notes   = store.get(KEY.notes, {});                 // { recipeId: text }
   let people  = store.get(KEY.people, [
-    { id: "p1", name: "אני", avoid: [], spicy: true },
-    { id: "p2", name: "הילדים", avoid: [], spicy: false }
+    { id: "p1", name: "אני", avoid: [], spicy: true, eats: 1 },
+    { id: "p2", name: "הילדים", avoid: [], spicy: false, eats: 1 }
   ]);
+  people.forEach(p => { if (typeof p.eats !== "number") p.eats = 1; });
+  const EATS = [[0.6, "מנה קטנה"], [1, "מנה רגילה"], [1.3, "מנה גדולה"]];
   let cooking = new Set(store.get(KEY.cooking, people.map(p => p.id)));
 
   const filters = { fast: false, nocook: false, snack: false, ninja: false, sauce: false, meat: false, shake: false, kids: false, empty: false, fav: false };
@@ -3219,6 +3348,17 @@
 
   /* ---------------- טעמים ---------------- */
   const eaters = () => people.filter(p => cooking.has(p.id));
+
+  // כמה מנות צריך: סכום התיאבונות של מי שאוכל הערב
+  function portions() {
+    const e = eaters();
+    if (!e.length) return 1;
+    return Math.max(0.6, e.reduce((a, p) => a + (p.eats || 1), 0));
+  }
+  const portionsText = () => {
+    const n = portions();
+    return (Math.round(n * 10) / 10) + " מנות · " + eaters().map(p => p.name).join(", ");
+  };
 
   function avoidSet() {
     const s = new Set();
@@ -3434,6 +3574,8 @@
   let sauceAside = store.get("mlo.sauceaside.v1", false);
   const ASIDE = 1.45;
 
+  const WHOLE_ONLY = ["eggs", "pita", "tortilla", "bread", "crackers"];   // אי אפשר חצי ביצה
+
   function scaleOne(item, people, ing) {
     const n = item[0], sing = item[1], plur = item[2] || item[1], mode = item[3];
     if (!n) return sing;                       // טקסט חופשי בלי מספר
@@ -3446,7 +3588,9 @@
     if (v >= 100) v = Math.round(v / 50) * 50;
     else if (v >= 20) v = Math.round(v / 5) * 5;
     else if (v >= 3) v = Math.round(v);
+    else if (WHOLE_ONLY.indexOf(ing) !== -1) v = Math.max(1, Math.round(v));
     else v = Math.max(0.5, Math.round(v * 2) / 2);
+    if (WHOLE_ONLY.indexOf(ing) !== -1) v = Math.max(1, Math.round(v));
     if (v === 0.5) return "חצי " + sing;
     if (v === 1) return sing;
     const whole = Math.floor(v), half = v - whole >= 0.5;
@@ -3458,13 +3602,30 @@
   function amountOf(r, ing) {
     const t = SAUCE_QTY[r.id];
     if (t && t[ing]) return scaleOne(t[ing], serves, ing);
+    const g = RECIPE_QTY[r.id];
+    if (g && g[ing]) {
+      const b = RECIPE_BASE[r.id] || 2;
+      return scaleOne(g[ing], portions() * 2 / b, ing);   // scaleOne עובד ביחס לבסיס 2
+    }
     return (r.amounts && r.amounts[ing]) ? r.amounts[ing] : nameOf(ing);
   }
+
+  const isBatch = id => BATCH.indexOf(id) !== -1;
 
   const pastaGrams = () => serves * 100;
 
   function servesBar(r) {
-    if (!SAUCE_QTY[r.id]) return "";
+    if (!SAUCE_QTY[r.id]) {
+      if (isBatch(r.id))
+        return '<div class="serves batch"><span class="lab">כמות</span>' +
+          '<span class="note">מתכון למנה גדולה — הכמויות קבועות ולא משתנות לפי מספר הסועדים</span></div>';
+      if (!RECIPE_QTY[r.id]) return "";
+      const b = RECIPE_BASE[r.id] || 2;
+      return '<div class="serves"><span class="lab">כמות</span>' +
+        '<span class="state">' + portionsText() + '</span>' +
+        '<div class="how"><span class="note">המתכון נכתב ל-' + b +
+        ' · הכמויות כאן כבר מותאמות. לשינוי — בחר מי אוכל למעלה</span></div></div>';
+    }
     return '<div class="serves"><span class="lab">לכמה</span>' +
       SERVE.map(n => '<button data-serves="' + n + '" aria-pressed="' + (n === serves) + '">' + n + '</button>').join("") +
       '<span class="state">' + (serves === 1 ? "סועד אחד" : serves + " סועדים") + '</span>' +
@@ -3879,6 +4040,8 @@
   /* ---------------- רשימת קניות למנה אחת ---------------- */
   function qtyText(ing, servings, r) {
     if (r && SAUCE_QTY[r.id] && SAUCE_QTY[r.id][ing]) return scaleOne(SAUCE_QTY[r.id][ing], servings, ing);
+    if (r && RECIPE_QTY[r.id] && RECIPE_QTY[r.id][ing])
+      return scaleOne(RECIPE_QTY[r.id][ing], servings * 2 / (RECIPE_BASE[r.id] || 2), ing);
     const q = QTY[ing];
     if (!q) return nameOf(ing);
     if (typeof q === "string") return q;
@@ -3911,7 +4074,7 @@
     const same = shop && shop.id === id;
     shop = {
       id: id,
-      servings: same ? shop.servings : (SAUCE_QTY[id] ? serves : 2),
+      servings: same ? shop.servings : (SAUCE_QTY[id] ? serves : Math.max(1, Math.round(portions()))),
       onlyMissing: same ? shop.onlyMissing : true,
       checked: same ? shop.checked : []
     };
@@ -3999,6 +4162,9 @@
         '<div class="hd">' +
           '<input class="nm" data-rename="' + p.id + '" value="' + esc(p.name) + '" aria-label="שם">' +
           '<label class="toggle"><input type="checkbox" data-spicy="' + p.id + '"' + (p.spicy ? " checked" : "") + '> אוכל חריף</label>' +
+          '<select data-eats="' + p.id + '" aria-label="גודל מנה">' +
+            EATS.map(e => '<option value="' + e[0] + '"' + (Math.abs((p.eats || 1) - e[0]) < .05 ? " selected" : "") + '>' + e[1] + '</option>').join("") +
+          '</select>' +
           (people.length > 1 ? '<button class="linkbtn" data-delp="' + p.id + '">הסר</button>' : "") +
         '</div>' +
         '<div class="avoid">' + (p.avoid || []).map(a =>
@@ -4014,7 +4180,7 @@
     ).join("");
     $("#who-state").textContent = eaters().length === 0
       ? "בחר לפחות אדם אחד"
-      : (spicyOk() ? "חריף בפנים" : "בלי חריף");
+      : (Math.round(portions() * 10) / 10) + " מנות · " + (spicyOk() ? "חריף בפנים" : "בלי חריף");
   }
 
   function renderCustom() {
@@ -4262,6 +4428,15 @@
       return;
     }
 
+    const ea = e.target.closest("[data-eats]");
+    if (ea) {
+      const p = people.find(x => x.id === ea.dataset.eats);
+      p.eats = Number(ea.value);
+      refreshAll();
+      if (!$("#panel-now").hidden) pickNow();
+      return;
+    }
+
     const sp = e.target.closest("[data-spicy]");
     if (sp) {
       const p = people.find(x => x.id === sp.dataset.spicy);
@@ -4302,7 +4477,7 @@
     const inp = $("#new-person"), nm = inp.value.trim();
     if (!nm) { inp.focus(); return; }
     const id = "p" + Date.now().toString(36);
-    people.push({ id: id, name: nm.slice(0, 20), avoid: [], spicy: false });
+    people.push({ id: id, name: nm.slice(0, 20), avoid: [], spicy: false, eats: 1 });
     cooking.add(id);
     inp.value = "";
     refreshAll();

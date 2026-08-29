@@ -14,6 +14,25 @@ Interface **en hébreu** (RTL). 132 idées de repas, dont 45 au Ninja Foodi Gril
 | **מה יש לי בבית** | Un champ de recherche pour retrouver un aliment parmi 69, puis on coche ce qu'on a (le choix est mémorisé sur l'appareil). Les recettes sont classées en trois groupes : réalisables tout de suite, il manque un ingrédient, il en manque plusieurs. |
 | **הטעמים שלנו** | Qui mange, et ce que chacun n'aime pas. Plus les ingrédients perso, les recettes écartées et les notes. |
 
+## Les quantités, pour votre tablée
+
+Chaque recette annonce **pour combien de personnes elle a été écrite** et affiche
+des quantités déjà ajustées au nombre de convives du soir. Ce nombre ne se saisit
+pas à la main : il vient de la barre **מבשל עבור**, où l'on coche qui mange.
+
+Chaque profil porte un appétit — **מנה קטנה** (× 0,6), **מנה רגילה** ou
+**מנה גדולה** (× 1,3). Une famille de cinq dont une enfant qui mange moins
+compte donc 4,6 portions, et toutes les quantités suivent : une soupe de
+lentilles écrite pour deux passe à deux tasses et demie de lentilles et cinq
+carottes.
+
+Les 742 quantités des 110 recettes concernées ont été converties en données
+calculables. L'ail, le piment, le citron et les herbes montent plus lentement que
+le reste, comme pour les sauces. Ce qui ne se divise pas — œufs, pitas, tranches
+de pain — est arrondi à l'unité. Les sept recettes de lot (œufs durs de la
+semaine, poulet grillé d'avance, pois chiches grillés) gardent volontairement
+des quantités fixes, et le disent.
+
 ## Les goûts de chacun
 
 Une barre **מבשל עבור** en haut permet de choisir pour qui on cuisine ce soir.
