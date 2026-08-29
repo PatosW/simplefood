@@ -449,6 +449,15 @@
   :root[data-theme="dark"] .who .person[aria-pressed="true"],
   :root:not([data-theme="light"]) .who .person[aria-pressed="true"] { color: #101512; }
   .who .heat { font-size: .8em; opacity: .85; }
+  .pgroup { display: inline-flex; align-items: stretch; }
+  .pgroup .person { border-start-start-radius: 999px; border-end-start-radius: 999px; }
+  .pgroup:has(.sz) .person { border-start-end-radius: 0; border-end-end-radius: 0; border-inline-end: 0; }
+  .who .sz {
+    border: 1px solid var(--olive); background: var(--olive-soft); color: var(--olive);
+    border-start-end-radius: 999px; border-end-end-radius: 999px;
+    padding: 5px 10px; font-family: "Heebo", sans-serif; font-size: .7rem; font-weight: 700;
+  }
+  .who .sz:hover { background: var(--surface); }
   .who .state { margin-inline-start: auto; font-family: "Heebo", sans-serif; font-size: .72rem; color: var(--ink-3); }
 
   /* ---------- שינויים בכרטיס ---------- */
@@ -3299,7 +3308,7 @@
 
   /* ---------------- מצב ---------------- */
   const KEY = {
-    pantry: "mlo.pantry.v1", fav: "mlo.fav.v1", people: "mlo.people.v2",
+    pantry: "mlo.pantry.v1", fav: "mlo.fav.v1", people: "mlo.people.v3",
     cooking: "mlo.cooking.v1", custom: "mlo.custom.v1", notes: "mlo.notes.v1", off: "mlo.off.v1"
   };
   const store = {
@@ -3312,12 +3321,22 @@
   let off     = new Set(store.get(KEY.off, []));          // מנות שהוצאו ידנית
   let custom  = store.get(KEY.custom, []);                // [{id, name, alias}]
   let notes   = store.get(KEY.notes, {});                 // { recipeId: text }
-  let people  = store.get(KEY.people, [
-    { id: "p1", name: "אני", avoid: [], spicy: true, eats: 1 },
-    { id: "p2", name: "הילדים", avoid: [], spicy: false, eats: 1 }
-  ]);
+  const DEFAULT_PEOPLE = [
+    { id: "p1", name: "אני",   avoid: [], spicy: true,  eats: 1 },
+    { id: "p2", name: "אודרה", avoid: [], spicy: false, eats: 1 },
+    { id: "p3", name: "אילן",  avoid: [], spicy: false, eats: 1 },
+    { id: "p4", name: "בן",    avoid: [], spicy: false, eats: 1 },
+    { id: "p5", name: "אמי",   avoid: [], spicy: false, eats: 0.6 }
+  ];
+  let people = store.get(KEY.people, null);
+  if (!people || !people.length) {
+    people = DEFAULT_PEOPLE.map(p => ({ id: p.id, name: p.name, avoid: [], spicy: p.spicy, eats: p.eats }));
+    const old = store.get("mlo.people.v2", null);      // לא מאבדים את מה שכבר סימנת שלא אוהבים
+    if (old && old.length) { people[0].avoid = old[0].avoid || []; people[0].spicy = !!old[0].spicy; }
+  }
   people.forEach(p => { if (typeof p.eats !== "number") p.eats = 1; });
-  const EATS = [[0.6, "מנה קטנה"], [1, "מנה רגילה"], [1.3, "מנה גדולה"]];
+  const EATS = [[0.6, "מנה קטנה", "קטן"], [1, "מנה רגילה", "רגיל"], [1.3, "מנה גדולה", "גדול"]];
+  const eatsLabel = v => (EATS.find(e => Math.abs(e[0] - v) < .05) || EATS[1])[2];
   let cooking = new Set(store.get(KEY.cooking, people.map(p => p.id)));
 
   const filters = { fast: false, nocook: false, snack: false, ninja: false, sauce: false, meat: false, shake: false, kids: false, empty: false, fav: false };
@@ -4175,8 +4194,14 @@
     ).join("");
 
     $("#who-list").innerHTML = people.map(p =>
-      '<button class="person" data-who="' + p.id + '" aria-pressed="' + cooking.has(p.id) + '">' +
-        esc(p.name) + (p.spicy ? ' <span class="heat">🌶</span>' : "") + '</button>'
+      '<span class="pgroup">' +
+        '<button class="person" data-who="' + p.id + '" aria-pressed="' + cooking.has(p.id) + '">' +
+          esc(p.name) + (p.spicy ? ' <span class="heat">🌶</span>' : "") + '</button>' +
+        (cooking.has(p.id)
+          ? '<button class="sz" data-eatcycle="' + p.id + '" title="גודל מנה — לחיצה מחליפה">' +
+            esc(eatsLabel(p.eats)) + '</button>'
+          : "") +
+      '</span>'
     ).join("");
     $("#who-state").textContent = eaters().length === 0
       ? "בחר לפחות אדם אחד"
@@ -4269,6 +4294,16 @@
       slotPick = sl.dataset.slot === slotNow(new Date()) ? null : sl.dataset.slot;
       setTab("now");
       pickAndShow();
+      return;
+    }
+
+    const ec = t.closest("[data-eatcycle]");
+    if (ec) {
+      const p = people.find(x => x.id === ec.dataset.eatcycle);
+      const i = EATS.findIndex(e => Math.abs(e[0] - (p.eats || 1)) < .05);
+      p.eats = EATS[(i + 1) % EATS.length][0];
+      refreshAll();
+      if (!$("#panel-now").hidden) pickNow();
       return;
     }
 
@@ -4451,9 +4486,7 @@
       const p = people.find(x => x.id === nm.dataset.rename);
       p.name = nm.value.slice(0, 20);
       store.set(KEY.people, people);
-      $("#who-list").innerHTML = people.map(q =>
-        '<button class="person" data-who="' + q.id + '" aria-pressed="' + cooking.has(q.id) + '">' +
-          esc(q.name) + (q.spicy ? ' <span class="heat">🌶</span>' : "") + '</button>').join("");
+      renderPeople();
       return;
     }
     const sq = e.target.closest("#ing-search");

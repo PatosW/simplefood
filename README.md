@@ -20,11 +20,16 @@ Chaque recette annonce **pour combien de personnes elle a été écrite** et aff
 des quantités déjà ajustées au nombre de convives du soir. Ce nombre ne se saisit
 pas à la main : il vient de la barre **מבשל עבור**, où l'on coche qui mange.
 
-Chaque profil porte un appétit — **מנה קטנה** (× 0,6), **מנה רגילה** ou
-**מנה גדולה** (× 1,3). Une famille de cinq dont une enfant qui mange moins
-compte donc 4,6 portions, et toutes les quantités suivent : une soupe de
-lentilles écrite pour deux passe à deux tasses et demie de lentilles et cinq
-carottes.
+L'app démarre avec la famille déjà en place — אני, אודרה, אילן, בן, אמי — et
+chaque profil porte un appétit : **מנה קטנה** (× 0,6), **מנה רגילה** ou
+**מנה גדולה** (× 1,3). Cinq personnes dont une qui mange moins font 4,6 portions,
+et toutes les quantités suivent : une soupe de lentilles écrite pour deux passe à
+deux tasses et demie de lentilles et cinq carottes.
+
+La taille se change aussi **au moment de cuisiner**, sans passer par les
+réglages : dans la barre du haut, chaque convive porte une pastille קטן / רגיל /
+גדול qu'un clic fait défiler. Quelqu'un rentre affamé, un clic, et les quantités
+montent.
 
 Les 742 quantités des 110 recettes concernées ont été converties en données
 calculables. L'ail, le piment, le citron et les herbes montent plus lentement que
