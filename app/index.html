@@ -460,6 +460,8 @@
     background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
   }
   .who > .lab { font-family: "Heebo", sans-serif; font-size: .72rem; font-weight: 700; letter-spacing: .08em; color: var(--ink-3); }
+  .who.empty { border-color: var(--olive); }
+  .who.empty .state { color: var(--olive); }
   .who .person {
     border: 1px solid var(--line); background: transparent; border-radius: 999px;
     padding: 5px 13px; font-size: var(--step--1); transition: background .15s, border-color .15s, color .15s;
@@ -3378,7 +3380,8 @@
   people.forEach(p => { if (typeof p.eats !== "number") p.eats = 1; });
   const EATS = [[0.6, "מנה קטנה", "קטן"], [1, "מנה רגילה", "רגיל"], [1.3, "מנה גדולה", "גדול"]];
   const eatsLabel = v => (EATS.find(e => Math.abs(e[0] - v) < .05) || EATS[1])[2];
-  let cooking = new Set(store.get(KEY.cooking, people.map(p => p.id)));
+  // בכל פתיחה מתחילים מאף אחד — בוחרים מי אוכל הפעם
+  let cooking = new Set();
 
   const filters = { fast: false, nocook: false, snack: false, ninja: false, sauce: false, meat: false, shake: false, kids: false, empty: false, fav: false };
   let lastShown = null;
@@ -3401,7 +3404,6 @@
     store.set(KEY.custom, custom);
     store.set(KEY.notes, notes);
     store.set(KEY.people, people);
-    store.set(KEY.cooking, Array.from(cooking));
     // רשימה נשמרת רק אחרי שסימנת משהו — עיון בלבד לא יוצר רשימה
     store.set("mlo.shop.v1", (shop && shop.checked.length) ? shop : null);
   }
@@ -3425,8 +3427,8 @@
     eaters().forEach(p => (p.avoid || []).forEach(a => s.add(a)));
     return s;
   }
-  // חריף מוצע רק אם כל מי שאוכל אוהב חריף
-  const spicyOk = () => { const e = eaters(); return e.length > 0 && e.every(p => p.spicy); };
+  // חריף מוצע רק אם כל מי שאוכל אוהב חריף. לא נבחר אף אחד — לא מסננים כלום
+  const spicyOk = () => { const e = eaters(); return e.length === 0 || e.every(p => p.spicy); };
 
   // מרכיב מסומן כקיים — ישירות, או דרך מוצר אישי שמחליף אותו
   const satisfies = ing => have.has(ing) || custom.some(c => c.alias === ing && have.has(c.id));
@@ -3665,7 +3667,8 @@
     const g = RECIPE_QTY[r.id];
     if (g && g[ing]) {
       const b = RECIPE_BASE[r.id] || 2;
-      return scaleOne(g[ing], portions() * 2 / b, ing);   // scaleOne עובד ביחס לבסיס 2
+      if (!eaters().length) return scaleOne(g[ing], 2, ing);   // אף אחד לא נבחר — הכמות המקורית
+      return scaleOne(g[ing], portions() * 2 / b, ing);        // scaleOne עובד ביחס לבסיס 2
     }
     return (r.amounts && r.amounts[ing]) ? r.amounts[ing] : nameOf(ing);
   }
@@ -3681,10 +3684,14 @@
           '<span class="note">מתכון למנה גדולה — הכמויות קבועות ולא משתנות לפי מספר הסועדים</span></div>';
       if (!RECIPE_QTY[r.id]) return "";
       const b = RECIPE_BASE[r.id] || 2;
+      if (!eaters().length)
+        return '<div class="serves"><span class="lab">כמות</span>' +
+          '<span class="state">המתכון ל-' + b + '</span>' +
+          '<div class="how"><span class="note">בחר למעלה מי אוכל, והכמויות יתעדכנו לפי מספר הסועדים</span></div></div>';
       return '<div class="serves"><span class="lab">כמות</span>' +
         '<span class="state">' + portionsText() + '</span>' +
         '<div class="how"><span class="note">המתכון נכתב ל-' + b +
-        ' · הכמויות כאן כבר מותאמות. לשינוי — בחר מי אוכל למעלה</span></div></div>';
+        ' · הכמויות כאן כבר מותאמות</span></div></div>';
     }
     return '<div class="serves"><span class="lab">לכמה</span>' +
       SERVE.map(n => '<button data-serves="' + n + '" aria-pressed="' + (n === serves) + '">' + n + '</button>').join("") +
@@ -4152,7 +4159,8 @@
   function qtyText(ing, servings, r) {
     if (r && SAUCE_QTY[r.id] && SAUCE_QTY[r.id][ing]) return scaleOne(SAUCE_QTY[r.id][ing], servings, ing);
     if (r && RECIPE_QTY[r.id] && RECIPE_QTY[r.id][ing])
-      return scaleOne(RECIPE_QTY[r.id][ing], servings * 2 / (RECIPE_BASE[r.id] || 2), ing);
+      return scaleOne(RECIPE_QTY[r.id][ing],
+        eaters().length ? servings * 2 / (RECIPE_BASE[r.id] || 2) : 2, ing);
     const q = QTY[ing];
     if (!q) return nameOf(ing);
     if (typeof q === "string") return q;
@@ -4185,7 +4193,8 @@
     const same = shop && shop.id === id;
     shop = {
       id: id,
-      servings: same ? shop.servings : (SAUCE_QTY[id] ? serves : Math.max(1, Math.round(portions()))),
+      servings: same ? shop.servings
+        : (SAUCE_QTY[id] ? serves : (eaters().length ? Math.max(1, Math.round(portions())) : 2)),
       onlyMissing: same ? shop.onlyMissing : true,
       checked: same ? shop.checked : []
     };
@@ -4296,6 +4305,7 @@
       '</span>'
     ).join("");
     // גודל המנה של כל אחד, לפני שמחפשים מנה
+    $("#who").classList.toggle("empty", eaters().length === 0);
     $("#who-sizes").innerHTML = eaters().length
       ? eaters().map(p =>
           '<div class="szrow"><span class="nm">' + esc(p.name) + '</span>' +
@@ -4308,7 +4318,7 @@
       : '<p class="szfoot">בחר מי אוכל כדי להגדיר גדלים.</p>';
 
     $("#who-state").textContent = eaters().length === 0
-      ? "בחר לפחות אדם אחד"
+      ? "בחר מי אוכל כדי להתאים כמויות וטעמים"
       : (Math.round(portions() * 10) / 10) + " מנות · " + (spicyOk() ? "חריף בפנים" : "בלי חריף");
   }
 

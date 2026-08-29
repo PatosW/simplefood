@@ -20,8 +20,15 @@ Chaque recette annonce **pour combien de personnes elle a été écrite** et aff
 des quantités déjà ajustées au nombre de convives du soir. Ce nombre ne se saisit
 pas à la main : il vient de la barre **מבשל עבור**, où l'on coche qui mange.
 
-L'app démarre avec la famille déjà en place — אני, אודרה, אילן, בן, אמי — et
-chaque profil porte un appétit : **מנה קטנה** (× 0,6), **מנה רגילה** ou
+L'app démarre avec la famille en place — אני, אודרה, אילן, בן, אמי — mais
+**personne n'est coché**. On choisit à chaque fois qui mange, et la sélection
+n'est pas conservée d'une ouverture à l'autre. Tant que rien n'est coché, aucun
+filtre de goût ne s'applique — les 132 recettes restent visibles, y compris les
+piquantes — et chaque recette affiche ses quantités d'origine en indiquant pour
+combien elle est écrite. Dès qu'un convive est coché, les exclusions, le piquant
+et les quantités s'ajustent.
+
+Chaque profil porte un appétit : **מנה קטנה** (× 0,6), **מנה רגילה** ou
 **מנה גדולה** (× 1,3). Cinq personnes dont une qui mange moins font 4,6 portions,
 et toutes les quantités suivent : une soupe de lentilles écrite pour deux passe à
 deux tasses et demie de lentilles et cinq carottes.
