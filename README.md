@@ -4,7 +4,7 @@ Une petite app pour arrêter de grignoter faute d'idée : elle propose des repas
 **simples et à peu près équilibrés**, à partir de ce qu'on a déjà à la maison,
 avec des produits qu'on trouve dans n'importe quel supermarché en Israël.
 
-Interface **en hébreu** (RTL). 69 idées de repas dont 10 smoothies, aucune ne dépasse 25 minutes.
+Interface **en hébreu** (RTL). 72 idées de repas dont 13 smoothies, aucune ne dépasse 25 minutes.
 
 ## Deux façons de s'en servir
 
@@ -35,7 +35,7 @@ peut les renommer, en ajouter, en supprimer.
 
 ## Smoothies
 
-Dix recettes pour blender (Ninja ou autre), couvrant les combinaisons réelles :
+Treize recettes pour blender (Ninja ou autre), couvrant les combinaisons réelles :
 fruits surgelés et fruits frais, avec yaourt protéiné, avec yaourt nature, avec
 lait, à l'eau ou au jus pressé. Les valeurs vont de 3 g de protéines (concombre-
 menthe, un rafraîchissement) à 28 g (le smoothie protéiné) — c'est affiché, pour
@@ -55,6 +55,11 @@ Chaque recette de smoothie porte un encadré dépliable, **« למה השייק 
 5. **Les pulses** — quatre ou cinq impulsions avant le mixage continu.
 6. **Quand ça bloque** — couper, secouer, ajouter deux cuillères de liquide.
    C'est une poche d'air sous les lames, pas une panne ; forcer n'aide pas.
+
+Trois d'entre elles se passent complètement de congélateur, pour les fruits
+frais de saison — mangue, pêche, prune — et l'une, banane–avoine–amandes, est
+bâtie pour la consistance plutôt que pour le goût : l'avoine et les amandes sont
+broyées à sec avant tout le reste, faute de quoi elles restent en morceaux.
 
 Un filtre « שייקים » les regroupe.
 
