@@ -240,6 +240,16 @@
   details.guide ol { margin: 10px 0; padding-inline-start: 1.2em; display: grid; gap: 8px; font-size: var(--step--1); line-height: 1.55; }
   details.guide ol li::marker { color: var(--ink-3); font-family: "Heebo", sans-serif; }
   details.guide ol b { color: var(--olive); }
+  .tablewrap { overflow-x: auto; margin: 12px 0; }
+  table.surftable { border-collapse: collapse; width: 100%; font-size: var(--step--1); }
+  table.surftable th {
+    font-family: "Heebo", sans-serif; font-size: .68rem; font-weight: 700; letter-spacing: .06em;
+    color: var(--ink-3); text-align: start; padding: 0 8px 6px 0; border-bottom: 1px solid var(--line);
+  }
+  table.surftable td { padding: 8px 8px 8px 0; border-bottom: 1px solid var(--line-soft); vertical-align: top; line-height: 1.45; }
+  table.surftable tr:last-child td { border-bottom: 0; }
+  table.surftable td b { color: var(--olive); white-space: nowrap; }
+
   details.guide > p { margin: 0 0 13px; font-size: var(--step--1); color: var(--ink-2); }
 
   .fromshelf {
@@ -247,6 +257,13 @@
     background: var(--surface-2); border-radius: 8px; padding: 8px 12px;
   }
   .fromshelf b { color: var(--ink); font-weight: 600; }
+
+  .surface {
+    margin: 9px 0 0; padding: 10px 13px; font-size: var(--step--1);
+    background: var(--olive-soft); border-radius: 8px; color: var(--ink);
+  }
+  .surface b { color: var(--olive); font-weight: 700; }
+  .surface span { display: block; margin-top: 4px; color: var(--ink-2); }
 
   .tools { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
   .tools li {
@@ -1910,6 +1927,7 @@
     { id:"ninja_legs_sweet", name:"שוקי עוף ובטטה בסל אחד", min:30, when:["erev"], ninja:true,
       need:["chicken_legs","sweet_potato"], nice:["lemon","garlic","parsley"],
       amounts:{ chicken_legs:"4 שוקי עוף", sweet_potato:"2 בטטות", lemon:"חצי לימון", garlic:"כפית שום אבקה", parsley:"מעט פטרוזיליה" },
+      surface:["ישר בסל, בלי כלום","השומן חייב לטפטף החוצה דרך החורים. נייר מתחת = עור רך במקום פריך."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ"],
       p:34, f:6, s:9,
       steps:[
@@ -1929,6 +1947,7 @@
     { id:"ninja_salmon_zucchini", name:"סלמון וקישואים על הגריל", min:16, when:["erev"], ninja:true,
       need:["salmon","zucchini"], nice:["lemon","garlic"],
       amounts:{ salmon:"2 פילה סלמון", zucchini:"2 קישואים", lemon:"לימון אחד", garlic:"כפית שום אבקה" },
+      surface:["משטח חשוף","העור מגן על הדג מלמטה, והפסים הם כל העניין. נייר מבטל אותם."],
       tools:["נינג'ה פודי גריל — משטח הגריל"],
       p:34, f:3, s:4,
       steps:[
@@ -1947,6 +1966,7 @@
     { id:"ninja_kefta", name:"קציצות בשר על הגריל", min:18, when:["erev"], ninja:true,
       need:["ground_meat","onion"], nice:["parsley","pita","cherry","tahini"],
       amounts:{ ground_meat:"400 גרם טחון", onion:"בצל אחד", parsley:"חופן פטרוזיליה", pita:"2 פיתות", cherry:"חופן עגבניות שרי", tahini:"2 כפות טחינה" },
+      surface:["משטח חשוף, וכוס מים בתחתית הכלי","השומן שנוטף הוא מקור העשן. המים בתחתית סופגים אותו."],
       tools:["נינג'ה פודי גריל — משטח הגריל","קערה","מגררת"],
       p:32, f:3, s:4,
       steps:[
@@ -1964,6 +1984,7 @@
     { id:"ninja_chicken_cherry", name:"חזה עוף ועגבניות שרי בגריל", min:18, when:["erev","tsohorayim"], ninja:true,
       need:["chicken","cherry"], nice:["garlic","lemon","parsley","bulgarit"],
       amounts:{ chicken:"2 חזה עוף", cherry:"קופסת עגבניות שרי", garlic:"כפית שום אבקה", lemon:"חצי לימון", parsley:"מעט פטרוזיליה", bulgarit:"50 גרם בולגרית" },
+      surface:["משטח חשוף","רוצים צריבה ישירה, והשרי מתפוצצות עליו ומשחררות רוטב."],
       tools:["נינג'ה פודי גריל — משטח הגריל"],
       p:38, f:3, s:5,
       steps:[
@@ -1981,6 +2002,7 @@
     { id:"ninja_sausage_frozen", name:"נקניקיות וירקות קפואים", min:20, when:["erev"], ninja:true, empty:true,
       need:["sausages","frozen_veg"], nice:["garlic","lemon"],
       amounts:{ sausages:"6 נקניקיות עוף", frozen_veg:"3 חופנים ירקות קפואים", garlic:"כפית שום אבקה", lemon:"חצי לימון" },
+      surface:["ישר בסל","הירקות הקפואים משחררים מים שצריכים לרדת. נייר כולא אותם והכול מתאדה."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ"],
       p:28, f:5, s:5,
       steps:[
@@ -1996,6 +2018,7 @@
     { id:"ninja_whitefish", name:"פילה דג לבן וברוקולי", min:18, when:["erev"], ninja:true,
       need:["white_fish","broccoli"], nice:["lemon","garlic"],
       amounts:{ white_fish:"2 פילה דג לבן", broccoli:"ראש ברוקולי או שקית פרחים קפואים", lemon:"לימון אחד", garlic:"כפית שום אבקה" },
+      surface:["נייר אפייה קטן, רק מתחת לדג","הדג נדבק ומתפרק. הברוקולי נשאר על המתכת החשופה כדי להתפצח."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ"],
       p:32, f:6, s:3,
       steps:[
@@ -2013,6 +2036,7 @@
     { id:"ninja_eggplant", name:"חציל שלם על הגריל עם טחינה", min:25, when:["erev","tsohorayim"], ninja:true,
       need:["eggplant","tahini"], nice:["lemon","garlic","parsley","eggs"],
       amounts:{ eggplant:"חציל אחד גדול", tahini:"3 כפות טחינה גולמית", lemon:"חצי לימון", garlic:"שן שום", parsley:"מעט פטרוזיליה", eggs:"ביצה קשה" },
+      surface:["משטח חשוף","החציל שלם ומתגלגל, והמגע הישיר עם המתכת הוא שנותן את הטעם המעושן."],
       tools:["נינג'ה פודי גריל — משטח הגריל","מזלג"],
       p:12, f:11, s:7,
       steps:[
@@ -2029,6 +2053,7 @@
     { id:"ninja_burger", name:"המבורגר ביתי בגריל", min:16, when:["erev"], ninja:true, kids:true,
       need:["ground_meat","bread"], nice:["yellow_cheese","tomato","lettuce","onion"],
       amounts:{ ground_meat:"400 גרם טחון", bread:"2 לחמניות או 4 פרוסות לחם מלא", yellow_cheese:"2 פרוסות גבינה צהובה", tomato:"עגבנייה אחת", lettuce:"2 עלי חסה", onion:"רבע בצל" },
+      surface:["משטח חשוף, וכוס מים בתחתית הכלי","המבורגר שמן. בלי המים המטבח מתמלא עשן תוך שתי דקות."],
       tools:["נינג'ה פודי גריל — משטח הגריל"],
       p:34, f:4, s:5,
       steps:[
@@ -2045,6 +2070,7 @@
     { id:"ninja_chicken_batch", name:"חזה עוף לשבוע בגריל", min:20, when:["erev","tsohorayim"], ninja:true, prep:true,
       need:["chicken"], nice:["lemon","garlic"],
       amounts:{ chicken:"4 חזה עוף", lemon:"לימון אחד", garlic:"כפית שום אבקה" },
+      surface:["משטח חשוף","פרוסות דקות שצריכות מגע ישיר כדי להיצרב מהר ולא להתייבש."],
       tools:["נינג'ה פודי גריל — משטח הגריל","קופסה אטומה"],
       p:38, f:1, s:1,
       steps:[
@@ -2061,6 +2087,7 @@
     { id:"ninja_frozen_veg", name:"ירקות קפואים באייר קריספ", min:18, when:["erev","tsohorayim"], ninja:true, empty:true,
       need:["frozen_veg"], nice:["garlic","lemon","almonds","tahini"],
       amounts:{ frozen_veg:"שקית ירקות קפואים (500 גרם)", garlic:"כפית שום אבקה", lemon:"חצי לימון", almonds:"חופן שקדים", tahini:"2 כפות טחינה" },
+      surface:["ישר בסל","האוויר חייב לעבור מלמטה — זה כל ההבדל בין ירקות פריכים לירקות רכים."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ"],
       p:6, f:8, s:6,
       steps:[
@@ -2076,6 +2103,7 @@
     { id:"ninja_sweet_fries", name:"צ'יפס בטטה באייר קריספ", min:25, when:["erev","nashnush"], ninja:true, kids:true,
       need:["sweet_potato"], nice:["tahini","almonds"],
       amounts:{ sweet_potato:"2 בטטות", tahini:"2 כפות טחינה", almonds:"חופן שקדים" },
+      surface:["ישר בסל","צ'יפס על נייר לא מתפצח לעולם. חובה מגע ישיר עם המתכת."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ","סכין"],
       p:4, f:7, s:12,
       steps:[
@@ -2093,6 +2121,7 @@
     { id:"ninja_chickpeas", name:"חומוס קלוי פריך", min:20, when:["nashnush"], ninja:true, snack:true, prep:true,
       need:["chickpeas"], nice:["harissa","chili"],
       amounts:{ chickpeas:"2 קופסאות חומוס", harissa:"כפית הריסה", chili:"חצי כפית פלפל חריף" },
+      surface:["ישר בסל","הם צריכים לקפוץ ולהתגלגל בכל ניעור. נייר מקבע אותם במקום."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ","מגבת נייר"],
       p:14, f:12, s:2,
       steps:[
@@ -2110,6 +2139,7 @@
     { id:"ninja_halloumi", name:"חלומי בגריל", min:10, when:["nashnush","erev"], ninja:true, snack:true,
       need:["halloumi"], nice:["lemon","cherry","lettuce","honey"],
       amounts:{ halloumi:"חבילת חלומי (200 גרם)", lemon:"חצי לימון", cherry:"חופן עגבניות שרי", lettuce:"חופן עלים", honey:"כפית דבש" },
+      surface:["משטח חשוף ויבש, בלי שמן","חלומי לא נדבק למשטח חם. שמן רק גורם לו להישרף בקצוות."],
       tools:["נינג'ה פודי גריל — משטח הגריל"],
       p:22, f:1, s:2,
       steps:[
@@ -2126,6 +2156,7 @@
     { id:"ninja_baby_potatoes", name:"תפוחי אדמה קטנים שלמים", min:30, when:["erev"], ninja:true,
       need:["potato"], nice:["garlic","parsley","sour_cream"],
       amounts:{ potato:"600 גרם תפוחי אדמה קטנים", garlic:"כפית שום אבקה", parsley:"מעט פטרוזיליה", sour_cream:"3 כפות שמנת חמוצה" },
+      surface:["ישר בסל","הקליפה מקבלת את הקימוט הפריך רק במגע ישיר עם המתכת החמה."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ"],
       p:6, f:6, s:2,
       steps:[
@@ -2143,6 +2174,7 @@
     { id:"ninja_mushrooms", name:"פטריות ובצל בגריל", min:15, when:["erev","tsohorayim"], ninja:true,
       need:["mushrooms","onion"], nice:["garlic","parsley","bread","chicken"],
       amounts:{ mushrooms:"חבילת פטריות (250 גרם)", onion:"בצל אחד", garlic:"כפית שום אבקה", parsley:"מעט פטרוזיליה", bread:"2 פרוסות לחם מלא", chicken:"חזה עוף מבושל" },
+      surface:["ישר בסל","הן משחררות המון מים. נייר עוצר אותם והפטריות מתבשלות במקום להשחים."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ"],
       p:8, f:4, s:5,
       steps:[
@@ -2159,6 +2191,7 @@
     { id:"ninja_hard_eggs", name:"ביצים קשות בלי מים בכלל", min:20, when:["nashnush","boker"], ninja:true, prep:true, snack:true,
       need:["eggs"], nice:[],
       amounts:{ eggs:"6 ביצים" },
+      surface:["ישר בסל","אין מה שיידבק וכלום לא מטפטף. הכי פשוט שיש."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ","קערה עם מים קרים"],
       p:12, f:0, s:1,
       steps:[
@@ -2176,6 +2209,7 @@
     { id:"ninja_shakshuka_ramekin", name:"שקשוקה אישית ברמקין", min:18, when:["boker","erev"], ninja:true,
       need:["eggs",["passata","tomato"]], nice:["bulgarit","parsley","pita","onion","schug"],
       amounts:{ eggs:"2 ביצים", passata:"חצי כוס רסק עגבניות", tomato:"2 עגבניות מרוסקות", bulgarit:"2 כפות בולגרית", parsley:"מעט פטרוזיליה", pita:"פיתה אחת", onion:"רבע בצל", schug:"כפית שוג" },
+      surface:["רמקין קרמי עמיד לתנור","כלי עמוק שמחזיק את הרוטב. אף פעם לא צלחת רגילה מהארון."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ","רמקין קרמי או כלי זכוכית עמיד לתנור"],
       p:16, f:5, s:8,
       steps:[
@@ -2194,6 +2228,7 @@
     { id:"ninja_egg_muffins", name:"מאפיני ביצים לשבוע", min:22, when:["boker","nashnush"], ninja:true, prep:true, snack:true,
       need:["eggs"], nice:["white_cheese","bulgarit","pepper","green_onion","mushrooms","tomato","spinach_frozen"],
       amounts:{ eggs:"6 ביצים", white_cheese:"3 כפות גבינה לבנה", bulgarit:"50 גרם בולגרית", pepper:"חצי פלפל", green_onion:"2 גבעולים", mushrooms:"4 פטריות", tomato:"עגבנייה אחת", spinach_frozen:"חופן תרד קפוא" },
+      surface:["תבנית מאפינס סיליקון","סיליקון משחרר בלי שמן ובלי לשבור. תבנית מתכת דורשת שימון של כל שקע."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ","תבנית מאפינס סיליקון","קערה","מזלג"],
       p:18, f:3, s:3,
       steps:[
@@ -2212,6 +2247,7 @@
     { id:"ninja_egg_avocado", name:"ביצה אפויה בתוך אבוקדו", min:16, when:["boker","tsohorayim"], ninja:true,
       need:["eggs","avocado"], nice:["bulgarit","parsley","lemon","chili"],
       amounts:{ eggs:"2 ביצים", avocado:"אבוקדו אחד גדול", bulgarit:"2 כפות בולגרית", parsley:"מעט פטרוזיליה", lemon:"רבע לימון", chili:"קורט פלפל חריף" },
+      surface:["תבנית אלומיניום קטנה","מחזיקה את החצאים ישרים כדי שהביצה לא תישפך החוצה."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ","כף","תבנית אלומיניום או נייר אפייה"],
       p:14, f:9, s:1,
       steps:[
@@ -2229,6 +2265,7 @@
     { id:"ninja_egg_toast", name:"טוסט עם ביצה בחור", min:10, when:["boker"], ninja:true, kids:true,
       need:["bread","eggs"], nice:["yellow_cheese","tomato","parsley"],
       amounts:{ bread:"2 פרוסות לחם מלא עבות", eggs:"2 ביצים", yellow_cheese:"פרוסת גבינה צהובה", tomato:"עגבנייה אחת", parsley:"מעט פטרוזיליה" },
+      surface:["משטח חשוף, מברישים שמן על הלחם","השמן על הלחם ולא על המשטח — כך הלחם מקבל פסים והמשטח נשאר נקי."],
       tools:["נינג'ה פודי גריל — משטח הגריל","כוס"],
       p:16, f:5, s:3,
       steps:[
@@ -2246,6 +2283,7 @@
     { id:"ninja_whole_fish", name:"דג שלם על הגריל", min:25, when:["erev"], ninja:true,
       need:["fish_whole","lemon"], nice:["garlic","parsley","cherry"],
       amounts:{ fish_whole:"דג שלם מנוקה (דניס או לברק, כ-400 גרם)", lemon:"לימון אחד", garlic:"2 שיני שום", parsley:"צרור פטרוזיליה", cherry:"חופן עגבניות שרי" },
+      surface:["נייר אפייה חתוך בדיוק בגודל הדג","עור הדג נדבק וקורע. זה המקרה הקלאסי שבו הנייר באמת חובה."],
       tools:["נינג'ה פודי גריל — משטח הגריל","נייר אפייה"],
       p:36, f:1, s:2,
       steps:[
@@ -2265,6 +2303,7 @@
     { id:"ninja_salmon_glaze", name:"סלמון בזיגוג דבש־סויה", min:16, when:["erev"], ninja:true,
       need:["salmon","soy_sauce","honey"], nice:["garlic","lemon","green_onion"],
       amounts:{ salmon:"2 פילה סלמון", soy_sauce:"2 כפות רוטב סויה", honey:"כף דבש", garlic:"שן שום", lemon:"רבע לימון", green_onion:"גבעול בצל ירוק" },
+      surface:["תבנית אלומיניום קטנה","הזיגוג המתוק נוטף ונשרף על המתכת. התבנית אוספת אותו ומחזירה אותו לדג."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ","קערית","מברשת או כף","נייר אפייה"],
       p:34, f:0, s:7,
       steps:[
@@ -2281,6 +2320,7 @@
     { id:"ninja_fish_cakes", name:"קציצות דג מטונה משומרת", min:20, when:["erev","tsohorayim"], ninja:true,
       need:["tuna","eggs","oats"], nice:["onion","parsley","lemon"],
       amounts:{ tuna:"2 קופסאות טונה", eggs:"ביצה אחת", oats:"3 כפות שיבולת שועל", onion:"רבע בצל", parsley:"חופן פטרוזיליה", lemon:"חצי לימון" },
+      surface:["נייר אפייה","הקציצות רכות עד שהן מתייצבות, ובלי נייר הן נשברות בהפיכה."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ","קערה","נייר אפייה"],
       p:34, f:3, s:2,
       steps:[
@@ -2298,6 +2338,7 @@
     { id:"ninja_fish_schnitzel", name:"שניצל דג בפירורי שיבולת שועל", min:20, when:["erev","tsohorayim"], ninja:true, kids:true,
       need:["white_fish","eggs","oats"], nice:["flour","lemon","garlic"],
       amounts:{ white_fish:"2 פילה דג לבן", eggs:"ביצה אחת", oats:"כוס שיבולת שועל", flour:"3 כפות קמח", lemon:"חצי לימון", garlic:"כפית שום אבקה" },
+      surface:["סל חשוף, מרוסס בשמן","הציפוי צריך אוויר מלמטה. אם אתה חושש להידבקות — נייר מנוקב, לא נייר שלם."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ","3 צלחות","נייר אפייה"],
       p:32, f:3, s:1,
       steps:[
@@ -2315,6 +2356,7 @@
     { id:"ninja_cauliflower", name:"כרובית שלמה בסל", min:35, when:["erev"], ninja:true,
       need:["cauliflower"], nice:["tahini","almonds","lemon","garlic","parsley"],
       amounts:{ cauliflower:"כרובית שלמה בינונית", tahini:"3 כפות טחינה", almonds:"חופן שקדים", lemon:"חצי לימון", garlic:"כפית שום אבקה", parsley:"מעט פטרוזיליה" },
+      surface:["ישר בסל","היא כבדה וצריכה אוויר מכל הכיוונים כדי להתבשל אחיד עד המרכז."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ"],
       p:8, f:9, s:6,
       steps:[
@@ -2332,6 +2374,7 @@
     { id:"ninja_falafel_balls", name:"קציצות חומוס בסל", min:22, when:["erev","tsohorayim"], ninja:true,
       need:["chickpeas","onion","flour"], nice:["parsley","garlic","tahini","pita"],
       amounts:{ chickpeas:"קופסת חומוס", onion:"חצי בצל", flour:"3 כפות קמח", parsley:"חופן גדול פטרוזיליה", garlic:"2 שיני שום", tahini:"2 כפות טחינה", pita:"2 פיתות" },
+      surface:["נייר אפייה מנוקב","רכות בהתחלה אבל צריכות אוויר. מנקבים 5 חורים בנייר עם מזלג לפני."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ","מעבד מזון או מזלג","נייר אפייה"],
       p:16, f:12, s:3,
       steps:[
@@ -2349,6 +2392,7 @@
     { id:"ninja_stuffed_peppers", name:"פלפלים ממולאים בקינואה", min:35, when:["erev"], ninja:true,
       need:["pepper","quinoa"], nice:["tomato","onion","bulgarit","parsley","chickpeas"],
       amounts:{ pepper:"3 פלפלים", quinoa:"כוס קינואה מבושלת", tomato:"עגבנייה אחת", onion:"חצי בצל", bulgarit:"50 גרם בולגרית", parsley:"מעט פטרוזיליה", chickpeas:"חצי קופסת חומוס" },
+      surface:["ישר בסל","הם עומדים לבד. נייר רק היה מונע מהתחתית להשחים."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ","קערה","סכין"],
       p:14, f:9, s:8,
       steps:[
@@ -2365,6 +2409,7 @@
     { id:"ninja_crispy_tofu", name:"טופו פריך בסל", min:22, when:["erev"], ninja:true,
       need:["tofu","soy_sauce"], nice:["garlic","rice","green_onion","chili"],
       amounts:{ tofu:"חבילת טופו (300 גרם)", soy_sauce:"2 כפות סויה", garlic:"כפית שום אבקה", rice:"כוס אורז מבושל", green_onion:"2 גבעולים", chili:"קורט פלפל חריף" },
+      surface:["ישר בסל","בלי מגע ישיר עם המתכת אין קרום — וזו כל המנה."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ","מגבת נייר","קערה"],
       p:26, f:4, s:3,
       steps:[
@@ -2380,6 +2425,7 @@
     { id:"ninja_pita_chips", name:"פיתות פריכות לנשנוש", min:12, when:["nashnush"], ninja:true, snack:true, prep:true,
       need:["pita"], nice:["tahini","hummus_ready"],
       amounts:{ pita:"2 פיתות מלאות", tahini:"2 כפות טחינה", hummus_ready:"גביע חומוס" },
+      surface:["ישר בסל","משולשים קלים שצריכים אוויר מכל צד, אחרת הם מתרככים."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ"],
       p:8, f:6, s:3,
       steps:[
@@ -2395,6 +2441,7 @@
     { id:"ninja_grilled_cheese", name:"טוסט גבינה בגריל", min:10, when:["tsohorayim","erev"], ninja:true, kids:true,
       need:["bread",["yellow_cheese","bulgarit","white_cheese"]], nice:["tomato","olives","parsley"],
       amounts:{ bread:"2 פרוסות לחם מלא", yellow_cheese:"2 פרוסות גבינה צהובה", bulgarit:"50 גרם בולגרית", white_cheese:"3 כפות גבינה לבנה", tomato:"עגבנייה אחת", olives:"5 זיתים", parsley:"מעט פטרוזיליה" },
+      surface:["משטח חשוף","לוחצים עליו עם מרית. נייר היה מונע גם את הלחיצה וגם את הפסים."],
       tools:["נינג'ה פודי גריל — משטח הגריל"],
       p:20, f:5, s:3,
       steps:[
@@ -2412,6 +2459,7 @@
     { id:"ninja_bruschetta", name:"ברוסקטה עגבניות ובזיליקום", min:12, when:["nashnush","erev"], ninja:true,
       need:["bread","tomato","garlic"], nice:["basil","bulgarit","olives"],
       amounts:{ bread:"4 פרוסות לחם מלא", tomato:"3 עגבניות", garlic:"2 שיני שום", basil:"כמה עלי בזיליקום", bulgarit:"50 גרם בולגרית", olives:"6 זיתים" },
+      surface:["משטח חשוף","רוצים סימני צריבה חזקים — הם גם מה שמאפשר לשפשף עליהם את השום."],
       tools:["נינג'ה פודי גריל — משטח הגריל","קערה","סכין"],
       p:10, f:6, s:5,
       steps:[
@@ -2429,6 +2477,7 @@
     { id:"ninja_flatbread", name:"לאפה ביתית משני מרכיבים", min:20, when:["erev","tsohorayim"], ninja:true, kids:true,
       need:["flour","yogurt"], nice:["tahini","bulgarit","parsley"],
       amounts:{ flour:"כוס וחצי קמח", yogurt:"גביע יוגורט (180 גרם)", tahini:"2 כפות טחינה", bulgarit:"50 גרם בולגרית", parsley:"מעט פטרוזיליה" },
+      surface:["משטח חשוף ויבש לגמרי","בצק על שמן מטגן במקום להתנפח. משטח יבש = בועות."],
       tools:["נינג'ה פודי גריל — משטח הגריל","קערה","מערוך או בקבוק"],
       p:12, f:4, s:4,
       steps:[
@@ -2446,6 +2495,7 @@
     { id:"ninja_baked_apples", name:"תפוחים אפויים בקינמון", min:22, when:["nashnush","erev"], ninja:true, snack:true, kids:true,
       need:["apple"], nice:["walnuts","honey","yogurt","oats"],
       amounts:{ apple:"2 תפוחים", walnuts:"חופן אגוזי מלך", honey:"כפית דבש", yogurt:"חצי גביע יוגורט", oats:"2 כפות שיבולת שועל" },
+      surface:["תבנית אלומיניום קטנה","המיץ המתוק נוטף ונשרף בתחתית. התבנית אוספת אותו והוא חוזר לתפוח."],
       tools:["נינג'ה פודי גריל — סל האייר קריספ","סכין"],
       p:4, f:6, s:20,
       steps:[
@@ -2462,6 +2512,7 @@
     { id:"ninja_grilled_banana", name:"בננה קרמלית על הגריל", min:10, when:["nashnush"], ninja:true, snack:true, kids:true,
       need:["banana"], nice:["cocoa","peanut_butter","walnuts","yogurt"],
       amounts:{ banana:"2 בננות", cocoa:"כפית קקאו", peanut_butter:"כף חמאת בוטנים", walnuts:"חופן אגוזים", yogurt:"חצי גביע יוגורט" },
+      surface:["משטח חשוף","הקליפה היא הכלי. רק הצד החתוך נוגע במתכת ומתקרמל."],
       tools:["נינג'ה פודי גריל — משטח הגריל"],
       p:6, f:4, s:18,
       steps:[
@@ -2477,6 +2528,7 @@
     { id:"ninja_grilled_peaches", name:"אפרסקים על הגריל עם יוגורט", min:12, when:["nashnush","erev"], ninja:true, snack:true,
       need:["peach","yogurt"], nice:["honey","walnuts","mint"],
       amounts:{ peach:"2 אפרסקים בשלים", yogurt:"גביע יוגורט", honey:"כפית דבש", walnuts:"חופן אגוזים", mint:"כמה עלי נענע" },
+      surface:["משטח חשוף","החתך צריך מגע ישיר כדי להשחים לפני שהפרי נמס."],
       tools:["נינג'ה פודי גריל — משטח הגריל"],
       p:8, f:4, s:19,
       steps:[
@@ -3027,7 +3079,11 @@
         (r.ninja ? NINJA_GUIDE : "") +
         (r.tools && r.tools.length
           ? '<div class="block"><h3>כלים</h3><ul class="tools">' +
-            r.tools.map(t => "<li>" + esc(t) + "</li>").join("") + '</ul></div>'
+            r.tools.map(t => "<li>" + esc(t) + "</li>").join("") + '</ul>' +
+            (r.surface
+              ? '<p class="surface"><b>על מה מניחים:</b> ' + esc(r.surface[0]) +
+                '<span>' + esc(r.surface[1]) + '</span></p>'
+              : "") + '</div>'
           : "") +
         '<div class="block">' + blockTitle("steps", r.id, "איך") + '<ol class="steps">' + r.steps.map(stepHTML).join("") + '</ol></div>' +
         (r.note ? '<p class="note"><b>שווה לדעת:</b> ' + esc(r.note) + '</p>' : "") +
@@ -3101,10 +3157,27 @@
     ["מה מותר להכניס", "רק כלים שכתוב עליהם «עמיד לתנור»: קרמיקה עמידה, פיירקס, סיליקון, מתכת, תבנית אלומיניום חד־פעמית. צלחת רגילה מהארון, חרסינה דקה, זכוכית רגילה, פלסטיק או כלי עם קישוט מוזהב — לא נכנסים. «מתאים למיקרוגל» הוא לא «עמיד לתנור». משאירים שני סנטימטרים לפחות בין הכלי לגוף החימום העליון, ולא מכסים את כל שטח הסל כדי שהאוויר ימשיך לזרום."]
   ];
 
+  /* על מה מניחים — טבלה אחת לכל סוגי המזון */
+  const NINJA_SURFACES = [
+    ["צ'יפס, ירקות, חומוס, טופו, פיתות", "סל חשוף", "האוויר חייב לעבור מלמטה. כל נייר מבטל את הפריכות."],
+    ["שוקיים, נקניקיות, בשר שמן", "סל חשוף", "השומן חייב לטפטף החוצה, אחרת האוכל מתבשל בתוכו."],
+    ["דג עם עור, בשר טחון עדין", "נייר אפייה בגודל האוכל", "נדבק וקורע. זה המקרה שבו נייר באמת חוסך את המנה."],
+    ["זיגוגים מתוקים, פירות אפויים", "תבנית אלומיניום קטנה", "הסוכר נוטף ונשרף. התבנית אוספת אותו ומחזירה אותו לאוכל."],
+    ["ביצים, שקשוקה, מאפינס", "סיליקון או רמקין עמיד לתנור", "צריך כלי שמחזיק נוזל. אף פעם לא צלחת רגילה."],
+    ["הכול על משטח הגריל", "משטח חשוף", "הפסים והצריבה הם כל הסיבה להשתמש בו. נייר מבטל אותם."]
+  ];
+
+  const NINJA_BUY = "שווה להחזיק: תבנית מאפינס סיליקון (עשרות שקלים, לביצים ולמאפינס), " +
+    "חבילת תבניות אלומיניום קטנות חד־פעמיות (לזיגוגים ולפירות), ושני רמקינים קרמיים. " +
+    "מה שלא צריך: מדפים מיוחדים, סילפט ייעודי ומברשות שמן — נייר אפייה רגיל ומרסס שמן עושים את אותה עבודה.";
+
   const NINJA_GUIDE =
-    '<details class="guide"><summary>איך עובדים עם הנינג\'ה — ששת הכללים</summary><ol>' +
+    '<details class="guide"><summary>איך עובדים עם הנינג\'ה — הכללים ועל מה מניחים</summary><ol>' +
     NINJA_RULES.map(r => "<li><b>" + r[0] + ".</b> " + r[1] + "</li>").join("") +
-    '</ol><p>הזמנים כאן נבדקו על פודי גריל רגיל. במכשיר גדול יותר מוסיפים 2-3 דקות.</p></details>';
+    '</ol><div class="tablewrap"><table class="surftable"><thead><tr><th>מה מבשלים</th><th>על מה</th><th>למה</th></tr></thead><tbody>' +
+    NINJA_SURFACES.map(r => "<tr><td>" + r[0] + "</td><td><b>" + r[1] + "</b></td><td>" + r[2] + "</td></tr>").join("") +
+    '</tbody></table></div><p>' + NINJA_BUY + '</p>' +
+    '<p>הזמנים כאן נבדקו על פודי גריל רגיל. במכשיר גדול יותר מוסיפים 2-3 דקות.</p></details>';
 
   const mmss = sec => Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0");
 
@@ -3440,6 +3513,7 @@
       if (r.tools && r.tools.length) {
         html += '<div class="big-sec">כלים</div>';
         r.tools.forEach(t => { html += miseRow("tool:" + t, t, false); });
+        if (r.surface) html += miseRow("surf:" + r.surface[0], r.surface[0], false);
       }
 
       $("#big-body").innerHTML = html;

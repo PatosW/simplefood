@@ -56,6 +56,12 @@ pois chiches, poivrons farcis, tofu croustillant), les pains et sandwichs
 chauds (chips de pita, croque au fromage, bruschetta, pain plat à deux
 ingrédients) et les desserts aux fruits sans sucre ajouté.
 
+Chaque recette indique **sur quoi poser l'aliment** — panier nu, plaque nue,
+papier cuisson, barquette aluminium, moule en silicone, ramequin — et pourquoi
+c'est le bon choix pour cette cuisson précise. Le papier n'est conservé que là
+où il sert vraiment (poisson à peau, croquettes fragiles) ; partout où il
+bouche les trous du panier et empêche de croustiller, il est retiré.
+
 Chaque recette porte un encadré dépliable avec les huit règles de l'appareil :
 préchauffage systématique, plaque contre panier, à quoi servent LO / MED / HI /
 MAX, la couche unique, comment limiter la fumée avec les viandes grasses, et
@@ -63,8 +69,11 @@ quand retourner, **comment utiliser le papier cuisson sans risque** — jamais
 pendant un préchauffage à vide, où rien ne le lest et où il s'envole vers la
 résistance — et **quels récipients peuvent entrer** — « oven safe »
 uniquement, jamais une assiette de table, et « va au micro-ondes » ne veut pas
-dire « va au four ». Les réglages sont donnés tels qu'on les compose sur
-l'appareil (GRILL HI, AIR CRISP 200°) et non en degrés génériques.
+dire « va au four ». S'y ajoutent un tableau récapitulatif — quel support pour
+quelle famille d'aliments — et la courte liste des accessoires qui valent
+l'achat, ainsi que de ceux qui n'apportent rien. Les réglages sont donnés tels
+qu'on les compose sur l'appareil (GRILL HI, AIR CRISP 200°) et non en degrés
+génériques.
 
 Un filtre « נינג'ה גריל » les regroupe.
 
