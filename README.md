@@ -246,18 +246,34 @@ idée, puis **« רשימת קניות »** — le bouton est en haut de la rece
 celui qui lance la cuisson, pas en bas de page. La liste est utilisable en
 rayon :
 
+- **complète par défaut** : elle s'ouvre sur **tout le plat, épices comprises**.
+  C'est le seul état sûr devant un supermarché — une liste filtrée par un
+  garde-manger pointé la semaine dernière peut s'ouvrir vide alors qu'il manque
+  la moitié des choses. Un bouton **« הסתר מה שכבר בבית »** filtre à la demande,
+  et l'inverse **« הצג את כל המנה »** revient à la liste complète ;
 - **groupée par rayon** dans l'ordre du magasin (frais, fruits et légumes,
   épicerie, surgelés) ;
 - **avec des quantités** — « 3 גזרים », « קופסת חומוס », « 300 גרם טחון » —
-  ajustées selon qu'on cuisine pour 1, 2 ou 4 ;
+  calculées pour ceux qui mangent ce soir ;
+- **avec les convives dans la fenêtre** : une rangée אני / אודרה / אילן / בן /
+  אמי en haut de la liste. On coche depuis le supermarché, et les quantités se
+  recalculent aussitôt — dans la liste **et** dans la recette. Les portions
+  tiennent compte de l'appétit de chacun, donc אמי compte pour 0,6 ;
 - **cochable au fur et à mesure**, en grosses cases lisibles d'une main ;
-- **au choix** : seulement ce qui manque à la maison, ou **tout le plat, épices
-  comprises** — utile quand on démarre et qu'on n'a pas encore de placard ;
 - **« קניתי — סמן במקרר »** : ce qu'on a mis dans le panier entre directement
   dans le garde-manger, donc l'app est à jour en rentrant.
 
 La liste en cours survit à la fermeture : un bouton « הרשימה שלי · 2/5 »
 apparaît en haut de la page tant qu'elle n'est pas finie.
+
+### Le frais se périme aussi dans l'app
+
+Ce qu'on coche dans **מה יש לי בבית** ne restait vrai que le jour même, mais
+l'app s'en souvenait indéfiniment — et faisait disparaître des courses des
+produits achetés il y a quinze jours. Au bout de **trois jours**, les produits
+des rayons מקרר et ירקות ופירות se décochent tout seuls et l'app le dit :
+« סימנת את המקרר לפני 5 ימים, אז ניקינו את הטרי ». Le placard (ארון) et le
+congélateur (מקפיא) restent cochés, eux ne tournent pas.
 
 ## Personnalisation
 

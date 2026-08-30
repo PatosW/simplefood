@@ -828,13 +828,8 @@
     </div>
 
     <div class="shop-opts">
-      <span class="lab">מנות</span>
-      <div class="row" id="serv-row">
-        <button class="chip" data-serv="1">1</button>
-        <button class="chip" data-serv="2">2</button>
-        <button class="chip" data-serv="4">4</button>
-        <button class="chip" data-serv="6">6</button>
-      </div>
+      <span class="lab">מי אוכל</span>
+      <div class="row" id="serv-row"></div>
       <button class="chip" id="dlg-scope" aria-pressed="true" style="margin-inline-start:auto">רק מה שחסר</button>
     </div>
 
@@ -3398,6 +3393,24 @@
   };
 
   let have    = new Set(store.get(KEY.pantry, []));
+  // מה שסימנת במקרר נשאר נכון כמה ימים; הטרי מתיישן, הארון והמקפיא לא
+  const PANTRY_TTL = 3 * 24 * 3600 * 1000;
+  const FRESH_AISLES = ["מקרר", "ירקות ופירות"];
+  let pantryAt = store.get("mlo.pantry.at.v1", 0);
+  let pantryStale = 0;
+  function touchPantry() { pantryAt = Date.now(); store.set("mlo.pantry.at.v1", pantryAt); }
+  (function expirePantry() {
+    if (!have.size) return;
+    if (!pantryAt) { touchPantry(); return; }
+    const age = Date.now() - pantryAt;
+    if (age < PANTRY_TTL) return;
+    const before = have.size;
+    Array.from(have).forEach(id => { if (FRESH_AISLES.indexOf(AISLE[id]) !== -1) have.delete(id); });
+    if (have.size !== before) pantryStale = Math.max(3, Math.round(age / 86400000));
+    touchPantry();
+    store.set(KEY.pantry, Array.from(have));
+  })();
+
   let favs    = new Set(store.get(KEY.fav, []));
   let off     = new Set(store.get(KEY.off, []));          // מנות שהוצאו ידנית
   let custom  = store.get(KEY.custom, []);                // [{id, name, alias}]
@@ -3691,7 +3704,7 @@
   let sauceAside = store.get("mlo.sauceaside.v1", false);
   const ASIDE = 1.45;
 
-  const WHOLE_ONLY = ["eggs", "pita", "tortilla", "bread", "crackers"];   // אי אפשר חצי ביצה
+  const WHOLE_ONLY = ["eggs", "pita", "tortilla", "bread", "crackers", "garlic", "onion"];   // אי אפשר חצי ביצה
 
   function scaleOne(item, people, ing) {
     const n = item[0], sing = item[1], plur = item[2] || item[1], mode = item[3];
@@ -4013,7 +4026,10 @@
       }
     }
 
-    $("#pantry-groups").innerHTML = html;
+    $("#pantry-groups").innerHTML = (pantryStale && !q
+      ? '<p class="empty">סימנת את המקרר לפני ' + pantryStale +
+        ' ימים, אז ניקינו את הטרי. מה שבארון ובמקפיא נשאר מסומן.</p>'
+      : "") + html;
     $("#ing-found").textContent = q ? shown + " נמצאו" : "";
     $("#all-ings").innerHTML = GROUPS.map(g =>
       g.items.map(it => '<option value="' + esc(it[1]) + '"></option>').join("")).join("");
@@ -4298,11 +4314,13 @@
   }
 
   /* ---------------- רשימת קניות למנה אחת ---------------- */
+  // כמה אנשים ביחס לבסיס של הטבלה — הרוטבים כתובים ל-2, המתכונים לפי RECIPE_BASE
+  const qtyPeople = (r, servings) => servings * 2 / (SAUCE_QTY[r.id] ? 2 : (RECIPE_BASE[r.id] || 2));
+
   function qtyText(ing, servings, r) {
-    if (r && SAUCE_QTY[r.id] && SAUCE_QTY[r.id][ing]) return scaleOne(SAUCE_QTY[r.id][ing], servings, ing);
+    if (r && SAUCE_QTY[r.id] && SAUCE_QTY[r.id][ing]) return scaleOne(SAUCE_QTY[r.id][ing], qtyPeople(r, servings), ing);
     if (r && RECIPE_QTY[r.id] && RECIPE_QTY[r.id][ing])
-      return scaleOne(RECIPE_QTY[r.id][ing],
-        eaters().length ? servings * 2 / (RECIPE_BASE[r.id] || 2) : 2, ing);
+      return scaleOne(RECIPE_QTY[r.id][ing], qtyPeople(r, servings), ing);
     const q = QTY[ing];
     if (!q) return nameOf(ing);
     if (typeof q === "string") return q;
@@ -4319,10 +4337,7 @@
     if (!withQty.length) return qtyText(ing, servings, rs[0]);
     let total = null, unit = null, ok = true;
     withQty.forEach(r => {
-      const b = SAUCE_QTY[r.id] ? 2 : (RECIPE_BASE[r.id] || 2);
-      const people = SAUCE_QTY[r.id] ? serves
-        : (eaters().length ? portions() * 2 / b : 2);
-      const q = scaleVal(qtyTableFor(r)[ing], people, ing);
+      const q = scaleVal(qtyTableFor(r)[ing], qtyPeople(r, servings), ing);
       if (!q) { ok = false; return; }
       if (unit && unit.sing !== q.sing) ok = false;
       unit = q; total = (total || 0) + q.v;
@@ -4359,6 +4374,12 @@
     return hit ? hit[1] : key;
   };
 
+  // כמה מנות לקנות: מי שאוכל הפעם קובע; בלי בחירה — 2 מנות (או כמות הפסטה ברוטב)
+  function shopServings(id) {
+    if (eaters().length) return portions();
+    return SAUCE_QTY[id] ? serves : 2;
+  }
+
   function openShop(id) {
     // מהמנה העיקרית — כל הארוחה; מתוספת — רק היא
     const ids = (id === meal.main && meal.extras.length) ? mealIds() : [id];
@@ -4366,9 +4387,8 @@
     shop = {
       ids: ids,
       id: id,
-      servings: same ? shop.servings
-        : (SAUCE_QTY[id] ? serves : (eaters().length ? Math.max(1, Math.round(portions())) : 2)),
-      onlyMissing: same ? shop.onlyMissing : true,
+      servings: shopServings(id),
+      onlyMissing: same ? shop.onlyMissing : false,
       checked: same ? shop.checked : []
     };
     renderShop();
@@ -4385,19 +4405,22 @@
     shop.checked = Array.from(checked);
 
     $("#dlg-title").textContent = rs.length > 1 ? rs.map(x => x.name).join(" + ") : r.name;
-    $("#dlg-sub").textContent = (!have.size && shop.onlyMissing)
-      ? "לא סימנת מה יש בבית, אז הרשימה כוללת את כל המנה. סמן כל מה שכבר יש לך."
-      : r.min + " דקות · " + r.p + " ג\' חלבון למנה";
-    $("#dlg-scope").textContent = shop.onlyMissing
-      ? (have.size ? "רק מה שחסר" : "בלי תבלינים")
-      : "כל המנה, כולל תבלינים";
+    const pnum = Math.round(shop.servings * 10) / 10;
+    const ptxt = pnum === 1 ? "מנה אחת" : pnum + " מנות";
+    $("#dlg-sub").textContent = shop.onlyMissing
+      ? "רק מה שחסר לפי «מה יש לי בבית» · " + ptxt
+      : (eaters().length ? ptxt : "ל" + ptxt + " · סמן מי אוכל כדי לדייק")
+        + " · " + r.min + " דקות";
+    // הכפתור אומר מה יקרה בלחיצה, לא מה רואים עכשיו
+    $("#dlg-scope").textContent = shop.onlyMissing ? "הצג את כל המנה" : "הסתר מה שכבר בבית";
     $("#dlg-scope").setAttribute("aria-pressed", String(!shop.onlyMissing));
-    document.querySelectorAll("[data-serv]").forEach(b =>
-      b.setAttribute("aria-pressed", String(Number(b.dataset.serv) === shop.servings)));
+    $("#serv-row").innerHTML = people.map(p =>
+      '<button class="chip" data-shopwho="' + p.id + '" aria-pressed="' + cooking.has(p.id) + '">' +
+      esc(p.name) + '</button>').join("");
 
     if (!items.length) {
       $("#dlg-list").innerHTML = '<p class="empty">יש לך כבר הכל בבית. אפשר לעלות ולהתחיל.<br>' +
-        'לא בטוח? לחץ על «כל המנה, כולל תבלינים» למעלה כדי לראות את הרשימה המלאה.</p>';
+        'לא בטוח? לחץ על «הצג את כל המנה» למעלה כדי לראות את הרשימה המלאה.</p>';
     } else {
       const byAisle = {};
       items.forEach(i => {
@@ -4633,6 +4656,12 @@
       const id = ing.dataset.ing;
       if (have.has(id)) have.delete(id); else have.add(id);
       ing.setAttribute("aria-pressed", String(have.has(id)));
+      if (pantryStale) {                      // עדכנת — ההודעה על הניקוי כבר לא רלוונטית
+        pantryStale = 0;
+        const note = document.querySelector("#pantry-groups > .empty");
+        if (note) note.remove();
+      }
+      touchPantry();
       store.set(KEY.pantry, Array.from(have));
       renderResults();
       return;
@@ -4699,8 +4728,16 @@
     const shopBtn = t.closest("[data-shop]");
     if (shopBtn) { openShop(shopBtn.dataset.shop); return; }
 
-    const serv = t.closest("[data-serv]");
-    if (serv) { shop.servings = Number(serv.dataset.serv); renderShop(); return; }
+    const swho = t.closest("[data-shopwho]");
+    if (swho) {
+      const id = swho.dataset.shopwho;
+      if (cooking.has(id)) cooking.delete(id); else cooking.add(id);
+      shop.servings = shopServings(shop.id);
+      renderShop();
+      renderPeople();
+      renderMeal();          // הכמויות במתכון עצמו זזות יחד עם הרשימה
+      return;
+    }
 
     const scope = t.closest("#dlg-scope");
     if (scope) { shop.onlyMissing = !shop.onlyMissing; renderShop(); return; }
@@ -4932,6 +4969,8 @@
   // אחרי הקנייה: מה שסומן בעגלה נכנס ישר למקרר
   $("#dlg-done").addEventListener("click", () => {
     shop.checked.forEach(i => { if (!isBasic(i)) have.add(i); });   // תבלינים לא נכנסים לרשימת המקרר
+    pantryStale = 0;
+    touchPantry();
     shop = null;
     $("#dlg").close();
     refreshAll();
