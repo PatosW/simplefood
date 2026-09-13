@@ -865,7 +865,7 @@
       ["sweet_potato","בטטה"],["banana","בננה"],["dates","תמרים"],["apple","תפוח"],
       ["potato","תפוח אדמה"],["zucchini","קישוא"],["eggplant","חציל"],
       ["broccoli","ברוקולי"],["mushrooms","פטריות"],["orange","תפוז"],["mint","נענע"],
-      ["mango_fresh","מנגו טרי"],["peach","אפרסק"],["plum","שזיף"],["cherry","עגבניות שרי"],
+      ["mango_fresh","מנגו טרי"],["peach","אפרסק"],["fig","תאנים"],["plum","שזיף"],["cherry","עגבניות שרי"],
       ["cauliflower","כרובית"],["basil","בזיליקום"]
     ]},
     { title: "ארון", items: [
@@ -883,6 +883,7 @@
     { title: "מקפיא", items: [
       ["frozen_veg","ירקות קפואים"],["edamame","אדממה"],["spinach_frozen","תרד קפוא"],
       ["frozen_berries","פירות יער קפואים"],["frozen_mango","מנגו קפוא"],["frozen_strawberry","תות קפוא"],
+      ["frozen_pineapple","אננס קפוא"],["frozen_banana","בננה קפואה"],
       ["peas","אפונה קפואה"]
     ]}
   ];
@@ -1905,6 +1906,50 @@
           tip:"הלימון מחדד את הטעם. שייק על מים בלי חומצה יוצא שטוח." }
       ],
       note:"שים לב: 4 גרם חלבון בלבד. זה קינוח נוזלי מרענן, לא ארוחה — למשהו שמשביע צריך יוגורט או חלב." },
+
+    { id:"yellow_water_shake", name:"השייק הצהוב — אפרסק, תאנים ומנגו על מים", min:6, when:["boker","nashnush"], shake:true, nocook:true, snack:true,
+      need:["peach","fig","frozen_mango","frozen_pineapple",["almonds","walnuts"]], nice:["dates","lemon","oats","protein_yogurt"],
+      amounts:{ peach:"אפרסק אחד", fig:"2 תאנים טריות", frozen_mango:"כוס מנגו קפוא (150 גרם)", frozen_pineapple:"חצי כוס אננס קפוא (100 גרם)", almonds:"חופן שקדים (25 גרם)", walnuts:"חופן אגוזי מלך (25 גרם)", dates:"תמר אחד, לא יותר", lemon:"כפית מיץ לימון", oats:"3 כפות שיבולת שועל", protein_yogurt:"חצי גביע יוגורט חלבון" },
+      tools:["נינג'ה או בלנדר","סכין","כוס מדידה"],
+      p:4, f:6, s:30,
+      steps:[
+        { t:"מוציאים את המנגו והאננס הקפואים מהמקפיא ומניחים על השיש. מחכים 5 דקות.",
+          tip:"אחרי 5 דקות הקוביה נשרטת בציפורן. זה הסימן שהיא תיטחן ולא תקפוץ מתחת ללהב.", sec:300 },
+        { t:"שמים בכוס הבלנדר כוס מים קרים (200 מ\"ל) וחופן שקדים או אגוזים, וטוחנים 30 שניות.",
+          tip:"המים נעשים עכורים ולבנבנים — זה חלב שקדים מהיר, והוא מה שנותן גוף לשייק על מים במקום שיבולת שועל.", sec:30 },
+        { t:"חוצים אפרסק, מוציאים את הגלעין, חותכים ל-4 ומכניסים לכוס." },
+        { t:"מורידים את הזנב מ-2 תאנים, חוצים כל אחת ומכניסים עם הקליפה.",
+          tip:"קליפת התאנה נטחנת לגמרי. לא צריך לקלף." },
+        { t:"רוצה יותר מתוק? תמר אחד בלי גלעין, לא יותר מזה.",
+          tip:"האפרסק והתאנים כבר מתוקים. כל תמר נוסף מוסיף 16 גרם סוכר בלי להוסיף טעם." },
+        { t:"שופכים מעל את המנגו והאננס הקפואים — הקפוא תמיד אחרון ולמעלה.",
+          tip:"בכוס קבועה הנוזל למטה ליד הלהב, אחרת נוצר כיס אוויר והלהב מסתובב בלי לטחון." },
+        { t:"מוסיפים קורט מלח — שניים־שלושה גרגרים, לא יותר.",
+          tip:"לא מרגישים מלח, מרגישים יותר מתוק. זה מה שמאפשר לוותר על התמרים." },
+        { t:"4 פולסים קצרים לשבירת הגושים, ואז 30 שניות רצוף.", sec:30 },
+        { t:"סוחטים כפית מיץ לימון פנימה ופולס אחד של 2 שניות.",
+          tip:"האננס כבר חמצמץ — מתחילים בכפית אחת, טועמים, ורק אז מוסיפים." }
+      ],
+      note:"30 גרם סוכר ו-4 גרם חלבון בכוס. זה פרי שלם עם הסיבים שלו, לא מיץ, אבל זה לא מחליף ארוחת בוקר — לצד זה ביצים או קוטג\', או חצי גביע יוגורט חלבון פנימה (ואז עוד רבע כוס מים, היוגורט הזה סמיך)." },
+
+    { id:"red_water_shake", name:"השייק האדום — פירות יער, בננה קפואה ותאנים", min:5, when:["boker","nashnush"], shake:true, nocook:true, snack:true,
+      need:["frozen_berries",["frozen_banana","banana"],"fig",["almonds","walnuts"]], nice:["dates","lemon","mint","protein_yogurt"],
+      amounts:{ frozen_berries:"כוס פירות יער קפואים", frozen_banana:"בננה קפואה", banana:"בננה טרייה", fig:"2 תאנים טריות", almonds:"חופן שקדים (25 גרם)", walnuts:"חופן אגוזי מלך (25 גרם)", dates:"תמר אחד", lemon:"כפית מיץ לימון", mint:"5 עלי נענע", protein_yogurt:"חצי גביע יוגורט חלבון" },
+      tools:["נינג'ה או בלנדר","סכין","כוס מדידה"],
+      p:5, f:8, s:22,
+      steps:[
+        { t:"מוציאים את פירות היער והבננה הקפואה מהמקפיא ומניחים על השיש. מחכים 5 דקות.", sec:300 },
+        { t:"שמים בכוס הבלנדר כוס מים קרים (200 מ\"ל) וחופן שקדים או אגוזים, וטוחנים 30 שניות.",
+          tip:"אותו חלב שקדים מהיר כמו בשייק הצהוב. בלי זה שייק על מים יוצא מימי.", sec:30 },
+        { t:"מורידים את הזנב מ-2 תאנים, חוצים כל אחת ומכניסים עם הקליפה." },
+        { t:"שופכים מעל כוס פירות יער ובננה קפואה שבורה לשניים.",
+          tip:"אין בננה קפואה? בננה טרייה ו-3 קוביות קרח עושות את אותו דבר." },
+        { t:"קורט מלח, שניים־שלושה גרגרים." },
+        { t:"4 פולסים קצרים ואז 30 שניות רצוף.", sec:30 },
+        { t:"כפית מיץ לימון ופולס אחד.",
+          tip:"פירות יער קפואים מהסופר חמצמצים בעצמם — טועמים לפני שמוסיפים לימון." }
+      ],
+      note:"אל תערבב את השניים. פירות יער עם מנגו ואננס יוצאים בצבע חום־סגול ושני הטעמים מבטלים זה את זה. אדום עם אדום, צהוב עם צהוב." },
 
     { id:"strawberry_banana", name:"תות־בננה קלאסי", min:4, when:["boker","nashnush"], shake:true, nocook:true, snack:true,
       need:["frozen_strawberry","banana","milk"], nice:["honey","oats","yogurt","chia"],
@@ -3152,6 +3197,8 @@
     protein_shake:      { protein_yogurt:"יוגורט רגיל וכף שיבולת שועל", frozen_berries:"תות או מנגו קפוא" },
     mango_yogurt_shake: { frozen_mango:"תות או פירות יער קפואים", yogurt:"גבינה לבנה" },
     water_shake:        { dates:"בננה בשלה נוספת", frozen_berries:"מנגו קפוא" },
+    yellow_water_shake: { peach:"מנגו טרי או תפוח", fig:"2 תמרים בלבד", frozen_mango:"עוד חצי כוס אננס קפוא", frozen_pineapple:"עוד חצי כוס מנגו קפוא", almonds:"כף חמאת בוטנים" },
+    red_water_shake:    { fig:"תמר אחד", frozen_banana:"בננה טרייה ו-3 קוביות קרח", frozen_berries:"תות קפוא", almonds:"כף חמאת בוטנים" },
     strawberry_banana:  { frozen_strawberry:"פירות יער קפואים", milk:"מים וכף יוגורט" },
     green_water_shake:  { spinach_frozen:"חופן עלים טריים ו-4 קוביות קרח", apple:"אגס או בננה" },
     choco_banana_shake: { cocoa:"כף חמאת בוטנים בלבד", milk:"מים ותמר אחד" },
@@ -3367,13 +3414,15 @@
     tuna_harissa: { tuna:[1,"קופסת טונה","קופסאות טונה","lin"], harissa:[1,"כפית הריסה","כפיות הריסה","soft"], schug:[1,"כפית שוג","כפיות שוג","soft"], chili:[0.5,"פלפל חריף","פלפלים חריף","soft"], lemon:[0.5,"לימון","לימונים","soft"], onion:[0.25,"בצל","בצלים","lin"], parsley:[1,"חופן פטרוזיליה","חופנים פטרוזיליה","soft"], chickpeas:[0.5,"קופסת חומוס","קופסאות חומוס","lin"], olives:[6,"זיתים","","soft"] },
     veg_omelette: { eggs:[3,"ביצה","ביצים","lin"], tomato:[1,"עגבנייה","עגבניות","lin"], pepper:[0.5,"פלפל","פלפלים","lin"], green_onion:[2,"גבעולי בצל ירוק","","lin"], bulgarit:[2,"כף בולגרית","כפות בולגרית","lin"], yellow_cheese:[1,"פרוסת גבינה צהובה","פרוסות גבינה צהובה","lin"], parsley:[0,"מעט פטרוזיליה","","soft"] },
     veg_sticks_dip: { carrot:[3,"גזר","גזרים","lin"], cucumber:[2,"מלפפון","מלפפונים","lin"], pepper:[1,"פלפל","פלפלים","lin"], yogurt:[1,"גביע יוגורט","גביעי יוגורט","lin"], lemon:[0.25,"לימון","לימונים","soft"], garlic:[1,"שן שום","שיני שום","soft"], parsley:[0,"מעט פטרוזיליה","","soft"] },
+    yellow_water_shake: { peach:[1,"אפרסק","אפרסקים","lin"], fig:[2,"תאנה טרייה","תאנים טריות","lin"], frozen_mango:[1,"כוס מנגו קפוא","כוסות מנגו קפוא","lin"], frozen_pineapple:[0.5,"כוס אננס קפוא","כוסות אננס קפוא","lin"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"], walnuts:[1,"חופן אגוזי מלך","חופנים אגוזי מלך","lin"], dates:[1,"תמר","תמרים","soft"], lemon:[1,"כפית מיץ לימון","כפיות מיץ לימון","soft"], oats:[3,"כף שיבולת שועל","כפות שיבולת שועל","lin"], protein_yogurt:[0.5,"גביע יוגורט חלבון","גביעי יוגורט חלבון","lin"] },
+    red_water_shake: { frozen_berries:[1,"כוס פירות יער קפואים","כוסות פירות יער קפואים","lin"], frozen_banana:[1,"בננה קפואה","בננות קפואות","lin"], banana:[1,"בננה טרייה","בננות טרייה","lin"], fig:[2,"תאנה טרייה","תאנים טריות","lin"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"], walnuts:[1,"חופן אגוזי מלך","חופנים אגוזי מלך","lin"], dates:[1,"תמר","תמרים","soft"], lemon:[1,"כפית מיץ לימון","כפיות מיץ לימון","soft"], mint:[5,"עלי נענע","","soft"], protein_yogurt:[0.5,"גביע יוגורט חלבון","גביעי יוגורט חלבון","lin"] },
     water_shake: { frozen_berries:[1,"כוס פירות יער קפואים","כוסות פירות יער קפואים","lin"], banana:[1,"בננה טרייה","בננות טרייה","lin"], dates:[2,"תמר","תמרים","lin"], lemon:[0.25,"לימון","לימונים","soft"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"], mint:[0,"כמה עלי נענע","","soft"] },
     white_cheese_bowl: { white_cheese:[1,"גביע גבינה לבנה","גביעי גבינה לבנה","lin"], walnuts:[1,"חופן אגוזי מלך","חופנים אגוזי מלך","lin"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"], cashews:[1,"חופן קשיו","חופנים קשיו","lin"], honey:[1,"כפית סילאן או דבש","כפיות סילאן או דבש","soft"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"], apple:[0.5,"תפוח","תפוחים","lin"], banana:[0.5,"בננה","בננות","lin"] },
     yogurt_bowl: { yogurt:[1,"גביע יוגורט (150-200 גרם)","גביעי יוגורט (150-200 גרם)","lin"], walnuts:[1,"חופן אגוזים (כ-20 גרם)","חופנים אגוזים (כ-20 גרם)","lin"], almonds:[1,"חופן שקדים","חופנים שקדים","lin"], cashews:[1,"חופן קשיו","חופנים קשיו","lin"], dates:[2,"תמר","תמרים","lin"], chia:[1,"כפית צ'יה","כפיות צ'יה","soft"], banana:[0.5,"בננה","בננות","lin"] },
   };
 
   /* לכמה סועדים כל מתכון כתוב במקור */
-  const RECIPE_BASE = {"avocado_toast": 1, "yogurt_bowl": 1, "shakshuka": 1, "tuna_chickpea": 2, "veg_omelette": 2, "pita_tahini_egg": 1, "quinoa_lentils": 2, "salmon_oven": 1, "cottage_crackers": 1, "edamame": 1, "pasta_tuna": 2, "green_salad_feta": 2, "overnight_oats": 2, "hummus_bowl": 1, "tofu_stirfry": 1, "lentil_soup": 2, "pb_banana": 1, "sardines_toast": 1, "israeli_salad": 2, "green_shake": 1, "sweet_potato_tahini": 1, "choco_yogurt": 1, "beans_tomato": 1, "chicken_pan": 1, "labaneh_plate": 1, "hummus_plate": 1, "cheese_sandwich": 1, "shakshuka_hot": 1, "pasta_chili": 2, "hummus_hot": 1, "tofu_chili": 1, "tuna_harissa": 1, "pancake_banana": 1, "ricotta_toast": 1, "pita_toaster": 1, "hot_oats": 2, "scrambled_soft": 2, "fruit_cottage": 1, "egg_wrap": 1, "date_shake": 1, "white_cheese_bowl": 1, "frittata_left": 2, "fried_rice": 1, "clean_soup": 2, "couscous_salad": 2, "pasta_veg_yogurt": 2, "oven_veg": 1, "rosti": 1, "fattoush": 1, "chicken_balls": 2, "hidden_veg_pasta": 2, "oven_schnitzel": 2, "pita_pizza": 2, "sweet_omelette": 1, "veg_sticks_dip": 1, "rice_lentils_kids": 1, "corn_pancakes": 1, "berry_shake": 1, "protein_shake": 1, "mango_yogurt_shake": 1, "water_shake": 1, "strawberry_banana": 1, "green_water_shake": 1, "choco_banana_shake": 1, "orange_mango_shake": 1, "cucumber_mint_shake": 1, "oats_shake": 1, "oat_date_shake": 1, "mango_fresh_shake": 1, "peach_plum_shake": 1, "ninja_legs_sweet": 2, "ninja_salmon_zucchini": 2, "ninja_kefta": 3, "ninja_chicken_cherry": 2, "ninja_sausage_frozen": 2, "ninja_whitefish": 2, "ninja_eggplant": 1, "ninja_burger": 3, "ninja_frozen_veg": 2, "ninja_sweet_fries": 2, "ninja_halloumi": 1, "ninja_baby_potatoes": 2, "ninja_mushrooms": 1, "ninja_shakshuka_ramekin": 1, "ninja_egg_avocado": 1, "ninja_egg_toast": 1, "ninja_whole_fish": 2, "ninja_salmon_glaze": 2, "ninja_fish_cakes": 1, "ninja_fish_schnitzel": 2, "ninja_cauliflower": 2, "ninja_falafel_balls": 2, "ninja_stuffed_peppers": 2, "ninja_crispy_tofu": 1, "ninja_grilled_cheese": 1, "ninja_bruschetta": 2, "ninja_flatbread": 2, "ninja_baked_apples": 1, "ninja_grilled_banana": 1, "ninja_grilled_peaches": 1, "ninja_steak_thin": 1, "ninja_steak_onion": 2, "ninja_beef_skewers": 2, "ninja_beef_strips_pita": 2, "ninja_beef_rice_bowl": 2, "ninja_beef_meatballs": 3, "ninja_kebab": 3, "ninja_beef_veg_tray": 3, "ninja_steak_salad": 2, "ninja_beef_tacos": 3};
+  const RECIPE_BASE = {"avocado_toast": 1, "yogurt_bowl": 1, "shakshuka": 1, "tuna_chickpea": 2, "veg_omelette": 2, "pita_tahini_egg": 1, "quinoa_lentils": 2, "salmon_oven": 1, "cottage_crackers": 1, "edamame": 1, "pasta_tuna": 2, "green_salad_feta": 2, "overnight_oats": 2, "hummus_bowl": 1, "tofu_stirfry": 1, "lentil_soup": 2, "pb_banana": 1, "sardines_toast": 1, "israeli_salad": 2, "green_shake": 1, "sweet_potato_tahini": 1, "choco_yogurt": 1, "beans_tomato": 1, "chicken_pan": 1, "labaneh_plate": 1, "hummus_plate": 1, "cheese_sandwich": 1, "shakshuka_hot": 1, "pasta_chili": 2, "hummus_hot": 1, "tofu_chili": 1, "tuna_harissa": 1, "pancake_banana": 1, "ricotta_toast": 1, "pita_toaster": 1, "hot_oats": 2, "scrambled_soft": 2, "fruit_cottage": 1, "egg_wrap": 1, "date_shake": 1, "white_cheese_bowl": 1, "frittata_left": 2, "fried_rice": 1, "clean_soup": 2, "couscous_salad": 2, "pasta_veg_yogurt": 2, "oven_veg": 1, "rosti": 1, "fattoush": 1, "chicken_balls": 2, "hidden_veg_pasta": 2, "oven_schnitzel": 2, "pita_pizza": 2, "sweet_omelette": 1, "veg_sticks_dip": 1, "rice_lentils_kids": 1, "corn_pancakes": 1, "berry_shake": 1, "protein_shake": 1, "mango_yogurt_shake": 1, "water_shake": 1, "yellow_water_shake": 2, "red_water_shake": 2, "strawberry_banana": 1, "green_water_shake": 1, "choco_banana_shake": 1, "orange_mango_shake": 1, "cucumber_mint_shake": 1, "oats_shake": 1, "oat_date_shake": 1, "mango_fresh_shake": 1, "peach_plum_shake": 1, "ninja_legs_sweet": 2, "ninja_salmon_zucchini": 2, "ninja_kefta": 3, "ninja_chicken_cherry": 2, "ninja_sausage_frozen": 2, "ninja_whitefish": 2, "ninja_eggplant": 1, "ninja_burger": 3, "ninja_frozen_veg": 2, "ninja_sweet_fries": 2, "ninja_halloumi": 1, "ninja_baby_potatoes": 2, "ninja_mushrooms": 1, "ninja_shakshuka_ramekin": 1, "ninja_egg_avocado": 1, "ninja_egg_toast": 1, "ninja_whole_fish": 2, "ninja_salmon_glaze": 2, "ninja_fish_cakes": 1, "ninja_fish_schnitzel": 2, "ninja_cauliflower": 2, "ninja_falafel_balls": 2, "ninja_stuffed_peppers": 2, "ninja_crispy_tofu": 1, "ninja_grilled_cheese": 1, "ninja_bruschetta": 2, "ninja_flatbread": 2, "ninja_baked_apples": 1, "ninja_grilled_banana": 1, "ninja_grilled_peaches": 1, "ninja_steak_thin": 1, "ninja_steak_onion": 2, "ninja_beef_skewers": 2, "ninja_beef_strips_pita": 2, "ninja_beef_rice_bowl": 2, "ninja_beef_meatballs": 3, "ninja_kebab": 3, "ninja_beef_veg_tray": 3, "ninja_steak_salad": 2, "ninja_beef_tacos": 3};
 
   /* מתכוני מנה גדולה — לא משתנים לפי מספר הסועדים */
   const BATCH = ["batch_eggs", "bento", "ninja_chicken_batch", "ninja_chickpeas", "ninja_egg_muffins", "ninja_hard_eggs", "ninja_pita_chips"];

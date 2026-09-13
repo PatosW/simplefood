@@ -4,7 +4,7 @@ Une petite app pour arrêter de grignoter faute d'idée : elle propose des repas
 **simples et à peu près équilibrés**, à partir de ce qu'on a déjà à la maison,
 avec des produits qu'on trouve dans n'importe quel supermarché en Israël.
 
-Interface **en hébreu** (RTL). 132 idées de repas, dont 45 au Ninja Foodi Grill, 15 sauces pour pâtes et 13 smoothies.
+Interface **en hébreu** (RTL). 134 idées de repas, dont 45 au Ninja Foodi Grill, 15 sauces pour pâtes et 15 smoothies.
 
 ## Deux façons de s'en servir
 
@@ -23,7 +23,7 @@ pas à la main : il vient de la barre **מבשל עבור**, où l'on coche qui 
 L'app démarre avec la famille en place — אני, אודרה, אילן, בן, אמי — mais
 **personne n'est coché**. On choisit à chaque fois qui mange, et la sélection
 n'est pas conservée d'une ouverture à l'autre. Tant que rien n'est coché, aucun
-filtre de goût ne s'applique — les 132 recettes restent visibles, y compris les
+filtre de goût ne s'applique — les 134 recettes restent visibles, y compris les
 piquantes — et chaque recette affiche ses quantités d'origine en indiquant pour
 combien elle est écrite. Dès qu'un convive est coché, les exclusions, le piquant
 et les quantités s'ajustent.
@@ -165,7 +165,7 @@ il tranche.
 
 ## Smoothies
 
-Treize recettes pour blender (Ninja ou autre), couvrant les combinaisons réelles :
+Quinze recettes pour blender (Ninja ou autre), couvrant les combinaisons réelles :
 fruits surgelés et fruits frais, avec yaourt protéiné, avec yaourt nature, avec
 lait, à l'eau ou au jus pressé. Les valeurs vont de 3 g de protéines (concombre-
 menthe, un rafraîchissement) à 28 g (le smoothie protéiné) — c'est affiché, pour
@@ -190,6 +190,27 @@ Trois d'entre elles se passent complètement de congélateur, pour les fruits
 frais de saison — mangue, pêche, prune — et l'une, banane–avoine–amandes, est
 bâtie pour la consistance plutôt que pour le goût : l'avoine et les amandes sont
 broyées à sec avant tout le reste, faute de quoi elles restent en morceaux.
+
+### Le jaune et le rouge
+
+Deux smoothies à l'eau construits autour d'une règle de couleur : **fruits
+rouges avec fruits rouges, jaunes avec jaunes**. Mélanger fruits rouges et
+mangue-ananas donne un brun-violet où les deux goûts s'annulent — la note de
+chaque recette le dit.
+
+- **השייק הצהוב** — pêche, 2 figues fraîches, mangue et ananas surgelés.
+  30 g de sucre et 4 g de protéines par verre : c'est écrit sur la carte, et la
+  note rappelle que ça ne remplace pas un petit-déjeuner.
+- **השייק האדום** — fruits rouges, banane congelée, 2 figues. 22 g de sucre.
+
+Les deux partagent un geste qui remplace l'avoine quand on n'en veut pas :
+**l'eau et les amandes se mixent seules trente secondes d'abord**, ce qui donne
+un lait d'amande grossier — c'est lui qui donne du corps à un smoothie à l'eau.
+Et une pincée de sel de deux ou trois grains : on ne la goûte pas, elle fait
+percevoir le sucre plus fort, donc on peut retirer des dattes.
+
+Ces deux recettes sont écrites pour **2 verres** (RECIPE_BASE = 2) ; les
+quantités se divisent ou se multiplient selon les convives cochés.
 
 Un filtre « שייקים » les regroupe.
 
